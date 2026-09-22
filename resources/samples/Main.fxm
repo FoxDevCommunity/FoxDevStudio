@@ -1,0 +1,63 @@
+{
+  "$schema": "foxdev-menu",
+  "version": 1,
+  "name": "Main",
+  "location": "Replace",
+  "items": [
+    {
+      "id": "mFile",
+      "prompt": "\\<File",
+      "name": "_mfile",
+      "result": {
+        "type": "submenu"
+      },
+      "children": [
+        {
+          "id": "mFileNew",
+          "prompt": "\\<New",
+          "result": {
+            "type": "command",
+            "text": "DO FORM HelloWorld"
+          },
+          "hotkey": {
+            "key": "N",
+            "ctrl": true
+          }
+        },
+        {
+          "id": "mFileSep1",
+          "prompt": "\\-",
+          "result": {
+            "type": "bar"
+          }
+        },
+        {
+          "id": "mFileExit",
+          "prompt": "E\\<xit",
+          "result": {
+            "type": "procedure",
+            "text": "CLEAR EVENTS"
+          },
+          "message": "Quit the application"
+        }
+      ]
+    },
+    {
+      "id": "mHelp",
+      "prompt": "\\<Help",
+      "result": {
+        "type": "submenu"
+      },
+      "children": [
+        {
+          "id": "mHelpAbout",
+          "prompt": "\\<About...",
+          "result": {
+            "type": "command",
+            "text": "MESSAGEBOX('HelloWorld 1.0')"
+          }
+        }
+      ]
+    }
+  ]
+}

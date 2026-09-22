@@ -1,0 +1,9 @@
+# What the samples say that this runtime cannot read: the file, the line in it, and what the
+# compiler or the importer said. The samples test fails on anything that is not listed here,
+# so the list only ever shrinks. Write it out again with SAMPLES_REPORT=<file> on that test,
+# which puts <file>.programs, <file>.forms, <file>.menus and <file>.ffc beside each other.
+# Lines with no folder in front of them are the class libraries in resources/ffc, which this
+# product ships: a fault in one of those is a fault a user meets on screen.
+#
+# The list is empty. Every one of the 247 samples Visual FoxPro ships, and every class library
+# we ship beside them, is read and compiled without a word.

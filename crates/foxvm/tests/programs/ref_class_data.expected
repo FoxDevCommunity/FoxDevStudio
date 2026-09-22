@@ -1,0 +1,16 @@
+Dataenvironment Dataenvironment Dataenvironment []
+.T. .T. 0
+[] X []
+.T. .T. .T.
+.T. .T. .T.
+Cursor Cursor [] []
+[] [] []
+1 0 .F.
+.F. .F.
+Relation Relation [] []
+[] [] .F.
+Exception Exception Exception 0 0
+[] [] []
+[] 0 []
+[mine]
+12 Exception 34 .T.

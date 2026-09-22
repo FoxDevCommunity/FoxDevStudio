@@ -1,0 +1,18 @@
+top 4
+LINENO() from the main program 38
+LINENO(1) from this procedure's own line 2
+MEMORY() is the fixed 640 .T.
+MEMORY(1) is a number greater than zero .T.
+
+
+MESSAGE() Operator/operand type mismatch.
+MESSAGE(1) outside the IDE []
+OS() names Windows .T.
+OS(2) []
+OS(3) is numeric text .T.
+OS(6) 2
+OS(7) []
+OS(8) 0
+OS(9) 0
+OS(10) 256
+OS(11) 1

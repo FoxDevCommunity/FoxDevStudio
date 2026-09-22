@@ -1,0 +1,30 @@
+Record#  CODE NAME          PRICE
+      1  A1   Bolt           2.50
+      2  B2   Nut            1.75
+      3  C3   Washer         0.40
+Record#  CODE    PRICE
+      1  A1       2.50
+      2  B2       1.75
+Structure for table: parts
+Number of data records: 3
+Field  Field Name      Type       Width    Dec
+    1  CODE            Character      4      0
+    2  NAME            Character     10      0
+    3  PRICE           Numeric        8      2
+** Total **                           23
+Currently Selected Database: parts
+Select area:  1, Table in Use: parts                Alias: parts      Records: 3
+EXACT is OFF
+DELETED is OFF
+NEAR is OFF
+UNIQUE is OFF
+TALK is ON
+SAFETY is ON
+CENTURY is OFF
+DECIMALS is 2
+MEMOWIDTH is 50
+MAIN
+OTHER
+No connections are open.
+    9.99
+Same

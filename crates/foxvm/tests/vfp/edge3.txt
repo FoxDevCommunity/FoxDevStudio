@@ -1,0 +1,19 @@
+
+today [09/08/2026]
+default century [19][76]
+rollover [09/07/2026][09/07/2075][09/07/1976][09/07/1999][09/07/2000]
+19/50 [19][50][09/07/2026][09/07/2049][09/07/1950][09/07/1999]
+18/0 [09/07/1826][09/07/1899]
+20 [20][0][09/07/2026]
+reset [19][76][09/07/2026]
+literal [09/07/2026][09/07/1926]
+--- nulldisplay length[ERR 1903 String is too long to fit.]
+nulldisplay stops at 15
+--- taiwan reading
+[0115/09/07][0015/09/07][0115/09/07]
+short cent on empty [  /  /    ][  /  /       :  :   AM]
+long cent on empty [  /  /    ][  /  /       :  :   AM]
+--- point in a picture literal
+[**,**][***,**]
+--- separator without a comma in the picture
+[1234567.80][1234567.8] 

@@ -1,0 +1,219 @@
+/* The palette site.html was drawn in: one set of tokens, light first, dark by preference or
+   by an explicit data-theme. Every colour on the site comes from here. */
+:root {
+  --ink: #0a1725;
+  --ground: #f2f6fb;
+  --surface: #ffffff;
+  --surface-sunk: #e7eef7;
+  --line: #cfdcea;
+  --text: #16283c;
+  --muted: #56687f;
+  --brand: #0079d6;
+  --brand-deep: #005ca5;
+  --brand-soft: rgba(0, 121, 214, 0.08);
+  --on-brand: #ffffff;
+  --code-ground: #0a1725;
+  --code-text: #dce7f3;
+  --code-muted: #6a8099;
+  --code-key: #6fb4f7;
+  --code-str: #8cc8a6;
+  --code-fn: #d9bd7a;
+  --shadow: 0 1px 2px rgba(10, 23, 37, 0.05), 0 14px 34px -14px rgba(10, 23, 37, 0.18);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ink: #e6eef8;
+    --ground: #08131f;
+    --surface: #101d2c;
+    --surface-sunk: #16273a;
+    --line: #25374a;
+    --text: #d8e3f0;
+    --muted: #8ba0b8;
+    --brand: #4ea8f5;
+    --brand-deep: #78c0ff;
+    --brand-soft: rgba(78, 168, 245, 0.11);
+    --on-brand: #06131f;
+    --code-ground: #050d16;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 14px 34px -14px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ink: #e6eef8;
+  --ground: #08131f;
+  --surface: #101d2c;
+  --surface-sunk: #16273a;
+  --line: #25374a;
+  --text: #d8e3f0;
+  --muted: #8ba0b8;
+  --brand: #4ea8f5;
+  --brand-deep: #78c0ff;
+  --brand-soft: rgba(78, 168, 245, 0.11);
+  --on-brand: #06131f;
+  --code-ground: #050d16;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 14px 34px -14px rgba(0, 0, 0, 0.7);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+}
+
+.wrap {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Bricolage Grotesque', 'IBM Plex Sans', sans-serif;
+  text-wrap: balance;
+  line-height: 1.2;
+  margin: 0;
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+.mono,
+code,
+kbd,
+pre {
+  font-family: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace;
+}
+
+/* the mark is one PNG, used as a paint source wherever it appears */
+.mark-img {
+  background: url('/mark.png') center / contain no-repeat;
+  flex: none;
+}
+
+/* ---- buttons -------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  border: 1px solid transparent;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease;
+}
+.btn-main {
+  background: var(--ink);
+  color: var(--ground);
+}
+.btn-main:hover {
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  border-color: var(--line);
+  color: var(--text);
+  background: var(--surface);
+}
+.btn-ghost:hover {
+  border-color: var(--muted);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* ---- the kicker, shared by the landing page and the docs -------------------- */
+.kicker {
+  font-family: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+/* ---- code listings --------------------------------------------------------- */
+.listing {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.listing-bar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  align-items: center;
+}
+.listing-bar b {
+  color: var(--text);
+  font-weight: 500;
+}
+.code-scroll {
+  overflow-x: auto;
+  background: var(--code-ground);
+}
+.listing pre {
+  margin: 0;
+  padding: 22px 20px;
+  font-size: 13.5px;
+  line-height: 1.72;
+  color: var(--code-text);
+  min-width: 44ch;
+  background: transparent;
+  border: 0;
+}
+.cmt {
+  color: var(--code-muted);
+  font-style: italic;
+}
+.kw {
+  color: var(--code-key);
+}
+.str {
+  color: var(--code-str);
+}
+.fn {
+  color: var(--code-fn);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

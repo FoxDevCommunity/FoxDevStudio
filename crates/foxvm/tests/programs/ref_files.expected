@@ -1,0 +1,27 @@
+.T.          0
+        12
+         6
+         7
+.T.
+.T.
+first line
+second line
+.T.
+         0         25
+         6 line
+.T.
+        -1          2
+.F.          6
+.T.
+.F. .T.
+         5
+.T.
+first
+.T.
+.F.
+         1
+NOTES.TXT         25
+         0
+report.prg report.txt
+.T.          3
+notes.txt

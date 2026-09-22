@@ -1,0 +1,19 @@
+Checkbox Checkbox Check []
+Check 0 0 0
+100 17 16777215 1
+.F. .F. .F. .F. .T.
+[] [] 13
+0 1 7171437
+1 N
+.T. L
+\<Loud
+.T. .T.
+.T. .T. .F.
+Optiongroup Optiongroup 0 0
+10 15 1 0
+[] [] .F.
+.T. .T. .T.
+.F. .F. .T.
+Optionbutton Option Option 0
+10 16 0 .F.
+.T. .F. .T.

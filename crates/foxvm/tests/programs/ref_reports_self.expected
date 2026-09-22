@@ -1,0 +1,12 @@
+         2          3
+GETTICKCOUNT kernel32
+         0
+.T.
+.T.
+.T.          2
+.T.
+.T.
+         1 Thing Custom
+         1 Init
+         1 #DEFINE MAX 10
+         0          0

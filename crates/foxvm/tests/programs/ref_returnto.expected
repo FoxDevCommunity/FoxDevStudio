@@ -1,0 +1,6 @@
+main starts
+  outer
+    middle
+      inner
+  outer after
+main again

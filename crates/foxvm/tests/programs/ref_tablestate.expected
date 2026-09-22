@@ -1,0 +1,14 @@
+.T. .T. .F. .F.
+STAFF.DBF STAFF.DBF []
+3 18
+NAME C 10 0
+PAY N 8 2
+.F. .F. 1
+.T.
+.T. 4
+.F. .F.
+.T. .T. 1 0
+D D .T.
+OLDVAL: error 1586 4000
+.T. .T.
+.F. []

@@ -1,0 +1,1723 @@
+kind	name	title	href
+command	!	RUN | ! Command	_5WN12PEL8
+command	?	? | ?? Command	_5WN12PCKK
+command	??	? | ?? Command	_5WN12PCKK
+command	???	??? Command	_5WN12PCKV
+command	@ ... BOX	@ ... BOX Command	_5WN12PWHN
+command	@ ... CLASS	@ ... CLASS Command	_5WN12PWHZ
+command	@ ... CLEAR	@ ... CLEAR Command	_5WN12PWIA
+command	@ ... EDIT - Edit Boxes	@ ... EDIT - Edit Boxes Command	_5WN12PWIL
+command	@ ... FILL	@ ... FILL Command	_5WN12PWIX
+command	@ ... GET - Check Boxes	@ ... GET - Check Boxes Command	_5WN12PWJ8
+command	@ ... GET - Combo Boxes	@ ... GET - Combo Boxes Command	_5WN12PWJK
+command	@ ... GET - Command Buttons	@ ... GET - Command Buttons Command	_5WN12PWJW
+command	@ ... GET - List Boxes	@ ... GET - List Boxes Command	_5WN12PWK9
+command	@ ... GET - Option Buttons	@ ... GET - Option Buttons Command	_5WN12PWKL
+command	@ ... GET - Spinners	@ ... GET - Spinners Command	_5WN12PWKX
+command	@ ... GET - Text Boxes	@ ... GET - Text Boxes Command	_5WN12PWL9
+command	@ ... GET - Transparent Buttons	@ ... GET - Transparent Buttons Command	_5WN12PWLL
+command	@ ... MENU	@ ... MENU Command	_5WN12PWLX
+command	@ ... PROMPT	@ ... PROMPT Command	_5WN12PWM8
+command	@ ... SAY	@ ... SAY Command	_5WN12PWMU
+command	@ ... SAY - Pictures & OLE Objects	@ ... SAY - Pictures & OLE Objects Command	_5WN12PWMJ
+command	@ ... SCROLL	@ ... SCROLL Command	_5WN12PWN5
+command	@ ... TO	@ ... TO Command	_5WN12PWNH
+command	*	* Command	_5WN12PCKA
+command	\	\ | \\ Command	_5WN12PCL5
+command	\\	\ | \\ Command	_5WN12PCL5
+command	&	& Command	_5WN12PCJP
+command	&&	&& Command	_5WN12PCJZ
+command	=	= Command	_5WN12PCLF
+command	ACTIVATE MENU	ACTIVATE MENU Command	_5WN12PCLP
+command	ACTIVATE POPUP	ACTIVATE POPUP Command	_5WN12PCM0
+command	ACTIVATE SCREEN	ACTIVATE SCREEN Command	_5WN12PCMC
+command	ACTIVATE WINDOW	ACTIVATE WINDOW Command	_5WN12PCMM
+command	ADD CLASS	ADD CLASS Command	_5WN12PCMX
+command	ADD TABLE	ADD TABLE Command	_5WN12PCN9
+command	ALTER TABLE - SQL	ALTER TABLE - SQL Command	_5WN12PCNQ
+command	APPEND	APPEND Command	_5WN12PCO4
+command	APPEND FROM	APPEND FROM Command	_5WN12PCQZ
+command	APPEND FROM ARRAY	APPEND FROM ARRAY Command	_5WN12PCOF
+command	APPEND GENERAL	APPEND GENERAL Command	_5WN12PCRA
+command	APPEND MEMO	APPEND MEMO Command	_5WN12PCRL
+command	APPEND PROCEDURES	APPEND PROCEDURES Command	_5WN12PCRX
+command	ASSERT	ASSERT Command	_5WN12PCS7
+command	ASSIST	ASSIST Command	_5WN12PWZ3
+command	AVERAGE	AVERAGE Command	_5WN12PCSI
+command	BEGIN TRANSACTION	BEGIN TRANSACTION Command	_5WN12PCSU
+command	BLANK	BLANK Command	_5WN12PCT4
+command	BROWSE	BROWSE Command	_5WN12PCTF
+command	BUILD APP	BUILD APP Command	_5WN12PCTR
+command	BUILD DLL	BUILD DLL Command	_5WN12PCU2
+command	BUILD EXE	BUILD EXE Command	_5WN12PCUC
+command	BUILD MTDLL	BUILD MTDLL Command	_5WN12PCUO
+command	BUILD PROJECT	BUILD PROJECT Command	_5WN12PCUY
+command	CALCULATE	CALCULATE Command	_5WN12PCV8
+command	CALL	CALL Command	_5WN12PWZE
+command	CANCEL	CANCEL Command	_5WN12PCVI
+command	CD	CD | CHDIR Command	_5WN12PCVS
+command	CHANGE	CHANGE Command	_5WN12PCW3
+command	CHDIR	CD | CHDIR Command	_5WN12PCVS
+command	CLEAR	CLEAR Commands	_5WN12PCWD
+command	CLOSE	CLOSE Commands	_5WN12PCWO
+command	CLOSE MEMO	CLOSE MEMO Command	_5WN12PCWW
+command	COMPILE	COMPILE Command	_5WN12PCX6
+command	CONTINUE	CONTINUE Command	_5WN12PCXH
+command	COPY FILE	COPY FILE Command	_5WN12PCXS
+command	COPY INDEXES	COPY INDEXES Command	_5WN12PCY2
+command	COPY MEMO	COPY MEMO Command	_5WN12PCYE
+command	COPY PROCEDURES	COPY PROCEDURES Command	_5WN12PCYO
+command	COPY STRUCTURE	COPY STRUCTURE Command	_5WN12PCYZ
+command	COPY STRUCTURE EXTENDED	COPY STRUCTURE EXTENDED Command	_5WN12PCZA
+command	COPY TAG	COPY TAG Command	_5WN12PCZL
+command	COPY TO	COPY TO Command	_5WN12PD07
+command	COPY TO ARRAY	COPY TO ARRAY Command	_5WN12PCZV
+command	COUNT	COUNT Command	_5WN12PD0H
+command	CREATE	CREATE Command	_5WN12PD1N
+command	CREATE CLASS	CREATE CLASS Command	_5WN12PD0S
+command	CREATE CLASSLIB	CREATE CLASSLIB Command	_5WN12PD12
+command	CREATE COLOR SET	CREATE COLOR SET Command	_5WN12PD1C
+command	CREATE CONNECTION	CREATE CONNECTION Command	_5WN12PD1X
+command	CREATE CURSOR - SQL	CREATE CURSOR - SQL Command	_5WN12PD29
+command	CREATE DATABASE	CREATE DATABASE Command	_5WN12PD2L
+command	CREATE FORM	CREATE FORM Command	_5WN12PD2V
+command	CREATE FROM	CREATE FROM Command	_5WN12PD35
+command	CREATE LABEL	CREATE LABEL Command	_5WN12PD3C
+command	CREATE MENU	CREATE MENU Command	_5WN12PD3J
+command	CREATE PROJECT	CREATE PROJECT Command	_5WN12PD3T
+command	CREATE QUERY	CREATE QUERY Command	_5WN12PD44
+command	CREATE REPORT	CREATE REPORT Command	_5WN12PD4P
+command	CREATE REPORT - Quick Report	CREATE REPORT - Quick Report Command	_5WN12PD4F
+command	CREATE SCREEN	CREATE SCREEN Command	_5WN12PX0N
+command	CREATE SCREEN - Quick Screen	CREATE SCREEN - Quick Screen Command	_5WN12PX0B
+command	CREATE SQL VIEW	CREATE SQL VIEW Command	_5WN12PD50
+command	CREATE TABLE - SQL	CREATE TABLE - SQL Command	_5WN12PD5B
+command	CREATE TRIGGER	CREATE TRIGGER Command	_5WN12PD5N
+command	CREATE VIEW	CREATE VIEW Command	_5WN12PD5X
+command	DEACTIVATE MENU	DEACTIVATE MENU Command	_5WN12PD68
+command	DEACTIVATE POPUP	DEACTIVATE POPUP Command	_5WN12PD6I
+command	DEACTIVATE WINDOW	DEACTIVATE WINDOW Command	_5WN12PD6S
+command	DEBUG	DEBUG Command	_5WN12PD73
+command	DEBUGOUT	DEBUGOUT Command	_5WN12PD7D
+command	DECLARE	DECLARE Command	_5WN12PD7Y
+command	DECLARE - DLL	DECLARE - DLL Command	_5WN12PD7O
+command	DEFINE BAR	DEFINE BAR Command	_5WN12PD89
+command	DEFINE BOX	DEFINE BOX Command	_5WN12PX0Y
+command	DEFINE CLASS	DEFINE CLASS Command	_5WN12PD8K
+command	DEFINE MENU	DEFINE MENU Command	_5WN12PDAN
+command	DEFINE PAD	DEFINE PAD Command	_5WN12PDAX
+command	DEFINE POPUP	DEFINE POPUP Command	_5WN12PDB8
+command	DEFINE WINDOW	DEFINE WINDOW Command	_5WN12PDBJ
+command	DELETE	DELETE Command	_5WN12PDC5
+command	DELETE - SQL	DELETE - SQL Command	_5WN12PDBU
+command	DELETE CONNECTION	DELETE CONNECTION Command	_5WN12PDCF
+command	DELETE DATABASE	DELETE DATABASE Command	_5WN12PDCQ
+command	DELETE FILE	DELETE FILE Command	_5WN12PDD0
+command	DELETE TAG	DELETE TAG Command	_5WN12PDDB
+command	DELETE TRIGGER	DELETE TRIGGER Command	_5WN12PDDL
+command	DELETE VIEW	DELETE VIEW Command	_5WN12PDDV
+command	DIMENSION	DIMENSION Command	_5WN12PDE6
+command	DIR or DIRECTORY	DIR or DIRECTORY Command	_5WN12PDEH
+command	DISPLAY	DISPLAY Command	_5WN12PDER
+command	DISPLAY CONNECTIONS	DISPLAY CONNECTIONS Command	_5WN12PDF2
+command	DISPLAY DATABASE	DISPLAY DATABASE Command	_5WN12PDFC
+command	DISPLAY DLLS	DISPLAY DLLS Command	_5WN12PDFN
+command	DISPLAY FILES	DISPLAY FILES Command	_5WN12PDFX
+command	DISPLAY MEMORY	DISPLAY MEMORY Command	_5WN12PDG8
+command	DISPLAY OBJECTS	DISPLAY OBJECTS Command	_5WN12PDGI
+command	DISPLAY PROCEDURES	DISPLAY PROCEDURES Command	_5WN12PDGS
+command	DISPLAY STATUS	DISPLAY STATUS Command	_5WN12PDH2
+command	DISPLAY STRUCTURE	DISPLAY STRUCTURE Command	_5WN12PDHD
+command	DISPLAY TABLES	DISPLAY TABLES Command	_5WN12PDHO
+command	DISPLAY VIEWS	DISPLAY VIEWS Command	_5WN12PDHY
+command	DO	DO Command	_5WN12PDII
+command	DO CASE ... ENDCASE	DO CASE ... ENDCASE Command	_5WN12PDI8
+command	DO FORM	DO FORM Command	_5WN12PDIT
+command	DO WHILE ... ENDDO	DO WHILE ... ENDDO Command	_5WN12PDJ3
+command	DOCK	DOCK Command	_5WN12PDJD
+command	DOEVENTS	DOEVENTS Command	_5WN12PDJP
+command	DROP TABLE	DROP TABLE Command	_5WN12PDJZ
+command	DROP VIEW	DROP VIEW Command	_5WN12PDKA
+command	EDIT	EDIT Command	_5WN12PDKK
+command	EJECT	EJECT Command	_5WN12PDKV
+command	EJECT PAGE	EJECT PAGE Command	_5WN12PDL6
+command	END TRANSACTION	END TRANSACTION Command	_5WN12PDLG
+command	ERASE	ERASE Command	_5WN12PDLQ
+command	ERROR	ERROR Command	_5WN12PDM1
+command	EXIT	EXIT Command	_5WN12PDMB
+command	EXPORT	EXPORT Command	_5WN12PDMM
+command	EXTERNAL	EXTERNAL Command	_5WN12PDMW
+command	FIND	FIND Command (Visual FoxPro)	_5WN12PX1J
+command	FLUSH	FLUSH Command	_5WN12PDN7
+command	FOR ... ENDFOR	FOR ... ENDFOR Command	_5WN12PDNR
+command	FOR EACH ... ENDFOR	FOR EACH ... ENDFOR Command	_5WN12PDNH
+command	FREE TABLE	FREE TABLE Command	_5WN12PDO1
+command	FUNCTION	FUNCTION Command	_5WN12PDOC
+command	GATHER	GATHER Command	_5WN12PDOM
+command	GETEXPR	GETEXPR Command	_5WN12PDOX
+command	GO	GO | GOTO Command	_5WN12PDP7
+command	GOTO	GO | GOTO Command	_5WN12PDP7
+command	HELP	HELP Command	_5WN12PDPI
+command	HIDE MENU	HIDE MENU Command	_5WN12PDPS
+command	HIDE POPUP	HIDE POPUP Command	_5WN12PDQ3
+command	HIDE WINDOW	HIDE WINDOW Command	_5WN12PDQD
+command	IF ... ENDIF	IF ... ENDIF Command	_5WN12PDQY
+command	IMPORT	IMPORT Command	_5WN12PDRJ
+command	INDEX	INDEX Command	_5WN12PDRT
+command	INPUT	INPUT Command	_5WN12PX1V
+command	INSERT	INSERT Command	_5WN12PX26
+command	INSERT - SQL	INSERT - SQL Command	_5WN12PDR9
+command	JOIN	JOIN Command	_5WN12PX2H
+command	KEYBOARD	KEYBOARD Command	_5WN12PDS5
+command	LABEL	LABEL Command	_5WN12PDSF
+command	LIST	LIST Commands	_5WN12PDSP
+command	LIST CONNECTIONS	LIST CONNECTIONS Command	_5WN12PDT0
+command	LIST DATABASE	LIST DATABASE Command	_5WN12PDTA
+command	LIST DLLS	LIST DLLS Command	_5WN12PDTK
+command	LIST OBJECTS	LIST OBJECTS Command	_5WN12PDTV
+command	LIST PROCEDURES	LIST PROCEDURES Command	_5WN12PDU5
+command	LIST TABLES	LIST TABLES Command	_5WN12PDUG
+command	LIST VIEWS	LIST VIEWS Command	_5WN12PDUQ
+command	LOAD	LOAD Command	_5WN12PX2S
+command	LOCAL	LOCAL Command	_5WN12PDV0
+command	LOCATE	LOCATE Command	_5WN12PDVB
+command	LOOP	LOOP Command	_5WN12PDVL
+command	LPARAMETERS	LPARAMETERS Command	_5WN12PDVW
+command	MD	MD | MKDIR Command	_5WN12PDW6
+command	MENU	MENU Command	_5WN12PDWH
+command	MENU TO	MENU TO Command	_5WN12PX3Q
+command	MKDIR	MD | MKDIR Command	_5WN12PDW6
+command	MODIFY CLASS	MODIFY CLASS Command	_5WN12PDWR
+command	MODIFY COMMAND	MODIFY COMMAND Command	_5WN12PDX1
+command	MODIFY CONNECTION	MODIFY CONNECTION Command	_5WN12PDXC
+command	MODIFY DATABASE	MODIFY DATABASE Command	_5WN12PDXN
+command	MODIFY FILE	MODIFY FILE Command	_5WN12PDXY
+command	MODIFY FORM	MODIFY FORM Command	_5WN12PDY8
+command	MODIFY GENERAL	MODIFY GENERAL Command	_5WN12PDYJ
+command	MODIFY LABEL	MODIFY LABEL Command	_5WN12PDYT
+command	MODIFY MEMO	MODIFY MEMO Command	_5WN12PDZ3
+command	MODIFY MENU	MODIFY MENU Command	_5WN12PDZE
+command	MODIFY PROCEDURE	MODIFY PROCEDURE Command	_5WN12PDZO
+command	MODIFY PROJECT	MODIFY PROJECT Command	_5WN12PDZY
+command	MODIFY QUERY	MODIFY QUERY Command	_5WN12PE08
+command	MODIFY REPORT	MODIFY REPORT Command	_5WN12PE0J
+command	MODIFY SCREEN	MODIFY SCREEN Command	_5WN12PX4C
+command	MODIFY STRUCTURE	MODIFY STRUCTURE Command	_5WN12PE0T
+command	MODIFY VIEW	MODIFY VIEW Command	_5WN12PE14
+command	MODIFY WINDOW	MODIFY WINDOW Command	_5WN12PE1E
+command	MOUSE	MOUSE Command	_5WN12PE1O
+command	MOVE POPUP	MOVE POPUP Command	_5WN12PE1Z
+command	MOVE WINDOW	MOVE WINDOW Command	_5WN12PE29
+command	NOTE	NOTE Command	_5WN12PE2T
+command	ON BAR	ON BAR Command	_5WN12PE33
+command	ON ERROR	ON ERROR Command	_5WN12PE3E
+command	ON ESCAPE	ON ESCAPE Command	_5WN12PE3P
+command	ON EXIT BAR	ON EXIT BAR Command	_5WN12PE3Z
+command	ON EXIT MENU	ON EXIT MENU Command	_5WN12PE49
+command	ON EXIT PAD	ON EXIT PAD Command	_5WN12PE4J
+command	ON EXIT POPUP	ON EXIT POPUP Command	_5WN12PE4T
+command	ON KEY	ON KEY Command	_5WN12PX5W
+command	ON KEY =	ON KEY = Command	_5WN12PX5L
+command	ON KEY LABEL	ON KEY LABEL Command	_5WN12PE54
+command	ON PAD	ON PAD Command	_5WN12PE5E
+command	ON PAGE	ON PAGE Command	_5WN12PE5P
+command	ON READERROR	ON READERROR Command	_5WN12PX67
+command	ON SELECTION BAR	ON SELECTION BAR Command	_5WN12PE60
+command	ON SELECTION MENU	ON SELECTION MENU Command	_5WN12PE6A
+command	ON SELECTION PAD	ON SELECTION PAD Command	_5WN12PE6K
+command	ON SELECTION POPUP	ON SELECTION POPUP Command	_5WN12PE6U
+command	ON SHUTDOWN	ON SHUTDOWN Command	_5WN12PE75
+command	OPEN DATABASE	OPEN DATABASE Command	_5WN12PE7G
+command	PACK	PACK Command	_5WN12PE7R
+command	PACK DATABASE	PACK DATABASE Command	_5WN12PE81
+command	PARAMETERS	PARAMETERS Command	_5WN12PE8B
+command	PLAY MACRO	PLAY MACRO Command	_5WN12PE8M
+command	POP KEY	POP KEY Command	_5WN12PE8W
+command	POP MENU	POP MENU Command	_5WN12PE96
+command	POP POPUP	POP POPUP Command	_5WN12PE9G
+command	PRINTJOB ... ENDPRINTJOB	PRINTJOB ... ENDPRINTJOB Command	_5WN12PE9R
+command	PRIVATE	PRIVATE Command	_5WN12PEA2
+command	PROCEDURE	PROCEDURE Command	_5WN12PEAC
+command	PUBLIC	PUBLIC Command	_5WN12PEAN
+command	PUSH KEY	PUSH KEY Command	_5WN12PEAX
+command	PUSH MENU	PUSH MENU Command	_5WN12PEB8
+command	PUSH POPUP	PUSH POPUP Command	_5WN12PEBI
+command	QUIT	QUIT Command	_5WN12PEBS
+command	RD	RD | RMDIR Command	_5WN12PEC2
+command	READ	READ Command	_5WN12PX75
+command	READ EVENTS	READ EVENTS Command	_5WN12PECC
+command	READ MENU	READ MENU Command	_5WN12PX7H
+command	RECALL	RECALL Command	_5WN12PECN
+command	REINDEX	REINDEX Command	_5WN12PECY
+command	RELEASE	RELEASE Command	_5WN12PEDT
+command	RELEASE BAR	RELEASE BAR Command	_5WN12PED8
+command	RELEASE CLASSLIB	RELEASE CLASSLIB Command	_5WN12PEDJ
+command	RELEASE LIBRARY	RELEASE LIBRARY Command	_5WN12PEE3
+command	RELEASE MENUS	RELEASE MENUS Command	_5WN12PEEK
+command	RELEASE PAD	RELEASE PAD Command	_5WN12PEEV
+command	RELEASE POPUPS	RELEASE POPUPS Command	_5WN12PEF5
+command	RELEASE PROCEDURE	RELEASE PROCEDURE Command	_5WN12PEFF
+command	RELEASE WINDOWS	RELEASE WINDOWS Command	_5WN12PEFR
+command	REMOVE CLASS	REMOVE CLASS Command	_5WN12PEG1
+command	REMOVE TABLE	REMOVE TABLE Command	_5WN12PEGB
+command	RENAME	RENAME Command	_5WN12PEGW
+command	RENAME CLASS	RENAME CLASS Command	_5WN12PEGL
+command	RENAME CONNECTION	RENAME CONNECTION Command	_5WN12PEH6
+command	RENAME TABLE	RENAME TABLE Command	_5WN12PEHH
+command	RENAME VIEW	RENAME VIEW Command	_5WN12PEHR
+command	REPLACE	REPLACE Command (Visual FoxPro)	_5WN12PEI1
+command	REPLACE FROM ARRAY	REPLACE FROM ARRAY Command	_5WN12PEIC
+command	REPORT FORM	REPORT FORM Command	_5WN12PEIM
+command	RESTORE FROM	RESTORE FROM Command	_5WN12PEIX
+command	RESTORE MACROS	RESTORE MACROS Command	_5WN12PEJ7
+command	RESTORE SCREEN	RESTORE SCREEN Command	_5WN12PEJH
+command	RESTORE WINDOW	RESTORE WINDOW Command	_5WN12PEJS
+command	RESUME	RESUME Command	_5WN12PEK2
+command	RETRY	RETRY Command	_5WN12PEKD
+command	RETURN	RETURN Command	_5WN12PEKN
+command	RMDIR	RD | RMDIR Command	_5WN12PEC2
+command	ROLLBACK	ROLLBACK Command	_5WN12PEKY
+command	RUN	RUN | ! Command	_5WN12PEL8
+command	SAVE MACROS	SAVE MACROS Command	_5WN12PELJ
+command	SAVE SCREEN	SAVE SCREEN Command	_5WN12PELT
+command	SAVE TO	SAVE TO Command	_5WN12PEM4
+command	SAVE WINDOWS	SAVE WINDOWS Command	_5WN12PEMF
+command	SCAN ... ENDSCAN	SCAN ... ENDSCAN Command	_5WN12PEMP
+command	SCATTER	SCATTER Command	_5WN12PEMZ
+command	SCROLL	SCROLL Command	_5WN12PENA
+command	SEEK	SEEK Command	_5WN12PENL
+command	SELECT	SELECT Command	_5WN12PESG
+command	SELECT - SQL	SELECT - SQL Command	_5WN12PENW
+command	SET ALTERNATE	SET ALTERNATE Command	_5WN12PETD
+command	SET ANSI	SET ANSI Command	_5WN12PETN
+command	SET ASSERTS	SET ASSERTS Command	_5WN12PETX
+command	SET AUTOINCERROR	SET AUTOINCERROR Command	_5WN12PEU7
+command	SET AUTOSAVE	SET AUTOSAVE Command	_5WN12PEUH
+command	SET BELL	SET BELL Command	_5WN12PEUR
+command	SET BLOCKSIZE	SET BLOCKSIZE Command	_5WN12PEV1
+command	SET BORDER	SET BORDER Command	_5WN12PXBW
+command	SET BROWSEIME	SET BROWSEIME Command	_5WN12PEVB
+command	SET BRSTATUS	SET BRSTATUS Command	_5WN12PXC7
+command	SET CARRY	SET CARRY Command	_5WN12PEVM
+command	SET CENTURY	SET CENTURY Command	_5WN12PEVX
+command	SET CLASSLIB	SET CLASSLIB Command	_5WN12PEW7
+command	SET CLEAR	SET CLEAR Command	_5WN12PXCJ
+command	SET CLOCK	SET CLOCK Command	_5WN12PEWI
+command	SET COLLATE	SET COLLATE Command	_5WN12PEWR
+command	SET COLOR OF	SET COLOR OF Command	_5WN12PXCU
+command	SET COLOR OF SCHEME	SET COLOR OF SCHEME Command	_5WN12PEX2
+command	SET COLOR SET	SET COLOR SET Command	_5WN12PEXD
+command	SET COLOR TO	SET COLOR TO Command	_5WN12PXD5
+command	SET COMPATIBLE	SET COMPATIBLE Command	_5WN12PEXN
+command	SET CONFIRM	SET CONFIRM Command	_5WN12PEY0
+command	SET CONSOLE	SET CONSOLE Command	_5WN12PEYB
+command	SET COVERAGE	SET COVERAGE Command	_5WN12PEYI
+command	SET CPCOMPILE	SET CPCOMPILE Command	_5WN12PEYS
+command	SET CPDIALOG	SET CPDIALOG Command	_5WN12PEZ2
+command	SET CURRENCY	SET CURRENCY Command	_5WN12PEZD
+command	SET CURSOR	SET CURSOR Command	_5WN12PEZO
+command	SET DATABASE	SET DATABASE Command	_5WN12PEZY
+command	SET DATASESSION	SET DATASESSION Command	_5WN12PF0A
+command	SET DATE	SET DATE Command	_5WN12PF0L
+command	SET DEBUG	SET DEBUG Command	_5WN12PXDD
+command	SET DEBUGOUT	SET DEBUGOUT Command	_5WN12PF0V
+command	SET DECIMALS	SET DECIMALS Command	_5WN12PF16
+command	SET DEFAULT	SET DEFAULT Command	_5WN12PF1G
+command	SET DELETED	SET DELETED Command	_5WN12PF1R
+command	SET DELIMITERS	SET DELIMITERS Command	_5WN12PXDO
+command	SET DEVELOPMENT	SET DEVELOPMENT Command	_5WN12PF21
+command	SET DEVICE	SET DEVICE Command	_5WN12PF2C
+command	SET DISPLAY	SET DISPLAY Command	_5WN12PXDZ
+command	SET DOHISTORY	SET DOHISTORY Command	_5WN12PF2X
+command	SET ECHO	SET ECHO Command	_5WN12PF37
+command	SET ENGINEBEHAVIOR	SET ENGINEBEHAVIOR Command	_5WN12PF3I
+command	SET ESCAPE	SET ESCAPE Command	_5WN12PF3S
+command	SET EVENTLIST	SET EVENTLIST Command	_5WN12PF42
+command	SET EVENTTRACKING	SET EVENTTRACKING Command	_5WN12PF4D
+command	SET EXACT	SET EXACT Command	_5WN12PF4N
+command	SET EXCLUSIVE	SET EXCLUSIVE Command	_5WN12PF4X
+command	SET FDOW	SET FDOW Command	_5WN12PF57
+command	SET FIELDS	SET FIELDS Command	_5WN12PF5H
+command	SET FILTER	SET FILTER Command	_5WN12PF5S
+command	SET FIXED	SET FIXED Command	_5WN12PF63
+command	SET FORMAT	SET FORMAT Command	_5WN12PXEB
+command	SET FULLPATH	SET FULLPATH Command	_5WN12PF6E
+command	SET FUNCTION	SET FUNCTION Command	_5WN12PF6O
+command	SET FWEEK	SET FWEEK Command	_5WN12PF6Z
+command	SET HEADINGS	SET HEADINGS Command	_5WN12PF7A
+command	SET HELP	SET HELP Command	_5WN12PF7L
+command	SET HOURS	SET HOURS Command	_5WN12PF7V
+command	SET INDEX	SET INDEX Command	_5WN12PF85
+command	SET INTENSITY	SET INTENSITY Command	_5WN12PXEM
+command	SET KEY	SET KEY Command	_5WN12PF8G
+command	SET KEYCOMP	SET KEYCOMP Command	_5WN12PF8Q
+command	SET LIBRARY	SET LIBRARY Command	_5WN12PF91
+command	SET LOCK	SET LOCK Command	_5WN12PF9C
+command	SET LOGERRORS	SET LOGERRORS Command	_5WN12PF9M
+command	SET MACKEY	SET MACKEY Command	_5WN12PF9X
+command	SET MARGIN	SET MARGIN Command	_5WN12PFA6
+command	SET MARK OF	SET MARK OF Command	_5WN12PFAG
+command	SET MARK TO	SET MARK TO Command	_5WN12PFAR
+command	SET MEMOWIDTH	SET MEMOWIDTH Command	_5WN12PFAY
+command	SET MESSAGE	SET MESSAGE Command	_5WN12PFB8
+command	SET MULTILOCKS	SET MULTILOCKS Command	_5WN12PFBI
+command	SET NEAR	SET NEAR Command	_5WN12PFBS
+command	SET NOCPTRANS	SET NOCPTRANS Command	_5WN12PFC2
+command	SET NOTIFY	SET NOTIFY Command	_5WN12PFCD
+command	SET NULL	SET NULL Command	_5WN12PFCN
+command	SET NULLDISPLAY	SET NULLDISPLAY Command	_5WN12PFCX
+command	SET ODOMETER	SET ODOMETER Command	_5WN12PFD8
+command	SET OLEOBJECT	SET OLEOBJECT Command	_5WN12PFDI
+command	SET OPTIMIZE	SET OPTIMIZE Command	_5WN12PFDS
+command	SET ORDER	SET ORDER Command	_5WN12PFE3
+command	SET PALETTE	SET PALETTE Command	_5WN12PFEE
+command	SET PATH	SET PATH Command	_5WN12PFEO
+command	SET PDSETUP	SET PDSETUP Command	_5WN12PFEZ
+command	SET POINT	SET POINT Command	_5WN12PFFA
+command	SET PRINTER	SET PRINTER Command	_5WN12PFFL
+command	SET PROCEDURE	SET PROCEDURE Command	_5WN12PFFW
+command	SET READBORDER	SET READBORDER Command	_5WN12PFG6
+command	SET REFRESH	SET REFRESH Command	_5WN12PFGH
+command	SET RELATION	SET RELATION Command	_5WN12PFGT
+command	SET RELATION OFF	SET RELATION OFF Command	_5WN12PFH5
+command	SET REPROCESS	SET REPROCESS Command	_5WN12PFHQ
+command	SET RESOURCE	SET RESOURCE Command	_5WN12PFI1
+command	SET SAFETY	SET SAFETY Command	_5WN12PFIC
+command	SET SECONDS	SET SECONDS Command	_5WN12PFIM
+command	SET SEPARATOR	SET SEPARATOR Command	_5WN12PFIW
+command	SET SKIP	SET SKIP Command	_5WN12PFJ7
+command	SET SKIP OF	SET SKIP OF Command	_5WN12PFJI
+command	SET SPACE	SET SPACE Command	_5WN12PFJS
+command	SET STATUS	SET STATUS Command	_5WN12PFKN
+command	SET STATUS BAR	SET STATUS BAR Command	_5WN12PFKD
+command	SET STEP	SET STEP Command	_5WN12PFKX
+command	SET STRICTDATE	SET STRICTDATE Command	_5WN12PFL8
+command	SET SYSFORMATS	SET SYSFORMATS Command	_5WN12PFLJ
+command	SET SYSMENU	SET SYSMENU Command	_5WN12PFLT
+command	SET TABLEVALIDATE	SET TABLEVALIDATE Command	_5WN12PFME
+command	SET TALK	SET TALK Command	_5WN12PFMO
+command	SET TEXTMERGE	SET TEXTMERGE Command	_5WN12PFMZ
+command	SET TEXTMERGE DELIMITERS	SET TEXTMERGE DELIMITERS Command	_5WN12PFN9
+command	SET TOPIC	SET TOPIC Command	_5WN12PFNK
+command	SET TOPIC ID	SET TOPIC ID Command	_5WN12PFNU
+command	SET TRBETWEEN	SET TRBETWEEN Command	_5WN12PFO5
+command	SET TYPEAHEAD	SET TYPEAHEAD Command	_5WN12PFOF
+command	SET UDFPARMS	SET UDFPARMS Command	_5WN12PFOQ
+command	SET UNIQUE	SET UNIQUE Command	_5WN12PFP0
+command	SET VIEW	SET VIEW Command	_5WN12PFPL
+command	SET WINDOW OF MEMO	SET WINDOW OF MEMO Command	_5WN12PXF9
+command	SHOW GET	SHOW GET Command	_5WN12PXFK
+command	SHOW GETS	SHOW GETS Command	_5WN12PXFW
+command	SHOW MENU	SHOW MENU Command	_5WN12PFPV
+command	SHOW OBJECT	SHOW OBJECT Command	_5WN12PXG7
+command	SHOW POPUP	SHOW POPUP Command	_5WN12PFQ5
+command	SHOW WINDOW	SHOW WINDOW Command	_5WN12PFQG
+command	SIZE POPUP	SIZE POPUP Command	_5WN12PFQQ
+command	SIZE WINDOW	SIZE WINDOW Command	_5WN12PFR0
+command	SKIP	SKIP Command	_5WN12PFRB
+command	SORT	SORT Command	_5WN12PFRM
+command	STORE	STORE Command	_5WN12PFRW
+command	SUM	SUM Command	_5WN12PFS7
+command	SUSPEND	SUSPEND Command	_5WN12PFSH
+command	TEXT ... ENDTEXT	TEXT ... ENDTEXT Command	_5WN12PFSS
+command	TOTAL	TOTAL Command	_5WN12PFT3
+command	TRY...CATCH...FINALLY	TRY...CATCH...FINALLY Command	_5WN12PFTE
+command	TYPE	TYPE Command	_5WN12PFTP
+command	UNLOCK	UNLOCK Command	_5WN12PFTZ
+command	UPDATE	UPDATE Command	_5WN12PXIB
+command	UPDATE - SQL	UPDATE - SQL Command	_5WN12PFUB
+command	USE	USE Command	_5WN12PFUT
+command	VALIDATE DATABASE	VALIDATE DATABASE Command	_5WN12PFVA
+command	WAIT	WAIT Command	_5WN12PFVL
+command	WITH ... ENDWITH	WITH ... ENDWITH Command	_5WN12PFVY
+command	ZAP	ZAP Command	_5WN12PFWA
+command	ZOOM WINDOW	ZOOM WINDOW Command	_5WN12PFWL
+directive	#DEFINE ... #UNDEF	#DEFINE ... #UNDEF Preprocessor Directive	_5WN12PTX3
+directive	#IF ... #ENDIF	#IF ... #ENDIF Preprocessor Directive	_5WN12PTXE
+directive	#IFDEF	#IFDEF | #IFNDEF ... #ENDIF Preprocessor Directive	_5WN12PTXR
+directive	#IFNDEF ... #ENDIF	#IFDEF | #IFNDEF ... #ENDIF Preprocessor Directive	_5WN12PTXR
+directive	#INCLUDE	#INCLUDE Preprocessor Directive	_5WN12PTY3
+directive	#INSERT	#INSERT Preprocessor Directive	_5WN12PTYF
+directive	#NAME	#NAME Preprocessor Directive	_5WN12PTYR
+event	Activate	Activate Event (Visual FoxPro)	_5WN12PNSG
+event	AdjustObjectSize	AdjustObjectSize Event	_5WN12PNSR
+event	AfterBand	AfterBand Event	_5WN12PNT4
+event	AfterBuild	AfterBuild Event	_5WN12PNTF
+event	AfterCloseTables	AfterCloseTables Event	_5WN12PNTN
+event	AfterCursorAttach	AfterCursorAttach Event	_5WN12PNTY
+event	AfterCursorClose	AfterCursorClose Event	_5WN12PNUA
+event	AfterCursorDetach	AfterCursorDetach Event	_5WN12PNUL
+event	AfterCursorFill	AfterCursorFill Event	_5WN12PNUW
+event	AfterCursorRefresh	AfterCursorRefresh Event	_5WN12PNV7
+event	AfterCursorUpdate	AfterCursorUpdate Event	_5WN12PNVJ
+event	AfterDelete	AfterDelete Event	_5WN12PNVU
+event	AfterDock	AfterDock Event	_5WN12PNW5
+event	AfterInsert	AfterInsert Event	_5WN12PNWG
+event	AfterRecordRefresh	AfterRecordRefresh Event	_5WN12PNWT
+event	AfterReport	AfterReport Event	_5WN12PNX4
+event	AfterRowColChange	AfterRowColChange Event	_5WN12PNXG
+event	AfterUpdate	AfterUpdate Event	_5WN12PNXR
+event	BeforeBand	BeforeBand Event	_5WN12PNY3
+event	BeforeCursorAttach	BeforeCursorAttach Event	_5WN12PNYN
+event	BeforeCursorClose	BeforeCursorClose Event	_5WN12PNYZ
+event	BeforeCursorDetach	BeforeCursorDetach Event	_5WN12PNZA
+event	BeforeCursorFill	BeforeCursorFill Event	_5WN12PNZP
+event	BeforeCursorRefresh	BeforeCursorRefresh Event	_5WN12PO01
+event	BeforeCursorUpdate	BeforeCursorUpdate Event	_5WN12PO0C
+event	BeforeDelete	BeforeDelete Event	_5WN12PO0O
+event	BeforeDock	BeforeDock Event	_5WN12PO0Z
+event	BeforeInsert	BeforeInsert Event	_5WN12PO1B
+event	BeforeOpenTables	BeforeOpenTables Event	_5WN12PO1O
+event	BeforeRecordRefresh	BeforeRecordRefresh Event	_5WN12PO20
+event	BeforeReport	BeforeReport Event	_5WN12PO2C
+event	BeforeRowColChange	BeforeRowColChange Event	_5WN12PO2O
+event	BeforeUpdate	BeforeUpdate Event	_5WN12PO31
+event	Click	Click Event	_5WN12PO3D
+event	dbc_Activate	dbc_Activate Event	_5WN12PO3Q
+event	dbc_AfterAddTable	dbc_AfterAddTable Event	_5WN12PO4F
+event	dbc_AfterAppendProc	dbc_AfterAppendProc Event	_5WN12PO4S
+event	dbc_AfterCloseTable	dbc_AfterCloseTable Event	_5WN12PO54
+event	dbc_AfterCopyProc	dbc_AfterCopyProc Event	_5WN12PO5F
+event	dbc_AfterCreateConnection	dbc_AfterCreateConnection Event	_5WN12PO5R
+event	dbc_AfterCreateOffline	dbc_AfterCreateOffline Event	_5WN12PO64
+event	dbc_AfterCreateTable	dbc_AfterCreateTable Event	_5WN12PO6H
+event	dbc_AfterCreateView	dbc_AfterCreateView Event	_5WN12PO6U
+event	dbc_AfterDBGetProp	dbc_AfterDBGetProp Event	_5WN12PO75
+event	dbc_AfterDBSetProp	dbc_AfterDBSetProp Event	_5WN12PO7J
+event	dbc_AfterDeleteConnection	dbc_AfterDeleteConnection Event	_5WN12PO7U
+event	dbc_AfterDropOffline	dbc_AfterDropOffline Event	_5WN12PO86
+event	dbc_AfterDropTable	dbc_AfterDropTable Event	_5WN12PO8U
+event	dbc_AfterModifyConnection	dbc_AfterModifyConnection Event	_5WN12PO9L
+event	dbc_AfterModifyProc	dbc_AfterModifyProc Event	_5WN12PO9Y
+event	dbc_AfterModifyTable	dbc_AfterModifyTable Event	_5WN12POAA
+event	dbc_AfterModifyView	dbc_AfterModifyView Event	_5WN12POAK
+event	dbc_AfterOpenTable	dbc_AfterOpenTable Event	_5WN12POAW
+event	dbc_AfterRemoveTable	dbc_AfterRemoveTable Event	_5WN12POB7
+event	dbc_AfterRenameConnection	dbc_AfterRenameConnection Event	_5WN12POBI
+event	dbc_AfterRenameTable	dbc_AfterRenameTable Event	_5WN12POBU
+event	dbc_AfterRenameView	dbc_AfterRenameView Event	_5WN12POC5
+event	dbc_AfterValidateData	dbc_AfterValidateData Event	_5WN12POCG
+event	dbc_BeforeAddTable	dbc_BeforeAddTable Event	_5WN12POD3
+event	dbc_BeforeAppendProc	dbc_BeforeAppendProc Event	_5WN12PODE
+event	dbc_BeforeCloseTable	dbc_BeforeCloseTable Event	_5WN12PODQ
+event	dbc_BeforeCopyProc	dbc_BeforeCopyProc Event	_5WN12POE2
+event	dbc_BeforeCreateConnection	dbc_BeforeCreateConnection Event	_5WN12POEC
+event	dbc_BeforeCreateOffline	dbc_BeforeCreateOffline Event	_5WN12POEO
+event	dbc_BeforeCreateTable	dbc_BeforeCreateTable Event	_5WN12POF0
+event	dbc_BeforeCreateView	dbc_BeforeCreateView Event	_5WN12POFC
+event	dbc_BeforeDBGetProp	dbc_BeforeDBGetProp Event	_5WN12POFN
+event	dbc_BeforeDBSetProp	dbc_BeforeDBSetProp Event	_5WN12POFY
+event	dbc_BeforeDeleteConnection	dbc_BeforeDeleteConnection Event	_5WN12POG9
+event	dbc_BeforeDropOffline	dbc_BeforeDropOffline Event	_5WN12POGK
+event	dbc_BeforeDropTable	dbc_BeforeDropTable Event	_5WN12POH8
+event	dbc_BeforeModifyConnection	dbc_BeforeModifyConnection Event	_5WN12POHV
+event	dbc_BeforeModifyProc	dbc_BeforeModifyProc Event	_5WN12POI8
+event	dbc_BeforeModifyTable	dbc_BeforeModifyTable Event	_5WN12POIK
+event	dbc_BeforeModifyView	dbc_BeforeModifyView Event	_5WN12POIW
+event	dbc_BeforeOpenTable	dbc_BeforeOpenTable Event	_5WN12POJ8
+event	dbc_BeforeRemoveTable	dbc_BeforeRemoveTable Event	_5WN12POJK
+event	dbc_BeforeRenameConnection	dbc_BeforeRenameConnection Event	_5WN12POJV
+event	dbc_BeforeRenameTable	dbc_BeforeRenameTable Event	_5WN12POK6
+event	dbc_BeforeRenameView	dbc_BeforeRenameView Event	_5WN12POKI
+event	dbc_BeforeValidateData	dbc_BeforeValidateData Event	_5WN12POKU
+event	dbc_CloseData	dbc_CloseData Event	_5WN12POL5
+event	dbc_Deactivate	dbc_Deactivate Event	_5WN12POLG
+event	dbc_ModifyData	dbc_ModifyData Event	_5WN12POLR
+event	dbc_OpenData	dbc_OpenData Event	_5WN12POM3
+event	dbc_PackData	dbc_PackData Event	_5WN12POME
+event	DblClick	DblClick Event	_5WN12POMP
+event	Deactivate	Deactivate Event	_5WN12PON0
+event	Deleted	Deleted Event	_5WN12PONC
+event	Destroy	Destroy Event	_5WN12PONN
+event	DownClick	DownClick Event	_5WN12PONV
+event	DragDrop	DragDrop Event	_5WN12POO7
+event	DragOver	DragOver Event	_5WN12POOI
+event	DropDown	DropDown Event	_5WN12POOU
+event	Error	Error Event (Visual FoxPro)	_5WN12POP9
+event	ErrorMessage	ErrorMessage Event	_5WN12PX19
+event	EvaluateContents	EvaluateContents Event	_5WN12POPM
+event	GotFocus	GotFocus Event	_5WN12POPY
+event	Init	Init Event	_5WN12POQA
+event	InteractiveChange	InteractiveChange Event	_5WN12POQL
+event	KeyPress	KeyPress Event	_5WN12POQW
+event	Load	Load Event	_5WN12POR7
+event	LoadReport	LoadReport Event	_5WN12PORJ
+event	LostFocus	LostFocus Event	_5WN12PORU
+event	Message	Message Event	_5WN12PX41
+event	MiddleClick	MiddleClick Event	_5WN12POS5
+event	MouseDown	MouseDown Event	_5WN12POSH
+event	MouseEnter	MouseEnter Event	_5WN12POSR
+event	MouseLeave	MouseLeave Event	_5WN12POT2
+event	MouseMove	MouseMove Event	_5WN12POTD
+event	MouseUp	MouseUp Event	_5WN12POTL
+event	MouseWheel	MouseWheel Event	_5WN12POTW
+event	Moved	Moved Event	_5WN12POU8
+event	OLECompleteDrag	OLECompleteDrag Event	_5WN12POUI
+event	OLEDragOver	OLEDragOver Event	_5WN12POV4
+event	OLEGiveFeedback	OLEGiveFeedback Event	_5WN12POVF
+event	OLESetData	OLESetData Event	_5WN12POVQ
+event	OLEStartDrag	OLEStartDrag Event	_5WN12POW1
+event	OnMoveItem	OnMoveItem Event	_5WN12POWC
+event	Paint	Paint Event	_5WN12POWK
+event	ProgrammaticChange	ProgrammaticChange Event	_5WN12POWV
+event	QueryAddFile	QueryAddFile Event	_5WN12POX5
+event	QueryModifyFile	QueryModifyFile Event	_5WN12POXH
+event	QueryNewFile	QueryNewFile Event	_5WN12POXS
+event	QueryRemoveFile	QueryRemoveFile Event	_5WN12POY4
+event	QueryRunFile	QueryRunFile Event	_5WN12POYG
+event	QueryUnload	QueryUnload Event	_5WN12POYQ
+event	RangeHigh	RangeHigh Event	_5WN12POZ3
+event	RangeLow	RangeLow Event	_5WN12POZF
+event	ReadActivate	ReadActivate Event	_5WN12PX7S
+event	ReadDeactivate	ReadDeactivate Event	_5WN12PX8P
+event	ReadShow	ReadShow Event	_5WN12PXAN
+event	ReadValid	ReadValid Event	_5WN12PXB9
+event	ReadWhen	ReadWhen Event	_5WN12PXBM
+event	Resize	Resize Event	_5WN12POZP
+event	RightClick	RightClick Event	_5WN12PP00
+event	SCCDestroy	SCCDestroy Event	_5WN12PP0D
+event	SCCInit	SCCInit Event	_5WN12PP0T
+event	Scrolled	Scrolled Event	_5WN12PP14
+event	Timer	Timer Event	_5WN12PP1G
+event	UIEnable	UIEnable Event	_5WN12PP1R
+event	UnDock	UnDock Event	_5WN12PP22
+event	Unload	Unload Event	_5WN12PP2D
+event	UnloadReport	UnloadReport Event	_5WN12PP2O
+event	UpClick	UpClick Event	_5WN12PP2Z
+event	Valid	Valid Event	_5WN12PP3A
+event	When	When Event	_5WN12PP3L
+function	ABS	ABS( ) Function	_5WN12PP7K
+function	ACLASS	ACLASS( ) Function	_5WN12PP7V
+function	ACOPY	ACOPY( ) Function	_5WN12PP88
+function	ACOS	ACOS( ) Function	_5WN12PP8I
+function	ADATABASES	ADATABASES( ) Function	_5WN12PP8U
+function	ADBOBJECTS	ADBOBJECTS( ) Function	_5WN12PP96
+function	ADDBS	ADDBS( ) Function	_5WN12PP9H
+function	ADDPROPERTY	ADDPROPERTY( ) Function	_5WN12PP9R
+function	ADEL	ADEL( ) Function	_5WN12PPA3
+function	ADIR	ADIR( ) Function	_5WN12PPAE
+function	ADLLS	ADLLS( ) Function	_5WN12PPAQ
+function	ADOCKSTATE	ADOCKSTATE( ) Function	_5WN12PPB1
+function	AELEMENT	AELEMENT( ) Function	_5WN12PPBC
+function	AERROR	AERROR( ) Function	_5WN12PPBN
+function	AEVENTS	AEVENTS( ) Function	_5WN12PPBZ
+function	AFIELDS	AFIELDS( ) Function	_5WN12PPCB
+function	AFONT	AFONT( ) Function	_5WN12PPCM
+function	AGETCLASS	AGETCLASS( ) Function	_5WN12PPCX
+function	AGETFILEVERSION	AGETFILEVERSION( ) Function	_5WN12PPD9
+function	AINS	AINS( ) Function	_5WN12PPDJ
+function	AINSTANCE	AINSTANCE( ) Function	_5WN12PPDU
+function	ALANGUAGE	ALANGUAGE( ) Function	_5WN12PPE5
+function	ALEN	ALEN( ) Function	_5WN12PPEG
+function	ALIAS	ALIAS( ) Function	_5WN12PPER
+function	ALINES	ALINES( ) Function	_5WN12PPF2
+function	ALLTRIM	ALLTRIM( ) Function	_5WN12PPFD
+function	AMEMBERS	AMEMBERS( ) Function	_5WN12PPFO
+function	AMOUSEOBJ	AMOUSEOBJ( ) Function	_5WN12PPFZ
+function	ANETRESOURCES	ANETRESOURCES( ) Function	_5WN12PPGA
+function	APRINTERS	APRINTERS( ) Function	_5WN12PPGL
+function	APROCINFO	APROCINFO( ) Function	_5WN12PPGW
+function	ASC	ASC( ) Function	_5WN12PPH7
+function	ASCAN	ASCAN( ) Function	_5WN12PPHI
+function	ASELOBJ	ASELOBJ( ) Function	_5WN12PPHV
+function	ASESSIONS	ASESSIONS( ) Function	_5WN12PPI5
+function	ASIN	ASIN( ) Function	_5WN12PPIH
+function	ASORT	ASORT( ) Function	_5WN12PPIR
+function	ASQLHANDLES	ASQLHANDLES( ) Function	_5WN12PPJ3
+function	ASTACKINFO	ASTACKINFO( ) Function	_5WN12PPJG
+function	ASUBSCRIPT	ASUBSCRIPT( ) Function	_5WN12PPJT
+function	AT	AT( ) Function	_5WN12PPK3
+function	AT_C	AT_C( ) Function	_5WN12PPKE
+function	ATAGINFO	ATAGINFO( ) Function	_5WN12PPKQ
+function	ATAN	ATAN( ) Function	_5WN12PPL1
+function	ATC	ATC( ) Function	_5WN12PPLD
+function	ATCC	ATCC( ) Function	_5WN12PPLP
+function	ATCLINE	ATCLINE( ) Function	_5WN12PPM2
+function	ATLINE	ATLINE( ) Function	_5WN12PPME
+function	ATN2	ATN2( ) Function	_5WN12PPMR
+function	AUSED	AUSED( ) Function	_5WN12PPN4
+function	AVCXCLASSES	AVCXCLASSES( ) Function	_5WN12PPNG
+function	BAR	BAR( ) Function	_5WN12PPNR
+function	BARCOUNT	BARCOUNT( ) Function	_5WN12PPO4
+function	BARPROMPT	BARPROMPT( ) Function	_5WN12PPOF
+function	BETWEEN	BETWEEN( ) Function	_5WN12PPOQ
+function	BINDEVENT	BINDEVENT( ) Function	_5WN12PPP0
+function	BINTOC	BINTOC( ) Function	_5WN12PPPC
+function	BITAND	BITAND( ) Function	_5WN12PPPN
+function	BITCLEAR	BITCLEAR( ) Function	_5WN12PPPY
+function	BITLSHIFT	BITLSHIFT( ) Function	_5WN12PPQ9
+function	BITNOT	BITNOT( ) Function	_5WN12PPQK
+function	BITOR	BITOR( ) Function	_5WN12PPQX
+function	BITRSHIFT	BITRSHIFT( ) Function	_5WN12PPR8
+function	BITSET	BITSET( ) Function	_5WN12PPRI
+function	BITTEST	BITTEST( ) Function	_5WN12PPRT
+function	BITXOR	BITXOR( ) Function	_5WN12PPS5
+function	BOF	BOF( ) Function	_5WN12PPSG
+function	CANDIDATE	CANDIDATE( ) Function	_5WN12PPSR
+function	CAPSLOCK	CAPSLOCK( ) Function	_5WN12PPT3
+function	CAST	CAST( ) Function	_5WN12PPTD
+function	CDOW	CDOW( ) Function	_5WN12PPTP
+function	CDX	CDX( ) Function	_5WN12PPU0
+function	CEILING	CEILING( ) Function	_5WN12PPUC
+function	CHR	CHR( ) Function	_5WN12PPUM
+function	CHRSAW	CHRSAW( ) Function	_5WN12PPUX
+function	CHRTRAN	CHRTRAN( ) Function	_5WN12PPV8
+function	CHRTRANC	CHRTRANC( ) Function	_5WN12PPVJ
+function	CLEARRESULTSET	CLEARRESULTSET( ) Function	_5WN12PPVU
+function	CMONTH	CMONTH( ) Function	_5WN12PPW5
+function	CNTBAR	CNTBAR( ) Function	_5WN12PPWG
+function	CNTPAD	CNTPAD( ) Function	_5WN12PPWR
+function	COL	COL( ) Function	_5WN12PWZP
+function	COMARRAY	COMARRAY( ) Function	_5WN12PPX1
+function	COMCLASSINFO	COMCLASSINFO( ) Function	_5WN12PPXD
+function	COMPOBJ	COMPOBJ( ) Function	_5WN12PPXO
+function	COMPROP	COMPROP( ) Function	_5WN12PPXZ
+function	COMRETURNERROR	COMRETURNERROR( ) Function	_5WN12PPYA
+function	COS	COS( ) Function	_5WN12PPYL
+function	CPCONVERT	CPCONVERT( ) Function	_5WN12PPYW
+function	CPCURRENT	CPCURRENT( ) Function	_5WN12PPZ7
+function	CPDBF	CPDBF( ) Function	_5WN12PPZI
+function	CREATEBINARY	CREATEBINARY( ) Function	_5WN12PPZT
+function	CREATEOBJECT	CREATEOBJECT( ) Function	_5WN12PQ04
+function	CREATEOBJECTEX	CREATEOBJECTEX( ) Function	_5WN12PQ0F
+function	CREATEOFFLINE	CREATEOFFLINE( ) Function	_5WN12PQ0Q
+function	CTOBIN	CTOBIN( ) Function	_5WN12PQ11
+function	CTOD	CTOD( ) Function	_5WN12PQ1C
+function	CTOT	CTOT( ) Function	_5WN12PQ1N
+function	CURDIR	CURDIR( ) Function	_5WN12PQ1Y
+function	CURSORGETPROP	CURSORGETPROP( ) Function	_5WN12PQ29
+function	CURSORSETPROP	CURSORSETPROP( ) Function	_5WN12PQ2K
+function	CURSORTOXML	CURSORTOXML( ) Function	_5WN12PQ2W
+function	CURVAL	CURVAL( ) Function	_5WN12PQ38
+function	DATE	DATE( ) Function	_5WN12PQ3J
+function	DATETIME	DATETIME( ) Function	_5WN12PQ3U
+function	DAY	DAY( ) Function	_5WN12PQ46
+function	DBC	DBC( ) Function	_5WN12PQ4S
+function	DBF	DBF( ) Function	_5WN12PQ54
+function	DBGETPROP	DBGETPROP( ) Function	_5WN12PQ5E
+function	DBSETPROP	DBSETPROP( ) Function	_5WN12PQ5R
+function	DBUSED	DBUSED( ) Function	_5WN12PQ62
+function	DDEAbortTrans	DDEAbortTrans( ) Function	_5WN12PQ6O
+function	DDEAdvise	DDEAdvise( ) Function	_5WN12PQ6Z
+function	DDEEnabled	DDEEnabled( ) Function	_5WN12PQ7A
+function	DDEExecute	DDEExecute( ) Function	_5WN12PQ7L
+function	DDEInitiate	DDEInitiate( ) Function	_5WN12PQ7W
+function	DDELastError	DDELastError( ) Function	_5WN12PQ87
+function	DDEPoke	DDEPoke( ) Function	_5WN12PQ8I
+function	DDERequest	DDERequest( ) Function	_5WN12PQ8T
+function	DDESetOption	DDESetOption( ) Function	_5WN12PQ94
+function	DDESetService	DDESetService( ) Function	_5WN12PQ9F
+function	DDESetTopic	DDESetTopic( ) Function	_5WN12PQ9N
+function	DDETerminate	DDETerminate( ) Function	_5WN12PQA0
+function	DEFAULTEXT	DEFAULTEXT( ) Function	_5WN12PQAC
+function	DELETED	DELETED( ) Function	_5WN12PQAP
+function	DESCENDING	DESCENDING( ) Function	_5WN12PQB0
+function	DIFFERENCE	DIFFERENCE( ) Function	_5WN12PQBB
+function	DIRECTORY	DIRECTORY( ) Function	_5WN12PQBM
+function	DISKSPACE	DISKSPACE( ) Function	_5WN12PQBX
+function	DisplayPath	DisplayPath( ) Function	_5WN12PQC8
+function	DMY	DMY( ) Function	_5WN12PQCJ
+function	DODEFAULT	DODEFAULT( ) Function	_5WN12PQCU
+function	DOW	DOW( ) Function	_5WN12PQD5
+function	DRIVETYPE	DRIVETYPE( ) Function	_5WN12PQDH
+function	DROPOFFLINE	DROPOFFLINE( ) Function	_5WN12PQDS
+function	DTOC	DTOC( ) Function	_5WN12PQE7
+function	DTOR	DTOR( ) Function	_5WN12PQEI
+function	DTOS	DTOS( ) Function	_5WN12PQET
+function	DTOT	DTOT( ) Function	_5WN12PQF4
+function	EDITSOURCE	EDITSOURCE( ) Function	_5WN12PQFC
+function	EMPTY	EMPTY( ) Function	_5WN12PQFN
+function	EOF	EOF( ) Function	_5WN12PQFY
+function	ERROR	ERROR( ) Function	_5WN12PQG9
+function	EVALUATE	EVALUATE( ) Function	_5WN12PQGK
+function	EVENTHANDLER	EVENTHANDLER( ) Function	_5WN12PQH7
+function	EVL	EVL( ) Function	_5WN12PQGV
+function	EXECSCRIPT	EXECSCRIPT( ) Function	_5WN12PQHH
+function	EXP	EXP( ) Function	_5WN12PQHS
+function	FCHSIZE	FCHSIZE( ) Function	_5WN12PQI3
+function	FCLOSE	FCLOSE( ) Function	_5WN12PQIE
+function	FCOUNT	FCOUNT( ) Function	_5WN12PQIP
+function	FCREATE	FCREATE( ) Function	_5WN12PQJ0
+function	FDATE	FDATE( ) Function	_5WN12PQJB
+function	FEOF	FEOF( ) Function	_5WN12PQJL
+function	FERROR	FERROR( ) Function	_5WN12PQJW
+function	FFLUSH	FFLUSH( ) Function	_5WN12PQK8
+function	FGETS	FGETS( ) Function	_5WN12PQKI
+function	FIELD	FIELD( ) Function	_5WN12PQKT
+function	FILE	FILE( ) Function	_5WN12PQL4
+function	FILETOSTR	FILETOSTR( ) Function	_5WN12PQLF
+function	FILTER	FILTER( ) Function	_5WN12PQLR
+function	FKLABEL	FKLABEL( ) Function	_5WN12PQM3
+function	FKMAX	FKMAX( ) Function	_5WN12PQME
+function	FLDLIST	FLDLIST( ) Function	_5WN12PQN1
+function	FLOCK	FLOCK( ) Function	_5WN12PQNC
+function	FLOOR	FLOOR( ) Function	_5WN12PQNO
+function	FONTMETRIC	FONTMETRIC( ) Function	_5WN12PQNZ
+function	FOPEN	FOPEN( ) Function	_5WN12PQOB
+function	FOR	FOR( ) Function	_5WN12PQON
+function	FORCEEXT	FORCEEXT( ) Function	_5WN12PQOZ
+function	FORCEPATH	FORCEPATH( ) Function	_5WN12PQPA
+function	FOUND	FOUND( ) Function	_5WN12PQPM
+function	FPUTS	FPUTS( ) Function	_5WN12PQPY
+function	FREAD	FREAD( ) Function	_5WN12PQQA
+function	FSEEK	FSEEK( ) Function	_5WN12PQQM
+function	FSIZE	FSIZE( ) Function	_5WN12PQQZ
+function	FTIME	FTIME( ) Function	_5WN12PQRA
+function	FULLPATH	FULLPATH( ) Function	_5WN12PQRL
+function	FV	FV( ) Function	_5WN12PQRX
+function	FWRITE	FWRITE( ) Function	_5WN12PQS8
+function	GETAUTOINCVALUE	GETAUTOINCVALUE( ) Function	_5WN12PQSJ
+function	GETBAR	GETBAR( ) Function	_5WN12PQSV
+function	GETCOLOR	GETCOLOR( ) Function	_5WN12PQT6
+function	GETCP	GETCP( ) Function	_5WN12PQTI
+function	GETCURSORADAPTER	GETCURSORADAPTER( ) Function	_5WN12PQTV
+function	GETDIR	GETDIR( ) Function	_5WN12PQU7
+function	GETENV	GETENV( ) Function	_5WN12PQUI
+function	GETFILE	GETFILE( ) Function	_5WN12PQUU
+function	GETFLDSTATE	GETFLDSTATE( ) Function	_5WN12PQV6
+function	GETFONT	GETFONT( ) Function	_5WN12PQVI
+function	GETINTERFACE	GETINTERFACE( ) Function	_5WN12PQVT
+function	GETNEXTMODIFIED	GETNEXTMODIFIED( ) Function	_5WN12PQW6
+function	GETOBJECT	GETOBJECT( ) Function	_5WN12PQWI
+function	GETPAD	GETPAD( ) Function	_5WN12PQWT
+function	GETPEM	GETPEM( ) Function	_5WN12PQX5
+function	GETPICT	GETPICT( ) Function	_5WN12PQXI
+function	GETPRINTER	GETPRINTER( ) Function	_5WN12PQXQ
+function	GETRESULTSET	GETRESULTSET( ) Function	_5WN12PQY1
+function	GETWORDCOUNT	GETWORDCOUNT( ) Function	_5WN12PQYC
+function	GETWORDNUM	GETWORDNUM( ) Function	_5WN12PQYN
+function	GOMONTH	GOMONTH( ) Function	_5WN12PQYZ
+function	HEADER	HEADER( ) Function	_5WN12PQZB
+function	HOME	HOME( ) Function	_5WN12PQZM
+function	HOUR	HOUR( ) Function	_5WN12PQZY
+function	ICASE	ICASE( ) Function	_5WN12PR0A
+function	IDXCOLLATE	IDXCOLLATE( ) Function	_5WN12PR0W
+function	IIF	IIF( ) Function	_5WN12PR19
+function	IMESTATUS	IMESTATUS( ) Function	_5WN12PR1L
+function	INDBC	INDBC( ) Function	_5WN12PR1W
+function	INDEXSEEK	INDEXSEEK( ) Function	_5WN12PR28
+function	INKEY	INKEY( ) Function	_5WN12PR2L
+function	INLIST	INLIST( ) Function	_5WN12PR2Z
+function	INPUTBOX	INPUTBOX( ) Function	_5WN12PR3C
+function	INSMODE	INSMODE( ) Function	_5WN12PR3O
+function	INT	INT( ) Function	_5WN12PR3Z
+function	ISALPHA	ISALPHA( ) Function	_5WN12PR4A
+function	ISBLANK	ISBLANK( ) Function	_5WN12PR4X
+function	ISCOLOR	ISCOLOR( ) Function	_5WN12PR5D
+function	ISDIGIT	ISDIGIT( ) Function	_5WN12PR5S
+function	ISEXCLUSIVE	ISEXCLUSIVE( ) Function	_5WN12PR69
+function	ISFLOCKED	ISFLOCKED( ) Function	_5WN12PR6N
+function	ISLEADBYTE	ISLEADBYTE( ) Function	_5WN12PR6Y
+function	ISLOWER	ISLOWER( ) Function	_5WN12PR7A
+function	ISMEMOFETCHED	ISMEMOFETCHED( ) Function	_5WN12PR7M
+function	ISMOUSE	ISMOUSE( ) Function	_5WN12PR7X
+function	ISNULL	ISNULL( ) Function	_5WN12PR88
+function	ISPEN	ISPEN( ) Function	_5WN12PR8J
+function	ISREADONLY	ISREADONLY( ) Function	_5WN12PR8T
+function	ISRLOCKED	ISRLOCKED( ) Function	_5WN12PR95
+function	ISTRANSACTABLE	ISTRANSACTABLE( ) Function	_5WN12PR9F
+function	ISUPPER	ISUPPER( ) Function	_5WN12PR9Q
+function	JUSTDRIVE	JUSTDRIVE( ) Function	_5WN12PRA1
+function	JUSTEXT	JUSTEXT( ) Function	_5WN12PRAC
+function	JUSTFNAME	JUSTFNAME( ) Function	_5WN12PRAN
+function	JUSTPATH	JUSTPATH( ) Function	_5WN12PRAZ
+function	JUSTSTEM	JUSTSTEM( ) Function	_5WN12PRBA
+function	KEY	KEY( ) Function	_5WN12PRBL
+function	KEYMATCH	KEYMATCH( ) Function	_5WN12PRBY
+function	LASTKEY	LASTKEY( ) Function	_5WN12PRC9
+function	LEFT	LEFT( ) Function	_5WN12PRCK
+function	LEFTC	LEFTC( ) Function	_5WN12PRCV
+function	LEN	LEN( ) Function	_5WN12PRD7
+function	LENC	LENC( ) Function	_5WN12PRDI
+function	LIKE	LIKE( ) Function	_5WN12PRDU
+function	LIKEC	LIKEC( ) Function	_5WN12PRE6
+function	LINENO	LINENO( ) Function	_5WN12PREH
+function	LOADPICTURE	LOADPICTURE( ) Function	_5WN12PRES
+function	LOCFILE	LOCFILE( ) Function	_5WN12PRF4
+function	LOCK	LOCK( ) Function	_5WN12PRFK
+function	LOG	LOG( ) Function	_5WN12PRFV
+function	LOG10	LOG10( ) Function	_5WN12PRG6
+function	LOOKUP	LOOKUP( ) Function	_5WN12PRGH
+function	LOWER	LOWER( ) Function	_5WN12PRGS
+function	LTRIM	LTRIM( ) Function	_5WN12PRH3
+function	LUPDATE	LUPDATE( ) Function	_5WN12PRHF
+function	MAKETRANSACTABLE	MAKETRANSACTABLE( ) Function	_5WN12PRHQ
+function	MAX	MAX( ) Function	_5WN12PRI1
+function	MCOL	MCOL( ) Function	_5WN12PRIC
+function	MDOWN	MDOWN( ) Function	_5WN12PX33
+function	MDX	MDX( ) Function	_5WN12PRIN
+function	MDY	MDY( ) Function	_5WN12PRIY
+function	MEMLINES	MEMLINES( ) Function	_5WN12PRJ6
+function	MEMORY	MEMORY( ) Function	_5WN12PRJH
+function	MENU	MENU( ) Function	_5WN12PRJS
+function	MESSAGE	MESSAGE( ) Function	_5WN12PRK3
+function	MESSAGEBOX	MESSAGEBOX( ) Function	_5WN12PRKF
+function	MIN	MIN( ) Function	_5WN12PRKU
+function	MINUTE	MINUTE( ) Function	_5WN12PRLE
+function	MLINE	MLINE( ) Function	_5WN12PRLQ
+function	MOD	MOD( ) Function	_5WN12PRM2
+function	MONTH	MONTH( ) Function	_5WN12PRMD
+function	MRKBAR	MRKBAR( ) Function	_5WN12PRMO
+function	MRKPAD	MRKPAD( ) Function	_5WN12PRMZ
+function	MROW	MROW( ) Function	_5WN12PRN9
+function	MTON	MTON( ) Function	_5WN12PRNL
+function	MWINDOW	MWINDOW( ) Function	_5WN12PRNY
+function	NDX	NDX( ) Function	_5WN12PRO9
+function	NEWOBJECT	NEWOBJECT( ) Function	_5WN12PROK
+function	NORMALIZE	NORMALIZE( ) Function	_5WN12PROW
+function	NTOM	NTOM( ) Function	_5WN12PRP5
+function	NUMLOCK	NUMLOCK( ) Function	_5WN12PRPI
+function	NVL	NVL( ) Function	_5WN12PRPT
+function	OBJNUM	OBJNUM( ) Function	_5WN12PX4N
+function	OBJTOCLIENT	OBJTOCLIENT( ) Function	_5WN12PRQ4
+function	OBJVAR	OBJVAR( ) Function	_5WN12PX4Y
+function	OCCURS	OCCURS( ) Function	_5WN12PRQF
+function	OEMTOANSI	OEMTOANSI( ) Function	_5WN12PX5A
+function	OLDVAL	OLDVAL( ) Function	_5WN12PRQR
+function	ON	ON( ) Function	_5WN12PRR2
+function	ORDER	ORDER( ) Function	_5WN12PRRE
+function	OS	OS( ) Function	_5WN12PRRP
+function	PAD	PAD( ) Function	_5WN12PRS1
+function	PADC	PADL( ) | PADR( ) | PADC( ) Functions	_5WN12PRSC
+function	PADL	PADL( ) | PADR( ) | PADC( ) Functions	_5WN12PRSC
+function	PADR	PADL( ) | PADR( ) | PADC( ) Functions	_5WN12PRSC
+function	PARAMETERS	PARAMETERS( ) Function	_5WN12PRSY
+function	PAYMENT	PAYMENT( ) Function	_5WN12PRT9
+function	PCOL	PCOL( ) Function	_5WN12PRTK
+function	PCOUNT	PCOUNT( ) Function	_5WN12PRTV
+function	PEMSTATUS	PEMSTATUS( ) Function	_5WN12PRU8
+function	PI	PI( ) Function	_5WN12PRUK
+function	POPUP	POPUP( ) Function	_5WN12PRUV
+function	PRIMARY	PRIMARY( ) Function	_5WN12PRV6
+function	PRINTSTATUS	PRINTSTATUS( ) Function	_5WN12PRVI
+function	PRMBAR	PRMBAR( ) Function	_5WN12PRVT
+function	PRMPAD	PRMPAD( ) Function	_5WN12PRW4
+function	PROGRAM	PROGRAM( ) Function	_5WN12PRWF
+function	PROMPT	PROMPT( ) Function	_5WN12PRWS
+function	PROPER	PROPER( ) Function	_5WN12PRX2
+function	PROW	PROW( ) Function	_5WN12PRXC
+function	PRTINFO	PRTINFO( ) Function	_5WN12PRXO
+function	PUTFILE	PUTFILE( ) Function	_5WN12PRY0
+function	PV	PV( ) Function	_5WN12PRYB
+function	QUARTER	QUARTER( ) Function	_5WN12PRYL
+function	RAISEEVENT	RAISEEVENT( ) Function	_5WN12PRYX
+function	RAND	RAND( ) Function	_5WN12PRZ8
+function	RAT	RAT( ) Function	_5WN12PRZJ
+function	RATC	RATC( ) Function	_5WN12PRZU
+function	RATLINE	RATLINE( ) Function	_5WN12PS05
+function	RDLEVEL	RDLEVEL( ) Function	_5WN12PX6U
+function	READKEY	READKEY( ) Function	_5WN12PX90
+function	RECCOUNT	RECCOUNT( ) Function	_5WN12PS0G
+function	RECNO	RECNO( ) Function	_5WN12PS0S
+function	RECSIZE	RECSIZE( ) Function	_5WN12PS13
+function	REFRESH	REFRESH( ) Function	_5WN12PS1E
+function	RELATION	RELATION( ) Function	_5WN12PS1P
+function	REPLICATE	REPLICATE( ) Function	_5WN12PS2C
+function	REQUERY	REQUERY( ) Function	_5WN12PS2N
+function	RGB	RGB( ) Function	_5WN12PS2Y
+function	RGBSCHEME	RGBSCHEME( ) Function	_5WN12PS3A
+function	RIGHT	RIGHT( ) Function	_5WN12PS3L
+function	RIGHTC	RIGHTC( ) Function	_5WN12PS3Y
+function	RLOCK	RLOCK( ) Function	_5WN12PS49
+function	ROUND	ROUND( ) Function	_5WN12PS4K
+function	ROW	ROW( ) Function	_5WN12PS4W
+function	RTOD	RTOD( ) Function	_5WN12PS57
+function	RTRIM	RTRIM( ) Function	_5WN12PS5I
+function	SAVEPICTURE	SAVEPICTURE( ) Function	_5WN12PS5T
+function	SCHEME	SCHEME( ) Function	_5WN12PS66
+function	SCOLS	SCOLS( ) Function	_5WN12PS6I
+function	SEC	SEC( ) Function	_5WN12PS6S
+function	SECONDS	SECONDS( ) Function	_5WN12PS74
+function	SEEK	SEEK( ) Function	_5WN12PS7G
+function	SELECT	SELECT( ) Function	_5WN12PS7R
+function	SET	SET( ) Function	_5WN12PS82
+function	SETFLDSTATE	SETFLDSTATE( ) Function	_5WN12PS8E
+function	SETRESULTSET	SETRESULTSET( ) Function	_5WN12PS8P
+function	SIGN	SIGN( ) Function	_5WN12PS90
+function	SIN	SIN( ) Function	_5WN12PS9B
+function	SKPBAR	SKPBAR( ) Function	_5WN12PS9L
+function	SKPPAD	SKPPAD( ) Function	_5WN12PS9W
+function	SOUNDEX	SOUNDEX( ) Function	_5WN12PSA7
+function	SPACE	SPACE( ) Function	_5WN12PSAI
+function	SQLCANCEL	SQLCANCEL( ) Function	_5WN12PSAT
+function	SQLCOLUMNS	SQLCOLUMNS( ) Function	_5WN12PSB4
+function	SQLCOMMIT	SQLCOMMIT( ) Function	_5WN12PSBG
+function	SQLCONNECT	SQLCONNECT( ) Function	_5WN12PSBQ
+function	SQLDISCONNECT	SQLDISCONNECT( ) Function	_5WN12PSC2
+function	SQLEXEC	SQLEXEC( ) Function	_5WN12PSCD
+function	SQLGETPROP	SQLGETPROP( ) Function	_5WN12PSCO
+function	SQLIDLEDISCONNECT	SQLIDLEDISCONNECT( ) Function	_5WN12PSD0
+function	SQLMORERESULTS	SQLMORERESULTS( ) Function	_5WN12PSDB
+function	SQLPREPARE	SQLPREPARE( ) Function	_5WN12PSDM
+function	SQLROLLBACK	SQLROLLBACK( ) Function	_5WN12PSDY
+function	SQLSETPROP	SQLSETPROP( ) Function	_5WN12PSE9
+function	SQLSTRINGCONNECT	SQLSTRINGCONNECT( ) Function	_5WN12PSEK
+function	SQLTABLES	SQLTABLES( ) Function	_5WN12PSEW
+function	SQRT	SQRT( ) Function	_5WN12PSF7
+function	SROWS	SROWS( ) Function	_5WN12PSFI
+function	STR	STR( ) Function	_5WN12PSFT
+function	STRCONV	STRCONV( ) Function	_5WN12PSG4
+function	STREXTRACT	STREXTRACT( ) Function	_5WN12PSGF
+function	STRTOFILE	STRTOFILE( ) Function	_5WN12PSGR
+function	STRTRAN	STRTRAN( ) Function	_5WN12PSHD
+function	STUFF	STUFF( ) Function	_5WN12PSHP
+function	STUFFC	STUFFC( ) Function	_5WN12PSHZ
+function	SUBSTR	SUBSTR( ) Function	_5WN12PSIA
+function	SUBSTRC	SUBSTRC( ) Function	_5WN12PSII
+function	SYSMETRIC	SYSMETRIC( ) Function	_5WN12PTG0
+function	TABLEREVERT	TABLEREVERT( ) Function	_5WN12PTGB
+function	TABLEUPDATE	TABLEUPDATE( ) Function	_5WN12PTGN
+function	TAG	TAG( ) Function	_5WN12PTGY
+function	TAGCOUNT	TAGCOUNT( ) Function	_5WN12PTH9
+function	TAGNO	TAGNO( ) Function	_5WN12PTHK
+function	TAN	TAN( ) Function	_5WN12PTHV
+function	TARGET	TARGET( ) Function	_5WN12PTI6
+function	TEXTMERGE	TEXTMERGE( ) Function	_5WN12PTIH
+function	TIME	TIME( ) Function	_5WN12PTIT
+function	TRANSFORM	TRANSFORM( ) Function	_5WN12PTJ4
+function	TRIM	TRIM( ) Function	_5WN12PTJF
+function	TTOC	TTOC( ) Function	_5WN12PTJQ
+function	TTOD	TTOD( ) Function	_5WN12PTK1
+function	TXNLEVEL	TXNLEVEL( ) Function	_5WN12PTKA
+function	TXTWIDTH	TXTWIDTH( ) Function	_5WN12PTKO
+function	TYPE	TYPE( ) Function	_5WN12PTKZ
+function	UNBINDEVENTS	UNBINDEVENTS( ) Function	_5WN12PTLA
+function	UNIQUE	UNIQUE( ) Function	_5WN12PTLM
+function	UPDATED	UPDATED( ) Function	_5WN12PXIT
+function	UPPER	UPPER( ) Function	_5WN12PTLX
+function	USED	USED( ) Function	_5WN12PTM8
+function	VAL	VAL( ) Function	_5WN12PTML
+function	VARREAD	VARREAD( ) Function	_5WN12PXJ4
+function	VARTYPE	VARTYPE( ) Function	_5WN12PTMW
+function	VERSION	VERSION( ) Function	_5WN12PTN9
+function	WBORDER	WBORDER( ) Function	_5WN12PTNL
+function	WCHILD	WCHILD( ) Function	_5WN12PTNX
+function	WCOLS	WCOLS( ) Function	_5WN12PTOA
+function	WDOCKABLE	WDOCKABLE( ) Function	_5WN12PTON
+function	WEEK	WEEK( ) Function	_5WN12PTOY
+function	WEXIST	WEXIST( ) Function	_5WN12PTPB
+function	WFONT	WFONT( ) Function	_5WN12PTPN
+function	WLAST	WLAST( ) Function	_5WN12PTPZ
+function	WLCOL	WLCOL( ) Function	_5WN12PTQB
+function	WLROW	WLROW( ) Function	_5WN12PTQN
+function	WMAXIMUM	WMAXIMUM( ) Function	_5WN12PTQY
+function	WMINIMUM	WMINIMUM( ) Function	_5WN12PTRB
+function	WONTOP	WONTOP( ) Function	_5WN12PTRO
+function	WOUTPUT	WOUTPUT( ) Function	_5WN12PTS0
+function	WPARENT	WPARENT( ) Function	_5WN12PTSB
+function	WREAD	WREAD( ) Function	_5WN12PXJL
+function	WROWS	WROWS( ) Function	_5WN12PTSO
+function	WTITLE	WTITLE( ) Function	_5WN12PTT0
+function	WVISIBLE	WVISIBLE( ) Function	_5WN12PTTB
+function	XMLTOCURSOR	XMLTOCURSOR( ) Function	_5WN12PTTO
+function	XMLUPDATEGRAM	XMLUPDATEGRAM( ) Function	_5WN12PTU1
+function	YEAR	YEAR( ) Function	_5WN12PTUE
+method	ActivateCell	ActivateCell Method	_5WN12PMS8
+method	AddColumn	AddColumn Method	_5WN12PMT4
+method	AddItem	AddItem Method (Visual FoxPro)	_5WN12PMTF
+method	AddListItem	AddListItem Method	_5WN12PMTQ
+method	AddObject	AddObject Method	_5WN12PMU1
+method	AddProperty	AddProperty Method	_5WN12PMUD
+method	AddTableSchema	AddTableSchema Method	_5WN12PMUN
+method	AddToSCC	AddToSCC Method	_5WN12PMUZ
+method	ApplyDiffgram	ApplyDiffgram Method	_5WN12PMVB
+method	Attach	Attach Method (Visual FoxPro)	_5WN12PMVL
+method	AutoFit	AutoFit Method	_5WN12PMVW
+method	AutoOpen	AutoOpen Method	_5WN12PMW7
+method	Box	Box Method	_5WN12PMWI
+method	Build	Build Method	_5WN12PMWS
+method	CancelReport	CancelReport Method	_5WN12PMX3
+method	ChangesToCursor	ChangesToCursor Method	_5WN12PMXE
+method	CheckIn	CheckIn Method	_5WN12PMXP
+method	CheckOut	CheckOut Method	_5WN12PMY5
+method	Circle	Circle Method	_5WN12PMYG
+method	CleanUp	CleanUp Method	_5WN12PMZ3
+method	Clear	Clear Method	_5WN12PMZE
+method	ClearData	ClearData Method	_5WN12PMZO
+method	ClearStatus	ClearStatus Method	_5WN12PMZZ
+method	CloneObject	CloneObject Method	_5WN12PN0A
+method	Close	Close Method (Visual FoxPro)	_5WN12PN0K
+method	CloseTables	CloseTables Method	_5WN12PN0V
+method	Cls	Cls Method	_5WN12PN15
+method	CursorAttach	CursorAttach Method	_5WN12PN1G
+method	CursorDetach	CursorDetach Method	_5WN12PN1R
+method	CursorFill	CursorFill Method	_5WN12PN22
+method	CursorRefresh	CursorRefresh Method	_5WN12PN2D
+method	DataToClip	DataToClip Method	_5WN12PN2P
+method	DelayedMemoFetch	DelayedMemoFetch Method	_5WN12PN2Z
+method	DeleteColumn	DeleteColumn Method	_5WN12PN3A
+method	Dock	Dock Method	_5WN12PN3K
+method	DoMessage	DoMessage Method	_5WN12PN45
+method	DoScroll	DoScroll Method	_5WN12PN4G
+method	DoStatus	DoStatus Method	_5WN12PN4R
+method	DoVerb	DoVerb Method	_5WN12PN52
+method	Drag	Drag Method	_5WN12PN5E
+method	Draw	Draw Method	_5WN12PN5P
+method	Eval	Eval Method	_5WN12PN60
+method	GetData	GetData Method	_5WN12PN6A
+method	GetDockState	GetDockState Method	_5WN12PN6L
+method	GetFormat	GetFormat Method	_5WN12PN6W
+method	GetKey	GetKey Method	_5WN12PN77
+method	GetLatestVersion	GetLatestVersion Method	_5WN12PN7I
+method	GetPageHeight	GetPageHeight Method	_5WN12PN82
+method	GetPageWidth	GetPageWidth Method	_5WN12PN8D
+method	Help	Help Method	_5WN12PN8Y
+method	Hide	Hide Method	_5WN12PN99
+method	IncludePageInOutput	IncludePageInOutput Method	_5WN12PN9G
+method	IndexToItemID	IndexToItemID Method	_5WN12PN9R
+method	ItemIDToIndex	ItemIDToIndex Method	_5WN12PNAN
+method	Line	Line Method	_5WN12PNAY
+method	LoadXML	LoadXML Method	_5WN12PNB9
+method	Modify	Modify Method	_5WN12PNBK
+method	Move	Move Method (Visual FoxPro)	_5WN12PNBU
+method	MoveItem	MoveItem Method	_5WN12PNC5
+method	Nest	Nest Method	_5WN12PNCG
+method	OLEDrag	OLEDrag Method	_5WN12PND2
+method	OnPreviewClose	OnPreviewClose Method	_5WN12PNDE
+method	OutputPage	OutputPage Method	_5WN12PNDZ
+method	Point	Point Method	_5WN12PNEC
+method	Print	Print Method	_5WN12PNEM
+method	PSet	PSet Method	_5WN12PNEX
+method	Quit	Quit Method	_5WN12PNF9
+method	ReadExpression	ReadExpression Method	_5WN12PNFG
+method	ReadMethod	ReadMethod Method	_5WN12PNFS
+method	RecordRefresh	RecordRefresh Method	_5WN12PNG3
+method	Refresh	Refresh Method (Visual FoxPro)	_5WN12PNGE
+method	Release	Release Method	_5WN12PNGP
+method	ReleaseXML	ReleaseXML Method	_5WN12PNGX
+method	RemoveFromSCC	RemoveFromSCC Method	_5WN12PNHT
+method	RemoveItem	RemoveItem Method	_5WN12PNI4
+method	RemoveListItem	RemoveListItem Method	_5WN12PNIF
+method	RemoveObject	RemoveObject Method	_5WN12PNIQ
+method	Render	Render Method	_5WN12PNJ1
+method	Requery	Requery Method	_5WN12PNJC
+method	RequestData	RequestData Method	_5WN12PNJN
+method	Reset	Reset Method	_5WN12PNJY
+method	ResetToDefault	ResetToDefault Method	_5WN12PNK8
+method	Run	Run Method (Visual FoxPro)	_5WN12PNKJ
+method	SaveAs	SaveAs Method (Visual FoxPro)	_5WN12PNKU
+method	SaveAsClass	SaveAsClass Method	_5WN12PNL4
+method	SetAll	SetAll Method	_5WN12PNLF
+method	SetData	SetData Method	_5WN12PNLS
+method	SetFocus	SetFocus Method	_5WN12PNM3
+method	SetFormat	SetFormat Method	_5WN12PNMD
+method	SetMain	SetMain Method	_5WN12PNMO
+method	SetVar	SetVar Method	_5WN12PNMZ
+method	SetViewPort	SetViewPort Method	_5WN12PNN9
+method	Show	Show Method (Visual FoxPro)	_5WN12PNNL
+method	ShowWhatsThis	ShowWhatsThis Method	_5WN12PNNW
+method	SupportsListenerType	SupportsListenerType Method	_5WN12PNO6
+method	TextHeight	TextHeight Method	_5WN12PNOI
+method	TextWidth	TextWidth Method	_5WN12PNOS
+method	ToCursor	ToCursor Method	_5WN12PNP3
+method	ToXML	ToXML Method	_5WN12PNPE
+method	UndoCheckOut	UndoCheckOut Method	_5WN12PNPO
+method	Unnest	Unnest Method	_5WN12PNPZ
+method	UpdateStatus	UpdateStatus Method	_5WN12PNQA
+method	WhatsThisMode	WhatsThisMode Method	_5WN12PNQK
+method	WriteExpression	WriteExpression Method	_5WN12PNQW
+method	WriteMethod	WriteMethod Method	_5WN12PNR6
+method	ZOrder	ZOrder Method	_5WN12PNRH
+object	Application	Application Object	_5WN12PFX8
+object	CheckBox	CheckBox Control	_5WN12PFXU
+object	Collection	Collection Class	_5WN12PFYS
+object	Column	Column Object	_5WN12PFZE
+object	ComboBox	ComboBox Control	_5WN12PG00
+object	CommandButton	CommandButton Control	_5WN12PG0M
+object	CommandGroup	CommandGroup Control	_5WN12PG1A
+object	Container	Container Object	_5WN12PG1V
+object	Control	Control Object (Visual FoxPro)	_5WN12PG2G
+object	Cursor	Cursor Object	_5WN12PG33
+object	CursorAdapter	CursorAdapter Class	_5WN12PG3O
+object	Custom	Custom Object	_5WN12PG49
+object	DataEnvironment	DataEnvironment Object	_5WN12PG4V
+object	DataObject	DataObject Object	_5WN12PG5H
+object	EditBox	EditBox Control	_5WN12PG62
+object	Empty	Empty Class	_5WN12PG6O
+object	Exception	Exception Class (Visual FoxPro)	_5WN12PG70
+object	File	File Object (Visual FoxPro)	_5WN12PG7Y
+object	Form	Form Object	_5WN12PG99
+object	FormSet	FormSet Object	_5WN12PG9W
+object	Grid	Grid Control	_5WN12PGAX
+object	Header	Header Object	_5WN12PGBK
+object	Hyperlink	Hyperlink Object	_5WN12PGC5
+object	Image	Image Control (Visual FoxPro)	_5WN12PGCQ
+object	Label	Label Control (Visual FoxPro)	_5WN12PGDE
+object	Line	Line Control	_5WN12PGFA
+object	ListBox	ListBox Control	_5WN12PGGQ
+object	OLE Bound	OLE Bound Control	_5WN12PGJ7
+object	OLE Container	OLE Container Control	_5WN12PGK3
+object	OptionButton	OptionButton Control	_5WN12PGL2
+object	OptionGroup	OptionGroup Control	_5WN12PGLU
+object	Page	Page Object	_5WN12PGMJ
+object	PageFrame	PageFrame Control	_5WN12PGNC
+object	Project	Project Object (Visual FoxPro)	_5WN12PGOG
+object	ProjectHook	ProjectHook Object	_5WN12PGP4
+object	Relation	Relation Object	_5WN12PGQL
+object	ReportListener	ReportListener Object	_5WN12PGRB
+object	Separator	Separator Object	_5WN12PGS0
+object	Server	Server Object	_5WN12PGSQ
+object	Session	Session Object	_5WN12PGUE
+object	Shape	Shape Control	_5WN12PGV1
+object	Spinner	Spinner Control	_5WN12PGVO
+object	TextBox	TextBox Control (Visual FoxPro)	_5WN12PGWZ
+object	Timer	Timer Control	_5WN12PGYZ
+object	ToolBar	ToolBar Object	_5WN12PGZO
+object	XMLAdapter	XMLAdapter Class	_5WN12PH0D
+object	XMLField	XMLField Class	_5WN12PH13
+object	XMLTable	XMLTable Class	_5WN12PH1R
+operator	-	- - Concatenation. Removes trailing blanks from the element preceding the operator then joins two elements. (Character Operators)	_5WN12PTV2
+operator	!	! - Logical negative (Logical Operators)	_5WN12PTVR
+operator	!=	!= - Not equal to (Relational Operators)	_5WN12PTWE
+operator	( )	( ) - Expression groups (Logical Operators)	_5WN12PTVR
+operator	*	* - Multiplication and division (Numeric Operators)	_5WN12PTW2
+operator	**	** - Exponentiation (Numeric Operators)	_5WN12PTW2
+operator	/	/ - Multiplication and division (Numeric Operators)	_5WN12PTW2
+operator	#	# - Not equal to (Relational Operators)	_5WN12PTWE
+operator	%	% - Modulus (remainder) (Numeric Operators)	_5WN12PTW2
+operator	^	^ - Exponentiation (Numeric Operators)	_5WN12PTW2
+operator	+	+ - Concatenation. Joins two strings, a string and a field, or a string and a variable. (Character Operators)	_5WN12PTV2
+operator	<	< - Less than (Relational Operators)	_5WN12PTWE
+operator	<=	<= - Less than or equal to (Relational Operators)	_5WN12PTWE
+operator	<>	<> - Not equal to (Relational Operators)	_5WN12PTWE
+operator	=	= - Equal to (Relational Operators)	_5WN12PTWE
+operator	==	== - Character string comparison (Relational Operators)	_5WN12PTWE
+operator	>	> - Greater than (Relational Operators)	_5WN12PTWE
+operator	>=	>= - Greater than or equal to (Relational Operators)	_5WN12PTWE
+operator	$	$ - Comparison. Seeks one character expression within another. (Character Operators)	_5WN12PTV2
+operator	AND	AND - Logical AND (Logical Operators)	_5WN12PTVR
+operator	NOT	NOT - Logical negative (Logical Operators)	_5WN12PTVR
+operator	OR	OR - Logical inclusive OR (Logical Operators)	_5WN12PTVR
+property	ActiveColumn	ActiveColumn Property	_5WN12PIMP
+property	ActiveControl	ActiveControl Property	_5WN12PIMZ
+property	ActiveForm	ActiveForm Property	_5WN12PINA
+property	ActivePage	ActivePage Property	_5WN12PINK
+property	ActiveProject	ActiveProject Property	_5WN12PINV
+property	ActiveRow	ActiveRow Property	_5WN12PIO5
+property	AddLineFeeds	AddLineFeeds Property	_5WN12PIOG
+property	ADOCodePage	ADOCodePage Property	_5WN12PIOQ
+property	Alias	Alias Property	_5WN12PIP1
+property	Align	Align Property	_5WN12PIPC
+property	Alignment	Alignment Property	_5WN12PIPM
+property	AllowAddNew	AllowAddNew Property	_5WN12PIPY
+property	AllowAutoColumnFit	AllowAutoColumnFit Property	_5WN12PIQ8
+property	AllowCellSelection	AllowCellSelection Property	_5WN12PIQJ
+property	AllowDelete	AllowDelete Property	_5WN12PIQT
+property	AllowHeaderSizing	AllowHeaderSizing Property	_5WN12PIR4
+property	AllowInsert	AllowInsert Property	_5WN12PIRE
+property	AllowModalMessages	AllowModalMessages Property	_5WN12PIRP
+property	AllowOutput	AllowOutput Property	_5WN12PIS0
+property	AllowRowSizing	AllowRowSizing Property	_5WN12PISA
+property	AllowSimultaneousFetch	AllowSimultaneousFetch Property	_5WN12PISL
+property	AllowTabs	AllowTabs Property	_5WN12PISW
+property	AllowUpdate	AllowUpdate Property	_5WN12PIT7
+property	AlwaysOnBottom	AlwaysOnBottom Property	_5WN12PITH
+property	AlwaysOnTop	AlwaysOnTop Property	_5WN12PITS
+property	Anchor	Anchor Property	_5WN12PIU2
+property	Application	Application Property	_5WN12PIUD
+property	AutoActivate	AutoActivate Property	_5WN12PIUO
+property	AutoCenter	AutoCenter Property	_5WN12PIUZ
+property	AutoCloseTables	AutoCloseTables Property	_5WN12PIV9
+property	AutoComplete	AutoComplete Property	_5WN12PIVK
+property	AutoCompSource	AutoCompSource Property	_5WN12PIVV
+property	AutoCompTable	AutoCompTable Property	_5WN12PIW5
+property	AutoHideScrollBar	AutoHideScrollBar Property	_5WN12PIWG
+property	AutoIncrement	AutoIncrement Property (Visual FoxPro)	_5WN12PIWR
+property	AutoOpenTables	AutoOpenTables Property	_5WN12PIX2
+property	AutoRelease	AutoRelease Property	_5WN12PIXC
+property	AutoSize	AutoSize Property	_5WN12PIXN
+property	AutoVerbMenu	AutoVerbMenu Property	_5WN12PIXY
+property	AutoYield	AutoYield Property	_5WN12PIY8
+property	BackStyle	BackStyle Property	_5WN12PIYZ
+property	BaseClass	BaseClass Property	_5WN12PIZA
+property	BatchUpdateCount	BatchUpdateCount Property	_5WN12PIZL
+property	BindControls	BindControls Property	_5WN12PIZW
+property	BorderColor	BorderColor Property	_5WN12PJ0G
+property	BorderStyle	BorderStyle Property	_5WN12PJ0Q
+property	BorderWidth	BorderWidth Property	_5WN12PJ11
+property	Bound	Bound Property	_5WN12PJ1C
+property	BoundColumn	BoundColumn Property	_5WN12PJ1M
+property	BoundTo	BoundTo Property	_5WN12PJ1X
+property	BreakOnError	BreakOnError Property	_5WN12PJ27
+property	BufferMode	BufferMode Property	_5WN12PJ2I
+property	BufferModeOverride	BufferModeOverride Property	_5WN12PJ2T
+property	BuildDateTime	BuildDateTime Property	_5WN12PJ33
+property	ButtonCount	ButtonCount Property	_5WN12PJ3E
+property	Buttons	Buttons Property	_5WN12PJ3P
+property	Cancel	Cancel Property	_5WN12PJ4L
+property	Caption	Caption Property (Visual FoxPro)	_5WN12PJ4W
+property	Centered	Centered Property	_5WN12PJ57
+property	Century	Century Property	_5WN12PJ5H
+property	ChildAlias	ChildAlias Property	_5WN12PJ5S
+property	ChildOrder	ChildOrder Property	_5WN12PJ63
+property	ChildTable	ChildTable Property	_5WN12PJ6D
+property	Class	Class Property (Visual FoxPro)	_5WN12PJ71
+property	ClassLibrary	ClassLibrary Property	_5WN12PJ7B
+property	ClipControls	ClipControls Property	_5WN12PJ7M
+property	Closable	Closable Property	_5WN12PJ7X
+property	CLSID	CLSID Property	_5WN12PJ87
+property	CodePage	CodePage Property	_5WN12PJ8I
+property	ColorScheme	ColorScheme Property	_5WN12PX00
+property	ColorSource	ColorSource Property	_5WN12PJ8T
+property	ColumnCount	ColumnCount Property (Visual FoxPro)	_5WN12PJ94
+property	ColumnLines	ColumnLines Property	_5WN12PJ9E
+property	ColumnOrder	ColumnOrder Property	_5WN12PJ9P
+property	Columns	Columns Property	_5WN12PJ9Z
+property	ColumnWidths	ColumnWidths Property	_5WN12PJAB
+property	CommandClauses	CommandClauses Property	_5WN12PJAL
+property	Comment	Comment Property	_5WN12PJAW
+property	CompareMemo	CompareMemo Property	_5WN12PJB8
+property	ConflictCheckCmd	ConflictCheckCmd Property	_5WN12PJBI
+property	ConflictCheckType	ConflictCheckType Property	_5WN12PJBS
+property	ContinuousScroll	ContinuousScroll Property	_5WN12PJC5
+property	ControlBox	ControlBox Property	_5WN12PJCF
+property	ControlCount	ControlCount Property	_5WN12PJCR
+property	Controls	Controls Property (Visual FoxPro)	_5WN12PJD3
+property	ControlSource	ControlSource Property	_5WN12PJDD
+property	ConversionFunc	ConversionFunc Property	_5WN12PJDO
+property	Count	Count Property (Visual FoxPro)	_5WN12PJDZ
+property	CurrentControl	CurrentControl Property	_5WN12PJEE
+property	CurrentDataSession	CurrentDataSession Property	_5WN12PJEQ
+property	CurrentPass	CurrentPass Property	_5WN12PJF2
+property	CursorSchema	CursorSchema Property	_5WN12PJFQ
+property	CursorSource	CursorSource Property	_5WN12PJG2
+property	CursorStatus	CursorStatus Property	_5WN12PJGG
+property	Curvature	Curvature Property	_5WN12PJGU
+property	Database	Database Property	_5WN12PJH6
+property	DataSession	DataSession Property	_5WN12PJHW
+property	DataSessionID	DataSessionID Property	_5WN12PJI7
+property	DataSource	DataSource Property (Visual FoxPro)	_5WN12PJII
+property	DataSourceType	DataSourceType Property	_5WN12PJIU
+property	DataType	DataType Property	_5WN12PJJ4
+property	DateFormat	DateFormat Property	_5WN12PJJF
+property	DateMark	DateMark Property	_5WN12PJJQ
+property	Debug	Debug Property (Visual FoxPro)	_5WN12PJK2
+property	DeclareXMLPrefix	DeclareXMLPrefix Property	_5WN12PJKD
+property	DEClass	DEClass Property	_5WN12PJKO
+property	DEClassLibrary	DEClassLibrary Property	_5WN12PJL0
+property	Default	Default Property	_5WN12PJLB
+property	DefaultFilePath	DefaultFilePath Property	_5WN12PJLL
+property	DefOLELCID	DefOLELCID Property	_5WN12PJLX
+property	DeleteCmd	DeleteCmd Property	_5WN12PJM8
+property	DeleteCmdDataSource	DeleteCmdDataSource Property	_5WN12PJMJ
+property	DeleteCmdDataSourceType	DeleteCmdDataSourceType Property	_5WN12PJMU
+property	DeleteMark	DeleteMark Property	_5WN12PJN6
+property	Description	Description Property (Visual FoxPro)	_5WN12PJNH
+property	Desktop	Desktop Property	_5WN12PJNP
+property	Details	Details Property	_5WN12PJO0
+property	DisabledPicture	DisabledPicture Property	_5WN12PJOY
+property	DisableEncode	DisableEncode Property	_5WN12PJPA
+property	DisplayCount	DisplayCount Property	_5WN12PJPM
+property	DisplayValue	DisplayValue Property	_5WN12PJQ7
+property	Dockable	Dockable Property	_5WN12PJQJ
+property	Docked	Docked Property	_5WN12PJQU
+property	DockPosition	DockPosition Property	_5WN12PJR5
+property	DocumentFile	DocumentFile Property	_5WN12PJRG
+property	DownPicture	DownPicture Property	_5WN12PJRQ
+property	DragIcon	DragIcon Property	_5WN12PJS1
+property	DragMode	DragMode Property	_5WN12PJSC
+property	DrawMode	DrawMode Property	_5WN12PJSM
+property	DrawStyle	DrawStyle Property	_5WN12PJSX
+property	DrawWidth	DrawWidth Property	_5WN12PJT8
+property	DynamicAlignment	DynamicAlignment Property	_5WN12PJTI
+property	DynamicCurrentControl	DynamicCurrentControl Property	_5WN12PJU3
+property	DynamicFontName	DynamicFontName Property	_5WN12PJUP
+property	DynamicFontOutline	DynamicFontOutline Property	_5WN12PJUZ
+property	DynamicFontShadow	DynamicFontShadow Property	_5WN12PJVA
+property	DynamicFontSize	DynamicFontSize Property	_5WN12PJVM
+property	DynamicInputMask	DynamicInputMask Property	_5WN12PJVX
+property	DynamicLineHeight	DynamicLineHeight Property	_5WN12PJW7
+property	EditorOptions	EditorOptions Property	_5WN12PJWJ
+property	Enabled	Enabled Property (Visual FoxPro)	_5WN12PJWT
+property	EnableHyperlinks	EnableHyperlinks Property	_5WN12PJX4
+property	Encrypted	Encrypted Property	_5WN12PJXE
+property	ErrorNo	ErrorNo Property	_5WN12PJXP
+property	Exclude	Exclude Property (Visual FoxPro)	_5WN12PJXZ
+property	Exclusive	Exclusive Property	_5WN12PJY6
+property	FetchAsNeeded	FetchAsNeeded Property	_5WN12PJYH
+property	FetchMemo	FetchMemo Property	_5WN12PJYR
+property	FetchMemoCmdList	FetchMemoCmdList Property	_5WN12PJZ1
+property	FetchMemoDataSource	FetchMemoDataSource Property	_5WN12PJZC
+property	FetchMemoDataSourceType	FetchMemoDataSourceType Property	_5WN12PJZN
+property	FetchSize	FetchSize Property	_5WN12PJZX
+property	FileClass	FileClass Property	_5WN12PK08
+property	FileClassLibrary	FileClassLibrary Property	_5WN12PK0J
+property	FillColor	FillColor Property (Visual FoxPro)	_5WN12PK0U
+property	FillStyle	FillStyle Property	_5WN12PK15
+property	Filter	Filter Property	_5WN12PK1H
+property	FirstElement	FirstElement Property	_5WN12PK1U
+property	FirstNestedTable	FirstNestedTable Property	_5WN12PK2D
+property	Flags	Flags Property (Visual FoxPro)	_5WN12PK2S
+property	FontCharSet	FontCharSet Property	_5WN12PK3F
+property	FontName	FontName Property	_5WN12PK40
+property	FontOutline	FontOutline Property	_5WN12PK4A
+property	FontShadow	FontShadow Property	_5WN12PK4K
+property	FontSize	FontSize Property	_5WN12PK4W
+property	ForceCloseTag	ForceCloseTag Property	_5WN12PK56
+property	Format	Format Property	_5WN12PK5H
+property	FormattedOutput	FormattedOutput Property	_5WN12PK5S
+property	FormCount	FormCount Property	_5WN12PK62
+property	Forms	Forms Property	_5WN12PK6D
+property	FractionDigits	FractionDigits Property	_5WN12PK6O
+property	FRXDataSession	FRXDataSession Property	_5WN12PK6Y
+property	FullName	FullName Property	_5WN12PK79
+property	GDIPlusGraphics	GDIPlusGraphics Property	_5WN12PK7K
+property	GridLineColor	GridLineColor Property	_5WN12PK7V
+property	GridLines	GridLines Property	_5WN12PK86
+property	GridLineWidth	GridLineWidth Property	_5WN12PK8G
+property	HalfHeightCaption	HalfHeightCaption Property	_5WN12PK8R
+property	HeaderClass	HeaderClass Property	_5WN12PK92
+property	HeaderClassLibrary	HeaderClassLibrary Property	_5WN12PK9D
+property	HeaderHeight	HeaderHeight Property	_5WN12PK9O
+property	Height	Height Property	_5WN12PK9Z
+property	HelpContextID	HelpContextID Property (Visual FoxPro)	_5WN12PKAA
+property	HideSelection	HideSelection Property	_5WN12PKAL
+property	Highlight	Highlight Property	_5WN12PKAW
+property	HighlightBackColor	HighlightBackColor Property	_5WN12PKB7
+property	HighlightForeColor	HighlightForeColor Property	_5WN12PKBH
+property	HighlightRow	HighlightRow Property	_5WN12PKBS
+property	HighlightRowLineWidth	HighlightRowLineWidth Property	_5WN12PKC2
+property	HighlightStyle	HighlightStyle Property	_5WN12PKCE
+property	HomeDir	HomeDir Property	_5WN12PKCO
+property	HostName	HostName Property (Visual FoxPro)	_5WN12PKCZ
+property	Hours	Hours Property	_5WN12PKDA
+property	HScrollSmallChange	HScrollSmallChange Property	_5WN12PKDK
+property	hWnd	hWnd Property (Visual FoxPro)	_5WN12PKDV
+property	Icon	Icon Property (Visual FoxPro)	_5WN12PKE6
+property	IMEMode	IMEMode Property	_5WN12PKEH
+property	Increment	Increment Property	_5WN12PKER
+property	IncrementalSearch	IncrementalSearch Property	_5WN12PKF2
+property	InitialSelectedAlias	InitialSelectedAlias Property	_5WN12PKFC
+property	InputMask	InputMask Property	_5WN12PKFK
+property	InsertCmd	InsertCmd Property	_5WN12PKFU
+property	InsertCmdDataSource	InsertCmdDataSource Property	_5WN12PKG5
+property	InsertCmdDataSourceType	InsertCmdDataSourceType Property	_5WN12PKGF
+property	InsertCmdRefreshCmd	InsertCmdRefreshCmd Property	_5WN12PKGQ
+property	InsertCmdRefreshFieldList	InsertCmdRefreshFieldList Property	_5WN12PKH0
+property	InsertCmdRefreshKeyFieldList	InsertCmdRefreshKeyFieldList Property	_5WN12PKHB
+property	Instancing	Instancing Property	_5WN12PKHL
+property	IntegralHeight	IntegralHeight Property	_5WN12PKHW
+property	Interval	Interval Property	_5WN12PKI7
+property	IsAttribute	IsAttribute Property	_5WN12PKIH
+property	IsBase64	IsBase64 Property	_5WN12PKIS
+property	IsBinary	IsBinary Property	_5WN12PKJ3
+property	IsDiffGram	IsDiffGram Property	_5WN12PKJD
+property	IsLoaded	IsLoaded Property	_5WN12PKJO
+property	IsNull	IsNull Property	_5WN12PKJY
+property	ItemData	ItemData Property	_5WN12PKKJ
+property	ItemIDData	ItemIDData Property	_5WN12PKKU
+property	ItemTips	ItemTips Property	_5WN12PKL5
+property	IXMLDOMElement	IXMLDOMElement Property	_5WN12PKLF
+property	Keyfield	Keyfield Property	_5WN12PKM1
+property	KeyFieldList	KeyFieldList Property	_5WN12PKMB
+property	KeyPreview	KeyPreview Property	_5WN12PKML
+property	KeySort	KeySort Property	_5WN12PKMW
+property	LanguageOptions	LanguageOptions Property	_5WN12PKN6
+property	Left	Left Property (Visual FoxPro)	_5WN12PKNS
+property	LeftColumn	LeftColumn Property	_5WN12PKO3
+property	LineContents	LineContents Property	_5WN12PKOE
+property	LineNo	LineNo Property	_5WN12PKOP
+property	LineSlant	LineSlant Property	_5WN12PKOZ
+property	LinkMaster	LinkMaster Property	_5WN12PKPB
+property	List	List Property	_5WN12PKPW
+property	ListCount	ListCount Property	_5WN12PKQ7
+property	ListenerType	ListenerType Property	_5WN12PKPL
+property	ListIndex	ListIndex Property (Visual FoxPro)	_5WN12PKQH
+property	ListItem	ListItem Property	_5WN12PKQR
+property	ListItemID	ListItemID Property	_5WN12PKR2
+property	LockColumns	LockColumns Property	_5WN12PKRC
+property	LockColumnsLeft	LockColumnsLeft Property	_5WN12PKRO
+property	LockScreen	LockScreen Property	_5WN12PKRY
+property	MacDesktop	MacDesktop Property	_5WN12PKS8
+property	MainFile	MainFile Property	_5WN12PKSK
+property	MapBinary	MapBinary Property	_5WN12PKSU
+property	MapN19_4ToCurrency	MapN19_4ToCurrency Property	_5WN12PKT5
+property	MapVarchar	MapVarchar Property	_5WN12PKTG
+property	Margin	Margin Property	_5WN12PKTR
+property	MaxButton	MaxButton Property	_5WN12PKU2
+property	MaxHeight	MaxHeight Property	_5WN12PKUC
+property	MaxLeft	MaxLeft Property	_5WN12PKUK
+property	MaxLength	MaxLength Property	_5WN12PKUU
+property	MaxRecords	MaxRecords Property	_5WN12PKV5
+property	MaxTop	MaxTop Property	_5WN12PKVF
+property	MaxWidth	MaxWidth Property	_5WN12PKVP
+property	MDIForm	MDIForm Property	_5WN12PKW0
+property	MemberClass	MemberClass Property	_5WN12PKWC
+property	MemberClassLibrary	MemberClassLibrary Property	_5WN12PKWO
+property	MemoWindow	MemoWindow Property	_5WN12PX3F
+property	Message	Message Property	_5WN12PKWY
+property	MinButton	MinButton Property	_5WN12PKX9
+property	MinHeight	MinHeight Property	_5WN12PKXJ
+property	MinWidth	MinWidth Property	_5WN12PKXS
+property	MouseIcon	MouseIcon Property	_5WN12PKY3
+property	MousePointer	MousePointer Property	_5WN12PKYE
+property	Movable	Movable Property	_5WN12PKYV
+property	MoverBars	MoverBars Property	_5WN12PKZ8
+property	MultiSelect	MultiSelect Property (Visual FoxPro)	_5WN12PKZK
+property	Name	Name Property (Visual FoxPro)	_5WN12PKZW
+property	NestedInto	NestedInto Property	_5WN12PL07
+property	NewIndex	NewIndex Property	_5WN12PL0I
+property	NewItemID	NewItemID Property	_5WN12PL0T
+property	NextSiblingTable	NextSiblingTable Property	_5WN12PL13
+property	NoCpTrans	NoCpTrans Property	_5WN12PL1E
+property	NoData	NoData Property	_5WN12PL1O
+property	NoDataOnLoad	NoDataOnLoad Property	_5WN12PL1Z
+property	NullDisplay	NullDisplay Property	_5WN12PL2B
+property	NumberOfElements	NumberOfElements Property	_5WN12PL2L
+property	Object	Object Property (Visual FoxPro)	_5WN12PL2W
+property	OLEClass	OLEClass Property	_5WN12PL36
+property	OLEDragMode	OLEDragMode Property	_5WN12PL3H
+property	OLEDragPicture	OLEDragPicture Property	_5WN12PL3R
+property	OLEDropEffects	OLEDropEffects Property	_5WN12PL45
+property	OLEDropHasData	OLEDropHasData Property	_5WN12PL4G
+property	OLEDropMode	OLEDropMode Property	_5WN12PL4R
+property	OLEDropTextInsertion	OLEDropTextInsertion Property	_5WN12PL52
+property	OLELCID	OLELCID Property	_5WN12PL5D
+property	OLERequestPendingTimeout	OLERequestPendingTimeout Property	_5WN12PL5O
+property	OLEServerBusyRaiseError	OLEServerBusyRaiseError Property	_5WN12PL5Y
+property	OLEServerBusyTimeout	OLEServerBusyTimeout Property	_5WN12PL69
+property	OLETypeAllowed	OLETypeAllowed Property	_5WN12PL6J
+property	OneToMany	OneToMany Property	_5WN12PL6T
+property	OpenViews	OpenViews Property	_5WN12PL74
+property	OpenWindow	OpenWindow Property	_5WN12PX6J
+property	Optimize	Optimize Property	_5WN12PL7F
+property	Order	Order Property (Visual FoxPro)	_5WN12PL7Q
+property	OrderDirection	OrderDirection Property	_5WN12PL80
+property	OutputPageCount	OutputPageCount Property	_5WN12PL8C
+property	OutputType	OutputType Property (Visual FoxPro)	_5WN12PL8M
+property	PageCount	PageCount Property	_5WN12PL8X
+property	PageHeight	PageHeight Property	_5WN12PL97
+property	PageNo	PageNo Property	_5WN12PL9I
+property	PageOrder	PageOrder Property	_5WN12PL9S
+property	Pages	Pages Property	_5WN12PLA3
+property	PageTotal	PageTotal Property	_5WN12PLAD
+property	PageWidth	PageWidth Property	_5WN12PLAP
+property	Panel	Panel Property	_5WN12PLAZ
+property	PanelLink	PanelLink Property	_5WN12PLBA
+property	ParentAlias	ParentAlias Property	_5WN12PLBL
+property	ParentClass	ParentClass Property	_5WN12PLBW
+property	ParentTable	ParentTable Property	_5WN12PLC8
+property	Partition	Partition Property	_5WN12PLCJ
+property	PasswordChar	PasswordChar Property	_5WN12PLCU
+property	Picture	Picture Property (Visual FoxPro)	_5WN12PLD4
+property	PictureMargin	PictureMargin Property	_5WN12PLDG
+property	PicturePosition	PicturePosition Property	_5WN12PLDQ
+property	PictureSelectionDisplay	PictureSelectionDisplay Property	_5WN12PLE1
+property	PictureSpacing	PictureSpacing Property	_5WN12PLEC
+property	PictureVal	PictureVal Property	_5WN12PLEM
+property	PolyPoints	PolyPoints Property	_5WN12PLEX
+property	Prepared	Prepared Property	_5WN12PLF8
+property	PreserveWhiteSpace	PreserveWhiteSpace Property	_5WN12PLFI
+property	PreviewContainer	PreviewContainer Property	_5WN12PLFT
+property	PrintJobName	PrintJobName Property	_5WN12PLG4
+property	Procedure	Procedure Property	_5WN12PLGE
+property	PROCESSID	PROCESSID Property	_5WN12PLGQ
+property	ProgID	ProgID Property (Visual FoxPro)	_5WN12PLH0
+property	ProjectHook	ProjectHook Property	_5WN12PLHB
+property	ProjectHookClass	ProjectHookClass Property	_5WN12PLHM
+property	ProjectHookLibrary	ProjectHookLibrary Property	_5WN12PLHX
+property	QuietMode	QuietMode Property	_5WN12PLI7
+property	ReadCycle	ReadCycle Property	_5WN12PX8F
+property	ReadLock	ReadLock Property	_5WN12PX9C
+property	ReadMouse	ReadMouse Property	_5WN12PX9P
+property	ReadObject	ReadObject Property	_5WN12PXA1
+property	ReadOnly	ReadOnly Property	_5WN12PLII
+property	ReadSave	ReadSave Property	_5WN12PXAC
+property	ReadTimeout	ReadTimeout Property	_5WN12PXAY
+property	RecordMark	RecordMark Property	_5WN12PLIS
+property	RecordSource	RecordSource Property	_5WN12PLJ3
+property	RecordSourceType	RecordSourceType Property	_5WN12PLJE
+property	RefreshAlias	RefreshAlias Property	_5WN12PLJO
+property	RefreshCmd	RefreshCmd Property	_5WN12PLJZ
+property	RefreshCmdDataSource	RefreshCmdDataSource Property	_5WN12PLK9
+property	RefreshCmdDataSourceType	RefreshCmdDataSourceType Property	_5WN12PLKK
+property	RefreshIgnoreFieldList	RefreshIgnoreFieldList Property	_5WN12PLKV
+property	RefreshTimeStamp	RefreshTimeStamp Property	_5WN12PLL6
+property	RelationalExpr	RelationalExpr Property	_5WN12PLLH
+property	RelativeColumn	RelativeColumn Property	_5WN12PLLS
+property	RelativeRow	RelativeRow Property	_5WN12PLM3
+property	ReleaseType	ReleaseType Property	_5WN12PLME
+property	Resizable	Resizable Property	_5WN12PLML
+property	RespectCursorCP	RespectCursorCP Property	_5WN12PLMV
+property	RespectNesting	RespectNesting Property	_5WN12PLN6
+property	RightToLeft	RightToLeft Property	_5WN12PLNH
+property	RotateFlip	RotateFlip Property	_5WN12PLNR
+property	Rotation	Rotation Property (Visual FoxPro)	_5WN12PLO2
+property	RowColChange	RowColChange Property	_5WN12PLOD
+property	RowHeight	RowHeight Property	_5WN12PLOO
+property	RowSource	RowSource Property	_5WN12PLOZ
+property	RowSourceType	RowSourceType Property	_5WN12PLP7
+property	ScaleMode	ScaleMode Property	_5WN12PLPI
+property	SCCProvider	SCCProvider Property	_5WN12PLPS
+property	SCCStatus	SCCStatus Property	_5WN12PLQ2
+property	ScrollBars	ScrollBars Property	_5WN12PLQD
+property	Seconds	Seconds Property	_5WN12PLQO
+property	SelectCmd	SelectCmd Property	_5WN12PLQZ
+property	Selected	Selected Property	_5WN12PLRA
+property	SelectedID	SelectedID Property	_5WN12PLRW
+property	SelectedItemBackColor	SelectedItemBackColor Property	_5WN12PLS6
+property	SelectedItemForeColor	SelectedItemForeColor Property	_5WN12PLSH
+property	SelectionNamespaces	SelectionNamespaces Property	_5WN12PLT3
+property	SelectOnEntry	SelectOnEntry Property	_5WN12PLSS
+property	SelLength	SelLength Property	_5WN12PLTD
+property	SelStart	SelStart Property	_5WN12PLTP
+property	SelText	SelText Property	_5WN12PLTZ
+property	SendGDIPlusImage	SendGDIPlusImage Property	_5WN12PLUA
+property	SendUpdates	SendUpdates Property	_5WN12PLUL
+property	ServerClass	ServerClass Property	_5WN12PLUW
+property	ServerClassLibrary	ServerClassLibrary Property	_5WN12PLV6
+property	ServerHelpFile	ServerHelpFile Property	_5WN12PLVH
+property	ServerName	ServerName Property	_5WN12PLVR
+property	ServerProject	ServerProject Property	_5WN12PLW2
+property	ShowInTaskbar	ShowInTaskbar Property	_5WN12PLWD
+property	ShowTips	ShowTips Property	_5WN12PLWO
+property	ShowWindow	ShowWindow Property	_5WN12PLWZ
+property	Sizable	Sizable Property	_5WN12PLXA
+property	SizeBox	SizeBox Property	_5WN12PLXK
+property	SOM	SOM Property	_5WN12PLXV
+property	Sorted	Sorted Property	_5WN12PLY5
+property	Sparse	Sparse Property	_5WN12PLYG
+property	SpecialEffect	SpecialEffect Property	_5WN12PLYO
+property	SplitBar	SplitBar Property	_5WN12PLZA
+property	StackLevel	StackLevel Property	_5WN12PLZL
+property	StartMode	StartMode Property	_5WN12PLZV
+property	StatusBar	StatusBar Property	_5WN12PM03
+property	StatusBarText	StatusBarText Property	_5WN12PM0D
+property	Stretch	Stretch Property	_5WN12PM0O
+property	StrictDateEntry	StrictDateEntry Property	_5WN12PM0Z
+property	Style	Style Property	_5WN12PM19
+property	TabIndex	TabIndex Property	_5WN12PM1L
+property	Tables	Tables Property	_5WN12PM1W
+property	TabOrientation	TabOrientation Property	_5WN12PM27
+property	Tabs	Tabs Property	_5WN12PM2I
+property	TabStop	TabStop Property	_5WN12PM2U
+property	TabStretch	TabStretch Property	_5WN12PM35
+property	TabStyle	TabStyle Property	_5WN12PM3G
+property	Tag	Tag Property (Visual FoxPro)	_5WN12PM3Q
+property	TerminateRead	TerminateRead Property	_5WN12PXI0
+property	Text	Text Property (Visual FoxPro)	_5WN12PM41
+property	Themes	Themes Property	_5WN12PM4C
+property	ThreadID	ThreadID Property	_5WN12PM4N
+property	TimestampFieldList	TimestampFieldList Property	_5WN12PM4Y
+property	TitleBar	TitleBar Property	_5WN12PM59
+property	ToolTipText	ToolTipText Property	_5WN12PM5J
+property	Top	Top Property (Visual FoxPro)	_5WN12PM6A
+property	TopIndex	TopIndex Property	_5WN12PM6K
+property	TopItemID	TopItemID Property	_5WN12PM6V
+property	TwoPassProcess	TwoPassProcess Property	_5WN12PM76
+property	Type	Type Property (Visual FoxPro)	_5WN12PM7H
+property	TypeLibCLSID	TypeLibCLSID Property	_5WN12PM7R
+property	TypeLibDesc	TypeLibDesc Property	_5WN12PM83
+property	TypeLibName	TypeLibName Property	_5WN12PM8E
+property	Unicode	Unicode Property	_5WN12PM8O
+property	UpdatableFieldList	UpdatableFieldList Property	_5WN12PM90
+property	UpdateCmd	UpdateCmd Property	_5WN12PM9A
+property	UpdateCmdDataSource	UpdateCmdDataSource Property	_5WN12PM9L
+property	UpdateCmdDataSourceType	UpdateCmdDataSourceType Property	_5WN12PM9W
+property	UpdateCmdRefreshCmd	UpdateCmdRefreshCmd Property	_5WN12PMA7
+property	UpdateCmdRefreshFieldList	UpdateCmdRefreshFieldList Property	_5WN12PMAI
+property	UpdateCmdRefreshKeyFieldList	UpdateCmdRefreshKeyFieldList Property	_5WN12PMAS
+property	UpdateGram	UpdateGram Property	_5WN12PMB3
+property	UpdateGramSchemaLocation	UpdateGramSchemaLocation Property	_5WN12PMBD
+property	UpdateNameList	UpdateNameList Property	_5WN12PMBO
+property	UpdateType	UpdateType Property	_5WN12PMBY
+property	UseCodePage	UseCodePage Property	_5WN12PMCA
+property	UseCursorSchema	UseCursorSchema Property	_5WN12PMCL
+property	UseDeDataSource	UseDeDataSource Property	_5WN12PMCV
+property	UseMemoSize	UseMemoSize Property	_5WN12PMD8
+property	UserValue	UserValue Property	_5WN12PMDT
+property	UseTransactions	UseTransactions Property	_5WN12PMDI
+property	UTF8Encoded	UTF8Encoded Property	_5WN12PME4
+property	Value	Value Property	_5WN12PMEF
+property	Version	Version Property	_5WN12PMEP
+property	VersionComments	VersionComments Property	_5WN12PMF0
+property	VersionCompany	VersionCompany Property	_5WN12PMFB
+property	VersionCopyright	VersionCopyright Property	_5WN12PMFN
+property	VersionDescription	VersionDescription Property	_5WN12PMFZ
+property	VersionNumber	VersionNumber Property	_5WN12PMGK
+property	VersionProduct	VersionProduct Property	_5WN12PMGV
+property	VersionTrademarks	VersionTrademarks Property	_5WN12PMH7
+property	VFPXMLProgID	VFPXMLProgID Property	_5WN12PMHJ
+property	View	View Property	_5WN12PMHU
+property	ViewPortHeight	ViewPortHeight Property	_5WN12PMI4
+property	ViewPortLeft	ViewPortLeft Property	_5WN12PMIF
+property	ViewPortTop	ViewPortTop Property	_5WN12PMIR
+property	ViewPortWidth	ViewPortWidth Property	_5WN12PMIY
+property	Visible	Visible Property (Visual FoxPro)	_5WN12PMJ8
+property	VisualEffect	VisualEffect Property	_5WN12PMJJ
+property	VScrollSmallChange	VScrollSmallChange Property	_5WN12PMJU
+property	WhatsThisButton	WhatsThisButton Property	_5WN12PMK5
+property	WhatsThisHelp	WhatsThisHelp Property	_5WN12PMKF
+property	WhatsThisHelpID	WhatsThisHelpID Property	_5WN12PMKQ
+property	WhereType	WhereType Property	_5WN12PML0
+property	Width	Width Property	_5WN12PMLB
+property	WindowList	WindowList Property	_5WN12PXHP
+property	WindowState	WindowState Property (Visual FoxPro)	_5WN12PMLM
+property	WindowType	WindowType Property	_5WN12PMLW
+property	WordWrap	WordWrap Property	_5WN12PMM7
+property	WrapCharInCDATA	WrapCharInCDATA Property	_5WN12PMMJ
+property	WrapInCDATA	WrapInCDATA Property	_5WN12PMMU
+property	WrapMemoInCDATA	WrapMemoInCDATA Property	_5WN12PMN4
+property	XMLAdapter	XMLAdapter Property	_5WN12PMNF
+property	XMLConstraints	XMLConstraints Property	_5WN12PMNQ
+property	XMLName	XMLName Property	_5WN12PMO0
+property	XMLNameIsXPath	XMLNameIsXPath Property	_5WN12PMOC
+property	XMLNamespace	XMLNamespace Property	_5WN12PMON
+property	XMLPrefix	XMLPrefix Property	_5WN12PMOY
+property	XMLSchemaLocation	XMLSchemaLocation Property	_5WN12PMP9
+property	XMLTable	XMLTable Property	_5WN12PMPK
+property	XMLType	XMLType Property	_5WN12PMPU
+property	XSDfractionDigits	XSDfractionDigits Property	_5WN12PMQ5
+property	XSDmaxLength	XSDmaxLength Property	_5WN12PMQG
+property	XSDtotalDigits	XSDtotalDigits Property	_5WN12PMQQ
+property	XSDtype	XSDtype Property	_5WN12PMR1
+property	ZoomBox	ZoomBox Property	_5WN12PMRB
+systemvar	_ASCIICOLS	_ASCIICOLS System Variable	_5WN12PTZS
+systemvar	_ASCIIROWS	_ASCIIROWS System Variable	_5WN12PU03
+systemvar	_BEAUTIFY	_BEAUTIFY System Variable	_5WN12PU0E
+systemvar	_BROWSER	_BROWSER System Variable	_5WN12PU0P
+systemvar	_BUILDER	_BUILDER System Variable	_5WN12PU11
+systemvar	_CALCMEM	_CALCMEM System Variable	_5WN12PU1D
+systemvar	_CALCVALUE	_CALCVALUE System Variable	_5WN12PU1P
+systemvar	_CLIPTEXT	_CLIPTEXT System Variable	_5WN12PU20
+systemvar	_CODESENSE	_CODESENSE System Variable	_5WN12PU2D
+systemvar	_CONVERTER	_CONVERTER System Variable	_5WN12PU2O
+systemvar	_COVERAGE	_COVERAGE System Variable	_5WN12PU2Z
+systemvar	_DBLCLICK	_DBLCLICK System Variable	_5WN12PU3B
+systemvar	_DIARYDATE	_DIARYDATE System Variable	_5WN12PU3N
+systemvar	_DOS	_DOS System Variable	_5WN12PU3Z
+systemvar	_FOXCODE	_FOXCODE System Variable	_5WN12PU4B
+systemvar	_FOXREF	_FOXREF System Variable	_5WN12PU4N
+systemvar	_FoxTask	_FoxTask System Variable	_5WN12PU4Y
+systemvar	_GALLERY	_GALLERY System Variable	_5WN12PU5A
+systemvar	_GENHTML	_GENHTML System Variable	_5WN12PU5N
+systemvar	_GENMENU	_GENMENU System Variable	_5WN12PU5Z
+systemvar	_GETEXPR	_GETEXPR System Variable	_5WN12PU6A
+systemvar	_INCLUDE	_INCLUDE System Variable	_5WN12PU6O
+systemvar	_INCSEEK	_INCSEEK System Variable	_5WN12PU71
+systemvar	_MAC	_MAC System Variable	_5WN12PU7D
+systemvar	_MLINE	_MLINE System Variable	_5WN12PU82
+systemvar	_ObjectBrowser	_ObjectBrowser System Variable	_5WN12PU8G
+systemvar	_PAGENO	_PAGENO System Variable	_5WN12PU8V
+systemvar	_PAGETOTAL	_PAGETOTAL System Variable	_5WN12PU99
+systemvar	_PRETEXT	_PRETEXT System Variable	_5WN12PU9M
+systemvar	_REPORTBUILDER	_REPORTBUILDER System Variable	_5WN12PU9Z
+systemvar	_REPORTOUTPUT	_REPORTOUTPUT System Variable	_5WN12PUAD
+systemvar	_REPORTPREVIEW	_REPORTPREVIEW System Variable	_5WN12PUAP
+systemvar	_SAMPLES	_SAMPLES System Variable	_5WN12PUB1
+systemvar	_SCCTEXT	_SCCTEXT System Variable	_5WN12PUBC
+systemvar	_SCREEN	_SCREEN System Variable	_5WN12PUBN
+systemvar	_SHELL	_SHELL System Variable	_5WN12PUCA
+systemvar	_SPELLCHK	_SPELLCHK System Variable	_5WN12PUCO
+systemvar	_STARTUP	_STARTUP System Variable	_5WN12PUD1
+systemvar	_TALLY	_TALLY System Variable	_5WN12PUDE
+systemvar	_TASKLIST	_TASKLIST System Variable	_5WN12PUDR
+systemvar	_TASKPANE	_TASKPANE System Variable	_5WN12PUE4
+systemvar	_TEXT	_TEXT System Variable	_5WN12PUEG
+systemvar	_THROTTLE	_THROTTLE System Variable	_5WN12PUET
+systemvar	_TOOLBOX	_TOOLBOX System Variable	_5WN12PUF4
+systemvar	_TRIGGERLEVEL	_TRIGGERLEVEL System Variable	_5WN12PUFR
+systemvar	_UNIX	_UNIX System Variable	_5WN12PUG2
+systemvar	_VFP	_VFP System Variable	_5WN12PUGD
+systemvar	_WINDOWS	_WINDOWS System Variable	_5WN12PUH1
+systemvar	_WIZARD	_WIZARD System Variable	_5WN12PUHC

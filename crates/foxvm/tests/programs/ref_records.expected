@@ -1,0 +1,31 @@
+OFF
+.T. 2 Ames
+.T. 4 Bell
+.F. .T. 5
+.F. .T.
+Curtis
+Nolan
+Bell
+Ames
+.T. 4
+ON
+3
+4
+.F.
+1
+0
+ON
+[] 0
+[] 0
+4
+ON
+CREW.NAME,CREW.PAY
+CREW.NAME,CREW.PAY
+50
+2
+ADMIN 9100
+SALES 5950
+2
+OFF .T.
+ON
+4 ADMIN

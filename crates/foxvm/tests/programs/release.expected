@@ -1,0 +1,5 @@
+global
+changed in proc
+
+Variable 'G' is not found.
+ERROR 12 line 15 in MAIN

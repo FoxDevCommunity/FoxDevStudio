@@ -1,0 +1,12 @@
+? "went wrong"
+? "stopped"
+QUIT
+? "bad value"
+DO header
+DO refresh
+? "closed"
+? "escape"
+.T. .F.
+DO refresh
+.T.
+keyboard taken

@@ -1,0 +1,32 @@
+CURSORTOXML(2) count .T.
+<?xml version = "1.0" encoding="Windows-1252" standalone="yes"?>
+<VFPData>
+        <xmlsrc>
+                <name>Alice</name>
+                <amt>12.50</amt>
+        </xmlsrc>
+        <xmlsrc>
+                <name>Bob</name>
+                <amt>7.25</amt>
+        </xmlsrc>
+</VFPData>
+
+CURSORTOXML(3) attributes <?xml version = "1.0" encoding="Windows-1252" standalone="yes"?>
+<VFPData>
+        <xmlsrc name="Alice" amt="12.50"/>
+        <xmlsrc name="Bob" amt="7.25"/>
+</VFPData>
+
+CURSORTOXML(4) continuous <?xml version = "1.0" encoding="Windows-1252" standalone="yes"?><VFPData><xmlsrc><name>Alice</name><amt>12.50</amt></xmlsrc><xmlsrc><name>Bob</name><amt>7.25</amt></xmlsrc></VFPData>
+CURSORTOXML(5) one record from the pointer <?xml version = "1.0" encoding="Windows-1252" standalone="yes"?><VFPData><xmlsrc><name>Bob</name><amt>7.25</amt></xmlsrc></VFPData>
+CURSORTOXML(6) names the schema .T.
+CURSORTOXML(6) still has both rows          2
+XMLTOCURSOR(1) default alias XMLRESULT          2
+XMLTOCURSOR(2) chosen alias ROUNDTRIP          2
+XMLTOCURSOR(2) reads it back Alice 12.50
+XMLTOCURSOR(3) keeps the spaces [  padded  ]
+XMLUPDATEGRAM(0) one sync          1.0000
+XMLUPDATEGRAM(0) before and after before after
+XMLUPDATEGRAM(1) same as (0) .T.
+XMLUPDATEGRAM(2) continuous .T.
+XMLUPDATEGRAM(3) names the schema .T.

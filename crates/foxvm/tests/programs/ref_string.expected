@@ -1,0 +1,26 @@
+padded|
+left|
+right|
+both|
+MIXED mixed Mixed Case Words
+         6          0
+abc def bcd def
+         3          3          0
+         6          0
+         3          0
+007 x.. --m--
+   | ababab
+a+b+c abba
+aXYef
+a1c2ef
+A   65
+        42    3.142 7
+  42.50    12.00   0.00
+  1,234.50
+         3 two
+middle
+.T. .T. .T. .T.
+.T. .F. .T.
+.T. .F.
+.T. .F.
+          2 one two

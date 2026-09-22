@@ -1,0 +1,20 @@
+before create stock in stock.dbf
+after create stock
+before close stock
+after close stock
+before open stock
+after open spare
+before close spare
+after close spare
+before add loose from loose.dbf
+after add loose
+before remove loose .F..T.
+after remove loose
+before create extra in extra.dbf
+after create extra
+before close extra
+after close extra
+before rename extra to spares
+after rename spares
+before drop stock .T.
+after drop stock

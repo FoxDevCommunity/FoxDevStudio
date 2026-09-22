@@ -1,0 +1,14 @@
+AT 3rd occurrence          6
+ATC case-insensitive, 2nd occurrence          4
+ATCC is ATC on a single-byte code page          4
+AT_C is AT on a single-byte code page          6
+RAT with no occurrence is the last one         11
+RAT 2nd occurrence from the end          8
+RATC is case-sensitive, unlike its name's C          0
+
+AT occurrence 0 is error 11, not occurrence 1         11
+GETWORDCOUNT with the default delimiters          6
+GETWORDCOUNT split only on commas          3
+GETWORDNUM the 3rd word by default BBB
+GETWORDNUM by comma keeps the leading space [ BBB bbb]
+GETWORDNUM past the last word is empty []

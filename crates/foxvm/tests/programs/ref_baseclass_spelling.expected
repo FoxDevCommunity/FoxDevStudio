@@ -1,0 +1,9 @@
+Commandbutton Commandbutton []
+Pageframe
+Optiongroup
+Textbox
+Editbox
+Xmladapter
+.T. .F.
+.F. .T. .T.
+Commandbutton Mybutton

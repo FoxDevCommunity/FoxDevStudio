@@ -1,0 +1,34 @@
+BYNAME          1 BYNAME NAME          1          1
+.F. .F. .F. .F.
+Ames
+Bell
+Nolan          1
+.T.
+.T. Curtis
+.F. .T.
+.T. Bell
+.T. Ames
+.T. Ames
+.T. Bell
+         2 BYDEPT
+ADMIN Ames
+.T.          3
+         2
+         3
+BYNAME REGULAR NAME ASCENDING
+Zane
+Bell
+PAY>3000
+Bell
+Nolan
+NAME TASKS
+Bell Audit .T.
+Zane Payroll
+.T.
+Zane
+.T.          0
+Nolan
+BYNAME
+         3
+         2
+         0 .T. .T. .T.

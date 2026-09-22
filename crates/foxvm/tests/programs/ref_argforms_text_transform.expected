@@ -1,0 +1,34 @@
+PADL default pad [    hi]
+PADL a custom pad character [****hi]
+PADC default pad [  hi  ]
+PADC a custom pad character [--hi---]
+SUBSTRC to the end World
+SUBSTRC with a length Wor
+STRTRAN default replaces every one X two X two X two
+STRTRAN with no replacement removes it [ two  two  two]
+STRTRAN from the 2nd occurrence onward one two X two X two
+STRTRAN one occurrence starting at the 2nd one two X two one two
+STRTRAN flag 1 is case-insensitive, exact replacement x TWO x
+STRTRAN flag 3 case-adjusts what flag 1 found X two X
+
+STRTRAN nStartOccurrence 0         11
+
+STRTRAN nNumberOfOccurrences 0         11
+STREXTRACT plain hello
+STREXTRACT the 3rd occurrence of the begin delimiter b
+STREXTRACT flag 1 is case-insensitive delimiters hi
+STREXTRACT flag 2 is the missing end delimiter hello
+STREXTRACT flag 4 keeps the delimiters <a>hello</a>
+STREXTRACT with no end delimiter at all reads to the end hello</a><b>world</b>
+STRCONV uppercase, plain HELLO
+STRCONV uppercase, with a locale HELLO
+STRCONV uppercase, with a locale and its type HELLO
+TEXTMERGE not recursive leaves the merged text alone value is <<1+1>>
+TEXTMERGE recursive evaluates the merged text too value is 2
+TEXTMERGE a left delimiter alone keeps >> on the right value is 2
+TEXTMERGE both delimiters given value is 2
+MLINE row 1 from its own start one two three four five
+MLINE row 1 skipping five characters wo three four five
+MLINE row 1 to exactly its own end is empty []
+MLINE row 1 one past its own end lands on row 2 whole second line here
+MLINE row 2 with an offset that has not reached it yet is row 2 whole second line here

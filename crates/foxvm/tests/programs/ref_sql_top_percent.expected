@@ -1,0 +1,85 @@
+half, rows:          4
+  [1][a]
+  [2][b]
+  [3][c]
+  [4][d]
+a tenth, rows:          1
+  [1][a]
+under a third, rows:          3
+  [1][a]
+  [2][b]
+  [3][c]
+just under a seventh, rows:          1
+  [1][a]
+just over a seventh, rows:          2
+  [1][a]
+  [2][b]
+nearly all, rows:          7
+  [1][a]
+  [2][b]
+  [3][c]
+  [4][d]
+  [5][e]
+  [6][f]
+  [7][g]
+a fraction of a percent over half, rows:          4
+  [1][a]
+  [2][b]
+  [3][c]
+  [4][d]
+the top three, rows:          3
+  [7][g]
+  [6][f]
+  [5][e]
+half the groups, rows:          4
+  [g][7]
+  [f][6]
+  [e][5]
+  [d][4]
+three of five, tied at the cut, rows:          3
+  [1][a]
+  [1][b]
+  [2][c]
+one of five, tied at the cut, rows:          1
+  [1][a]
+half of five, tied at the cut, rows:          3
+  [1][a]
+  [1][b]
+  [2][c]
+a fifth of five, tied at the cut, rows:          1
+  [1][a]
+twenty of seven, rows:          7
+  [1][a]
+  [2][b]
+  [3][c]
+  [4][d]
+  [5][e]
+  [6][f]
+  [7][g]
+one percent of a hundred, rows:          1
+a tenth of a percent of a hundred, rows:          1
+a third of a hundred, rows:         34
+just under all of a hundred, rows:        100
+twelve and a bit of a hundred, rows:         13
+the smallest share there is, rows:          1
+none of it:       1866 SQL: Invalid TOP specification.
+all of it:       1866 SQL: Invalid TOP specification.
+more than all of it:       1866 SQL: Invalid TOP specification.
+no rows at all:       1866 SQL: Invalid TOP specification.
+half of nothing, rows:          0
+three of nothing, rows:          0
+half the distinct tags, rows:          2
+  [a]
+  [b]
+two distinct tags, rows:          2
+  [a]
+  [b]
+half the tags, rows:          3
+  [a]
+  [a]
+  [b]
+top before distinct, rows:          2
+  [a]
+  [b]
+unordered:       1867 SQL: TOP requires an ORDER BY.
+unordered count:       1867 SQL: TOP requires an ORDER BY.

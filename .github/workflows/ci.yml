@@ -1,0 +1,20 @@
+# Branches and pull requests: the checks, and nothing packaged. main has the nightly
+# workflow for that, and a tag has the release.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [master, main]
+    tags-ignore: ['**']
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    uses: ./.github/workflows/build.yml
+    with:
+      version: 0.0.0-ci
+      package: false

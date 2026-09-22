@@ -1,0 +1,18 @@
+first and more on the same line
+  the spaces in front are kept
+
+after an empty line
+Fox at the front
+", "
+plain <<cName>>
+<<cName>> stays and Fox is worked out
+{{}}
+<<>>
+seedone
+two
+[
+alphabeta]
+name=Fox
+* not a comment && nor is this
+one; two
+still Fox

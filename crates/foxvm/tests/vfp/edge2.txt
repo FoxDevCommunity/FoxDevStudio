@@ -1,0 +1,14 @@
+
+fdow 8 [ERR 46 Expression evaluated to an illegal value.]
+point empty [ERR 46 Expression evaluated to an illegal value.]
+nulldisplay 38 [ERR 1903 String is too long to fit.]
+nulldisplay 24 [ERR 1903 String is too long to fit.]
+  got [.NULL.]
+nulldisplay 25 [ERR 1903 String is too long to fit.]
+  got [.NULL.]
+date bad [ERR 10 Syntax error.]
+decimals 19 [ERR 10 Syntax error.]
+hours 13 [ERR 10 Syntax error.]
+sep empty  
+mark empty [ ]
+currency empty []

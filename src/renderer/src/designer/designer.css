@@ -1,0 +1,68 @@
+.fx-designer { display: flex; height: 100%; min-height: 0; }
+.fx-toolbox { border-right: 1px solid var(--colorNeutralStroke2); overflow: auto; }
+/*
+ * The surface a form is laid out on. A dotted grid, the way Visual Studio and the VFP form
+ * designer both draw it: it gives the eye a ruler without competing with the form itself.
+ */
+.fx-canvas-area {
+  flex: 1;
+  overflow: auto;
+  padding: 16px;
+  outline: none;
+  position: relative;
+  background-color: var(--colorNeutralBackground3);
+  background-image: radial-gradient(var(--colorNeutralStroke1) 1px, transparent 1px);
+  background-size: 8px 8px;
+  background-position: -1px -1px;
+}
+.fx-canvas-area:focus-visible { box-shadow: inset 0 0 0 2px var(--colorBrandStroke1); }
+.fx-form-window { display: inline-block; border: 1px solid #6b6b6b; box-shadow: 2px 2px 8px rgba(0,0,0,.35); background: #fff; }
+.fx-form-title { height: 24px; line-height: 24px; padding: 0 8px; font: 12px 'Segoe UI', sans-serif; color: #fff; background: linear-gradient(#3b78d8, #1e5bb8); user-select: none; white-space: nowrap; overflow: hidden; }
+.fx-form-client { position: relative; overflow: hidden; }
+.fx-form-client.fx-grid { background-image: radial-gradient(rgba(0,0,0,.35) 1px, transparent 1px); background-position: -1px -1px; }
+.fx-control { position: absolute; box-sizing: border-box; user-select: none; cursor: default; }
+.fx-control.fx-hidden { opacity: .45; outline: 1px dashed #888; }
+.fx-control.fx-selected { outline: 1px dotted #000; outline-offset: 0; z-index: 1; }
+.fx-handle { position: absolute; width: 7px; height: 7px; background: #fff; border: 1px solid #000; z-index: 2; }
+.fx-handle[data-handle=nw] { left: -4px; top: -4px; cursor: nwse-resize; }
+.fx-handle[data-handle=n] { left: calc(50% - 4px); top: -4px; cursor: ns-resize; }
+.fx-handle[data-handle=ne] { right: -4px; top: -4px; cursor: nesw-resize; }
+.fx-handle[data-handle=e] { right: -4px; top: calc(50% - 4px); cursor: ew-resize; }
+.fx-handle[data-handle=se] { right: -4px; bottom: -4px; cursor: nwse-resize; }
+.fx-handle[data-handle=s] { left: calc(50% - 4px); bottom: -4px; cursor: ns-resize; }
+.fx-handle[data-handle=sw] { left: -4px; bottom: -4px; cursor: nesw-resize; }
+.fx-handle[data-handle=w] { left: -4px; top: calc(50% - 4px); cursor: ew-resize; }
+.fx-marquee { position: absolute; border: 1px dashed #1e5bb8; background: rgba(30,91,184,.08); pointer-events: none; z-index: 3; }
+.fx-surface { width: 100%; height: 100%; box-sizing: border-box; overflow: hidden; white-space: nowrap; font: 12px Arial, sans-serif; }
+.fx-3d { border: 1px solid; border-color: #7a7a7a #fff #fff #7a7a7a; box-shadow: inset 1px 1px 0 #404040; }
+.fx-raised { border: 1px solid; border-color: #fff #404040 #404040 #fff; box-shadow: inset -1px -1px 0 #808080; }
+.fx-container-client { position: relative; width: 100%; height: 100%; }
+.fx-tabs { display: flex; height: 24px; align-items: flex-end; border-bottom: 1px solid #7a7a7a; background: transparent; }
+.fx-tab { padding: 2px 10px; border: 1px solid #7a7a7a; border-bottom: none; background: #e6e3d8; margin-right: -1px; font: 12px Arial, sans-serif; }
+.fx-tab.fx-tab-active { background: #f4f2ea; padding-bottom: 4px; margin-bottom: -1px; }
+.fx-page-client { position: relative; width: 100%; height: calc(100% - 24px); background: #f4f2ea; overflow: hidden; }
+.fx-grid-header { display: flex; background: #ece9d8; border-bottom: 1px solid #7a7a7a; }
+.fx-grid-cell { border-right: 1px solid #c0c0c0; padding: 1px 4px; box-sizing: border-box; overflow: hidden; }
+.fx-grid-row { display: flex; border-bottom: 1px solid #c0c0c0; }
+.fx-props { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.fx-props-toolbar { padding: 4px 6px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--colorNeutralStroke2); }
+.fx-props-body { flex: 1; overflow: auto; }
+.fx-props table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.fx-props td { padding: 1px 4px; border-bottom: 1px solid var(--colorNeutralStroke3); vertical-align: middle; }
+.fx-props td.fx-prop-name { width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fx-props td.fx-prop-name.fx-changed { font-weight: 600; }
+.fx-props .fx-event-row { cursor: pointer; }
+.fx-props .fx-event-row:hover { background: var(--colorNeutralBackground1Hover); }
+.fx-props input[type=color] { width: 22px; height: 22px; padding: 0; border: 1px solid #888; background: none; vertical-align: middle; margin-right: 4px; }
+.fx-props table { table-layout: fixed; }
+.fx-props td.fx-prop-value { width: 60%; min-width: 0; }
+.fx-props td.fx-prop-value > *, .fx-props td.fx-prop-value input, .fx-props td.fx-prop-value select { max-width: 100%; box-sizing: border-box; }
+.fx-props .fui-Input, .fx-props .fui-Select, .fx-props .fui-Textarea { min-width: 0; width: 100%; }
+
+/* Symbol explorer: the whole form's objects and methods, under the properties window. */
+.fx-symbols { display: flex; flex-direction: column; min-height: 0; flex: 0 0 40%; border-top: 1px solid var(--colorNeutralStroke2); }
+.fx-symbols__head { padding: 4px 6px; display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--colorNeutralStroke2); }
+.fx-symbols__list { flex: 1; overflow: auto; font-size: 12px; }
+.fx-symbols__list .fui-TreeItemLayout { min-height: 20px; padding-top: 0; padding-bottom: 0; font-size: 12px; line-height: 20px; }
+.fx-symbols__list .fui-TreeItemLayout__main { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fx-symbols__list .fui-TreeItemLayout__iconBefore { font-size: 13px; line-height: 20px; }

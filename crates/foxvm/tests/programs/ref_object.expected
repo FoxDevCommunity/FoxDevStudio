@@ -1,0 +1,16 @@
+O O
+.T.
+hello
+.T.
+changed
+O
+.T. .F.
+.T.          1
+         0          0
+.T. .T.
+file.txt file txt
+c:\dir c:\dir\ report.prg
+c:\other\file.txt
+OFF ON
+.T.
+.T.

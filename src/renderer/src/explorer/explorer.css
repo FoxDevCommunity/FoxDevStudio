@@ -1,0 +1,55 @@
+/*
+ * Fluent's tree is sized for touch: 32px rows and 14px text. A project explorer is read at a
+ * glance and scrolled a lot, so it is tightened to the density of a code editor's sidebar.
+ * Scoped to the explorer so nothing else in the shell changes.
+ */
+
+.fx-explorer {
+  font-size: 12px;
+}
+
+.fx-explorer .fui-TreeItemLayout {
+  min-height: 22px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.fx-explorer .fui-TreeItemLayout__main {
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* the expander and the group icon shrink with the row */
+.fx-explorer .fui-TreeItemLayout__expandIcon,
+.fx-explorer .fui-TreeItemLayout__iconBefore {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.fx-explorer .fui-TreeItemLayout__expandIcon {
+  width: 16px;
+  min-width: 16px;
+}
+
+/* nested levels indent by half of Fluent's default, which is a full icon width */
+.fx-explorer .fui-TreeItem {
+  --fui-Tree--size: 22px;
+}
+
+.fx-explorer .fui-Toolbar {
+  min-height: 28px;
+  padding: 0 4px;
+  gap: 0;
+}
+
+.fx-explorer .fui-Button {
+  min-width: 24px;
+  max-width: 24px;
+  height: 24px;
+  padding: 0;
+}

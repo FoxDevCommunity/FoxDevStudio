@@ -1,0 +1,31 @@
+[package]
+name = "foxvm"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "FoxDev Studio FoxPro-like compiler and bytecode VM"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = []
+# wasm-bindgen exports; off for native `cargo test`
+wasm = ["dep:wasm-bindgen", "dep:js-sys", "dep:serde-wasm-bindgen"]
+
+[dependencies]
+serde = { version = "1", features = ["derive", "rc"] }
+postcard = { version = "1.1", features = ["alloc"] }
+wasm-bindgen = { version = "=0.2.128", optional = true }
+js-sys = { version = "0.3.105", optional = true }
+serde-wasm-bindgen = { version = "0.6.5", optional = true }
+roxmltree = "0.20"
+quick-xml = "0.37"
+encoding_rs = "0.8"
+calamine = { version = "0.36.1", default-features = false, features = ["dates"] }
+image = { version = "0.25.10", default-features = false, features = ["bmp", "png", "jpeg", "gif"] }
+matchit = "0.7"
+serde_json = { version = "1.0.151", features = ["preserve_order"] }
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false

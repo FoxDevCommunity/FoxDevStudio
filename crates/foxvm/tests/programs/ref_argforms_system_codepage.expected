@@ -1,0 +1,5 @@
+CPCURRENT() is numeric .T.
+CPCURRENT(1) agrees with the plain form .T.
+CPCURRENT(2) is the OEM code page instead .T.
+IMESTATUS() is 0 with no IME .T.
+IMESTATUS(0) still answers 0 .T.

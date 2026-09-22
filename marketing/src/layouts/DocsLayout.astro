@@ -1,0 +1,509 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import { docs, allDocs } from '../data/nav';
+
+/**
+ * The frame around a documentation page: the sidebar listing every page, the page itself
+ * as Markdown prose, and the headings of this page down the right on a wide screen.
+ *
+ * A Markdown page names this layout in its frontmatter; Astro hands the frontmatter and the
+ * headings it found to the layout as props.
+ */
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    kicker?: string;
+  };
+  headings: { depth: number; slug: string; text: string }[];
+}
+const { frontmatter, headings } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const here = allDocs.findIndex((p) => p.href === path);
+const prev = here > 0 ? allDocs[here - 1] : undefined;
+const next = here >= 0 && here < allDocs.length - 1 ? allDocs[here + 1] : undefined;
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <div class="wrap">
+    <Masthead current="docs" />
+    <div class="docs">
+      <aside class="side">
+        <nav aria-label="Documentation">
+          {
+            docs.map((group) => (
+              <div class="group">
+                <span class="group-label">{group.label}</span>
+                <ul>
+                  {group.pages.map((p) => (
+                    <li>
+                      <a href={p.href} aria-current={p.href === path ? 'page' : undefined} title={p.summary}>
+                        {p.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </nav>
+      </aside>
+
+      <article class="page">
+        <header class="page-head">
+          {frontmatter.kicker && <span class="kicker">{frontmatter.kicker}</span>}
+          <h1>{frontmatter.title}</h1>
+          <p class="lede">{frontmatter.description}</p>
+        </header>
+        <div class="prose">
+          <slot />
+        </div>
+        <nav class="pager" aria-label="Neighbouring pages">
+          {
+            prev ? (
+              <a class="pager-link" href={prev.href}>
+                <span class="pager-dir">Previous</span>
+                <span class="pager-title">{prev.title}</span>
+              </a>
+            ) : (
+              <span />
+            )
+          }
+          {
+            next && (
+              <a class="pager-link next" href={next.href}>
+                <span class="pager-dir">Next</span>
+                <span class="pager-title">{next.title}</span>
+              </a>
+            )
+          }
+        </nav>
+      </article>
+
+      {
+        toc.length > 1 && (
+          <aside class="toc">
+            <span class="group-label">On this page</span>
+            <ul>
+              {toc.map((h) => (
+                <li class={h.depth === 3 ? 'sub' : undefined}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </div>
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  .docs {
+    display: grid;
+    gap: 36px;
+    padding-block: 36px 60px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 820px) {
+    .docs {
+      grid-template-columns: 200px minmax(0, 1fr);
+    }
+  }
+  @media (min-width: 1160px) {
+    .wrap {
+      max-width: 1240px;
+    }
+    .docs {
+      grid-template-columns: 200px minmax(0, 1fr) 190px;
+    }
+  }
+
+  .side {
+    font-size: 14.5px;
+  }
+  @media (min-width: 820px) {
+    .side nav {
+      position: sticky;
+      top: 24px;
+    }
+  }
+  .group {
+    margin-bottom: 22px;
+  }
+  .group-label {
+    display: block;
+    font-family: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .side ul,
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .side a {
+    display: block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--muted);
+    border-left: 2px solid transparent;
+  }
+  .side a:hover {
+    color: var(--text);
+    background: var(--brand-soft);
+  }
+  .side a[aria-current='page'] {
+    color: var(--ink);
+    font-weight: 600;
+    background: var(--brand-soft);
+    border-left-color: var(--brand);
+  }
+  @media (max-width: 819px) {
+    .side nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .group {
+      margin-bottom: 0;
+    }
+  }
+
+  .toc {
+    display: none;
+    font-size: 13px;
+  }
+  @media (min-width: 1160px) {
+    .toc {
+      display: block;
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+    }
+  }
+  .toc a {
+    display: block;
+    padding: 3px 0;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .toc a:hover {
+    color: var(--text);
+  }
+  .toc .sub a {
+    padding-left: 14px;
+    font-size: 12.5px;
+  }
+
+  .page {
+    min-width: 0;
+  }
+  .page-head {
+    display: grid;
+    gap: 10px;
+    padding-bottom: 28px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .page-head h1 {
+    font-size: clamp(2rem, 4.5vw, 2.7rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+  .lede {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(1.02rem, 1.6vw, 1.15rem);
+    max-width: 62ch;
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 52px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .pager-link {
+    display: grid;
+    gap: 2px;
+    text-decoration: none;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+  }
+  .pager-link:hover {
+    border-color: var(--muted);
+  }
+  .pager-link.next {
+    text-align: right;
+  }
+  .pager-dir {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-family: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  }
+  .pager-title {
+    font-weight: 600;
+    color: var(--ink);
+  }
+</style>
+
+<style is:global>
+  /* The Markdown prose. Global because the content is rendered inside the slot, outside
+     this component's scoped styles. */
+  .prose {
+    font-size: 16px;
+    max-width: 74ch;
+  }
+  .prose > :first-child {
+    margin-top: 0;
+  }
+  .prose h2 {
+    font-size: 1.55rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 2.4em 0 0.7em;
+    padding-top: 0.2em;
+    scroll-margin-top: 24px;
+  }
+  .prose h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 1.9em 0 0.6em;
+    scroll-margin-top: 24px;
+  }
+  .prose h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 1.6em 0 0.5em;
+  }
+  .prose p,
+  .prose ul,
+  .prose ol {
+    margin: 0 0 1.1em;
+  }
+  .prose li {
+    margin-bottom: 0.35em;
+  }
+  .prose li > p {
+    margin-bottom: 0.4em;
+  }
+  .prose strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .prose a {
+    color: var(--brand-deep);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+  .prose a:hover {
+    color: var(--brand);
+  }
+  .prose code {
+    font-size: 0.9em;
+    color: var(--text);
+    background: var(--brand-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .prose pre {
+    margin: 1.2em 0 1.5em;
+    padding: 18px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    font-size: 13.5px;
+    line-height: 1.7;
+    overflow-x: auto;
+    box-shadow: var(--shadow);
+  }
+  /* shiki paints the tokens; the frame is ours, and the ground is always the dark listing
+     colour, so the dark token set is the one used on both sides of the theme */
+  .prose pre.astro-code {
+    background: var(--code-ground) !important;
+  }
+  .prose .astro-code,
+  .prose .astro-code span {
+    color: var(--shiki-dark) !important;
+  }
+  .prose pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+  }
+  .prose blockquote {
+    margin: 1.4em 0;
+    padding: 14px 20px;
+    border-left: 3px solid var(--brand);
+    background: var(--surface-sunk);
+    border-radius: 0 8px 8px 0;
+    color: var(--text);
+  }
+  .prose blockquote p:last-child {
+    margin-bottom: 0;
+  }
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2.4em 0;
+  }
+  .prose table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    font-size: 14.5px;
+    margin: 1.2em 0 1.6em;
+    display: block;
+    overflow-x: auto;
+  }
+  .prose th,
+  .prose td {
+    text-align: left;
+    vertical-align: top;
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+  .prose th {
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--surface-sunk);
+    white-space: nowrap;
+  }
+  .prose td code,
+  .prose th code {
+    white-space: nowrap;
+  }
+  .prose kbd {
+    font-size: 0.85em;
+    padding: 1px 6px;
+    border: 1px solid var(--line);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .prose img {
+    border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+</style>
+
+<style is:global>
+  /* Diagrams drawn inline in the Markdown pages. The classes match the landing page's, so a
+     picture reads the same wherever it appears, and every colour is a token so both themes
+     work. */
+  .prose .diagram-frame {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    margin: 1.4em 0 1.8em;
+  }
+  .prose .diagram-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 10px 16px;
+    font-family: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    align-items: center;
+  }
+  .prose .diagram-bar b {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .prose .diagram {
+    display: block;
+    width: 100%;
+    min-width: 600px;
+    height: auto;
+    padding: 6px;
+  }
+  .prose .dg-box {
+    fill: var(--surface-sunk);
+    stroke: var(--line);
+  }
+  .prose .dg-box-lead {
+    fill: var(--brand-soft);
+    stroke: var(--brand);
+  }
+  .prose .dg-box-plain {
+    fill: var(--surface);
+    stroke: var(--line);
+  }
+  .prose .dg-name {
+    font: 600 13px 'IBM Plex Sans', sans-serif;
+    fill: var(--ink);
+  }
+  .prose .dg-sub {
+    font: 400 11.5px 'IBM Plex Sans', sans-serif;
+    fill: var(--muted);
+  }
+  .prose .dg-flow {
+    font: 400 11px 'IBM Plex Mono', ui-monospace, monospace;
+    fill: var(--muted);
+  }
+  .prose .dg-code {
+    font: 500 11.5px 'IBM Plex Mono', ui-monospace, monospace;
+    fill: var(--text);
+  }
+  .prose .dg-edge {
+    font: 500 10.5px 'IBM Plex Mono', ui-monospace, monospace;
+    fill: var(--brand);
+    letter-spacing: 0.08em;
+  }
+  .prose .dg-line {
+    stroke: var(--muted);
+    stroke-width: 1.2;
+    fill: none;
+  }
+  .prose .dg-line-lead {
+    stroke: var(--brand);
+    stroke-width: 1.4;
+    fill: none;
+  }
+  .prose .dg-rule {
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+  .prose .dg-split {
+    stroke: var(--brand);
+    stroke-width: 1.2;
+    stroke-dasharray: 5 5;
+    opacity: 0.65;
+  }
+  .prose .dg-tip {
+    fill: var(--muted);
+  }
+  .prose .dg-tip-lead {
+    fill: var(--brand);
+  }
+</style>

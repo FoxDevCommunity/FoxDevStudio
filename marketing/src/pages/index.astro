@@ -1,0 +1,1021 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Masthead from '../components/Masthead.astro';
+import Footer from '../components/Footer.astro';
+import { docs } from '../data/nav';
+
+/**
+ * The landing page. It says what the product does, how it is built, and what FoxScript adds,
+ * and it points into the documentation for everything longer than a paragraph.
+ */
+
+// The table-size figure: 279 squares of 2 GB each, 31 to a row, drawn one by one so every
+// square is whole. A pattern fill tiles from the SVG's origin and cut the edge cells.
+const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y: 232 + Math.floor(i / 31) * 7 }));
+---
+
+<BaseLayout
+  title="FoxDev Studio"
+  description="A modern IDE and 64-bit runtime for Visual FoxPro 9 applications: the same language, rebuilt on Electron, React and a Rust virtual machine in WebAssembly."
+>
+  <div class="wrap">
+    <Masthead current="home" />
+
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="mark-img hero-mark" role="img" aria-label="The FoxDev Studio mark: a fox drawn from two angle brackets"></span>
+        <h1>Your FoxPro applications, at home on a modern machine.</h1>
+        <p class="lede">
+          FoxDev Studio opens the projects, forms and tables you already have and runs them the
+          way you remember: <strong>no rewrite, no conversion, no export step</strong>.
+        </p>
+        <div class="actions">
+          <a class="btn btn-main" href="#download">Download</a>
+          <a class="btn btn-ghost" href="/docs/getting-started">Get started</a>
+          <a class="btn btn-ghost" href="#architecture">How it is built</a>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <svg
+          class="vignette"
+          viewBox="0 0 340 240"
+          role="img"
+          aria-label="A customer form open in the designer: a blue title bar, two labelled entry boxes, and a Save button selected, showing its eight sizing handles on the designer grid."
+        >
+          <defs>
+            <pattern id="designer-grid" width="12" height="12" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r=".9" fill="var(--line)"></circle>
+            </pattern>
+            <clipPath id="window-clip"><rect x="12" y="16" width="316" height="208" rx="7"></rect></clipPath>
+          </defs>
+
+          <g clip-path="url(#window-clip)">
+            <rect x="12" y="16" width="316" height="208" fill="var(--surface)"></rect>
+            <rect x="12" y="44" width="316" height="180" fill="url(#designer-grid)"></rect>
+            <rect x="12" y="16" width="316" height="28" fill="var(--brand)"></rect>
+          </g>
+          <rect x="12" y="16" width="316" height="208" rx="7" fill="none" stroke="var(--line)"></rect>
+
+          <text class="vg-title" x="26" y="35">Customer</text>
+          <g fill="var(--on-brand)" opacity=".8">
+            <rect x="277" y="26" width="12" height="8" rx="1"></rect>
+            <rect x="294" y="26" width="12" height="8" rx="1"></rect>
+            <rect x="311" y="26" width="10" height="8" rx="1"></rect>
+          </g>
+
+          <text class="vg-label" x="30" y="72">Company</text>
+          <rect x="30" y="79" width="190" height="24" fill="var(--ground)" stroke="var(--line)"></rect>
+          <text class="vg-value" x="38" y="95">Western Trading Co.</text>
+
+          <text class="vg-label" x="30" y="126">Credit limit</text>
+          <rect x="30" y="133" width="110" height="24" fill="var(--ground)" stroke="var(--line)"></rect>
+          <text class="vg-value" x="132" y="149" text-anchor="end">25,000.00</text>
+
+          <rect x="214" y="176" width="88" height="28" rx="3" fill="var(--surface-sunk)" stroke="var(--line)"></rect>
+          <text class="vg-btn" x="258" y="194" text-anchor="middle">Save</text>
+          <g fill="var(--brand)">
+            <rect x="211" y="173" width="6" height="6"></rect>
+            <rect x="255" y="173" width="6" height="6"></rect>
+            <rect x="299" y="173" width="6" height="6"></rect>
+            <rect x="211" y="187" width="6" height="6"></rect>
+            <rect x="299" y="187" width="6" height="6"></rect>
+            <rect x="211" y="201" width="6" height="6"></rect>
+            <rect x="255" y="201" width="6" height="6"></rect>
+            <rect x="299" y="201" width="6" height="6"></rect>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <section id="what">
+      <div class="section-head">
+        <h2>It picks up where you left off</h2>
+        <p>Point it at a folder you have not opened in years, and what is there is what you get.</p>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M2.5 6.2A1.7 1.7 0 0 1 4.2 4.5h4.4l2 2.6h9.2a1.7 1.7 0 0 1 1.7 1.7v8.7a1.7 1.7 0 0 1-1.7 1.7H4.2a1.7 1.7 0 0 1-1.7-1.7z"
+            ></path>
+            <path d="M6.5 12.4h6M6.5 15.6h9"></path>
+          </svg>
+          <h3>Your project, as it is</h3>
+          <p>
+            Projects, forms, class libraries, menus and reports open straight from the files you
+            already have. Nothing is migrated first, and nothing is left behind.
+          </p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2.5" y="3.5" width="19" height="17" rx="1.8"></rect>
+            <path d="M2.5 8h19"></path>
+            <rect x="6.5" y="11.5" width="8" height="5.5"></rect>
+            <g class="solid">
+              <rect x="5.4" y="10.4" width="2.2" height="2.2"></rect>
+              <rect x="13.4" y="10.4" width="2.2" height="2.2"></rect>
+              <rect x="5.4" y="15.9" width="2.2" height="2.2"></rect>
+              <rect x="13.4" y="15.9" width="2.2" height="2.2"></rect>
+            </g>
+          </svg>
+          <h3>The designers you know</h3>
+          <p>
+            Forms, classes, menus and reports are edited where you expect them to be, alongside
+            the project manager, the Command Window and a debugger that stops on your line.
+          </p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2.5" y="4.5" width="19" height="15" rx="1.8"></rect>
+            <path d="M2.5 9.3h19M2.5 14.4h19M9.5 9.3v10.2M16 9.3v10.2"></path>
+          </svg>
+          <h3>Your data stays your data</h3>
+          <p>
+            Tables, indexes, memos and databases are read and written in place. What sits on disk
+            afterwards is the same kind of file it was before.
+          </p>
+        </div>
+        <div class="card">
+          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="1.5" y="7.5" width="7" height="9" rx="1.6"></rect>
+            <rect x="15.5" y="7.5" width="7" height="9" rx="1.6"></rect>
+            <path d="M8.5 12h7"></path>
+            <path d="M12.6 9.9 15.4 12l-2.8 2.1"></path>
+          </svg>
+          <h3>Whatever it talked to, it still talks to</h3>
+          <p>
+            The system calls, the automation objects and the old add-in libraries your application
+            leans on keep working, so the parts nobody wants to touch stay untouched.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screens">
+      <div class="section-head">
+        <h2>What it looks like</h2>
+        <p>The IDE, on Visual FoxPro's own sample projects. Every picture is a real session.</p>
+      </div>
+
+      <div class="shots">
+        <a class="shot wide" href="/screenshots/solution.png">
+          <img
+            src="/screenshots/solution.png"
+            width="2758"
+            height="1778"
+            alt="Visual FoxPro's Solution sample running on the Screen tab: its samples launcher form with an outline of ActiveX, Controls, Databases and Forms samples, beside a project explorer listing the project's forms, menus, programs, class libraries, databases, free tables and reports; the status bar says Waiting for events."
+            loading="lazy"
+          />
+          <span>Visual FoxPro's own Solution sample, imported and running: its launcher form on the Screen tab, the project's 123 forms, 7 menus and 11 class libraries in the explorer, and the runtime waiting for events.</span>
+        </a>
+        <a class="shot" href="/screenshots/editor.jpg">
+          <img
+            src="/screenshots/editor.jpg"
+            width="1600"
+            height="1026"
+            alt="The program editor with a FormsUI sample open, the linter marking a syntax error inline on a FOR line, and the Output and Command windows below."
+            loading="lazy"
+          />
+          <span>The editor lints through the runtime's own compiler, so what it underlines is what would fail.</span>
+        </a>
+        <a class="shot" href="/screenshots/debugger.png">
+          <img
+            src="/screenshots/debugger.png"
+            width="2756"
+            height="1776"
+            alt="The debugger stopped on line 26 of the Solution sample's main program, one step past a breakpoint on line 25: the current line highlighted, and below it the Output window, the call stack, the locals, a watch box and the breakpoints list."
+            loading="lazy"
+          />
+          <span>Stopped one step past a breakpoint in the Solution sample's main program: call stack, locals, watches, and the line it is on.</span>
+        </a>
+        <a class="shot" href="/screenshots/browser.jpg">
+          <img
+            src="/screenshots/browser.jpg"
+            width="1600"
+            height="1036"
+            alt="The table browser showing the 17 records of a database container, with its memo fields as links, beside a project explorer listing forms, menus, programs, class libraries and databases."
+            loading="lazy"
+          />
+          <span>A database container in the table browser: 8 fields, 17 records, memos a click away.</span>
+        </a>
+        <a class="shot" href="/screenshots/http-server.jpg">
+          <img
+            src="/screenshots/http-server.jpg"
+            width="1600"
+            height="947"
+            alt="A FoxScript program registering HTTP routes with lambdas, calling a 32-bit encryption library from inside one, and the Output window reporting that the server is listening on port 8080."
+            loading="lazy"
+          />
+          <span>FoxScript: lambdas answering HTTP routes, a 32-bit library called from inside one, listening on 8080.</span>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="band">
+        <h2>Built to match, not to approximate</h2>
+        <p>
+          Small differences are what break an old application: a number printed a column too
+          wide, an event arriving a moment late, an error with the wrong number on it. So
+          behaviour here is <strong>settled by asking Visual FoxPro itself</strong> and matching
+          its answer, rather than by reading a reference page and hoping.
+        </p>
+        <p>
+          What comes out of that is a runtime written from scratch: quick to start,
+          self-contained, and straightforward about the corners it has not reached yet.
+        </p>
+        <div class="figures">
+          <div class="figure-stat">
+            <b>1,722</b>
+            <span>elements of the Visual FoxPro 9 language reference known to the runtime</span>
+          </div>
+          <div class="figure-stat">
+            <b>1,534</b>
+            <span>of them exercised by a test that compares the answer with the product's</span>
+          </div>
+          <div class="figure-stat">
+            <b>3</b>
+            <span>names it has not met yet; everything else runs, is ignored on purpose, or is refused by name</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <div class="section-head">
+        <h2>What Visual FoxPro 10 would have been</h2>
+        <p>
+          Visual FoxPro stopped at version 9, and at 32 bits. This is the same language, rebuilt
+          on a foundation that has not been frozen since 2007. Four pieces are what make that
+          possible.
+        </p>
+      </div>
+
+      <div class="diagram-frame">
+        <div class="listing-bar"><b>Where a call goes</b><span>/</span><span>and where the 32-bit world stops</span></div>
+        <svg
+          class="diagram"
+          viewBox="0 0 680 352"
+          role="img"
+          aria-label="Four layers stacked: the form on screen, the live object tree, the virtual machine, and the host. Arrows connect each to the next. A dashed line marks the boundary between the 64-bit application and the 32-bit world, and an arrow crosses it from the host to fllhost.exe, a separate 32-bit process holding your .fll."
+        >
+          <defs>
+            <marker id="tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"></path>
+            </marker>
+          </defs>
+
+          <text class="dg-edge" x="420" y="18" text-anchor="end">64-BIT</text>
+          <text class="dg-edge" x="444" y="18">32-BIT</text>
+          <line class="dg-split" x1="432" y1="26" x2="432" y2="344"></line>
+
+          <rect class="dg-box" x="24" y="30" width="376" height="52" rx="5"></rect>
+          <text class="dg-name" x="44" y="54">The form on screen</text>
+          <text class="dg-sub" x="44" y="71">React, drawing straight from the tree below</text>
+
+          <line class="dg-line" x1="52" y1="84" x2="52" y2="110" marker-start="url(#tip)" marker-end="url(#tip)"></line>
+          <text class="dg-flow" x="68" y="101">repaints one control, not the form</text>
+
+          <rect class="dg-box" x="24" y="112" width="376" height="52" rx="5"></rect>
+          <text class="dg-name" x="44" y="136">The live object tree</text>
+          <text class="dg-sub" x="44" y="153">every control, with its properties and its events</text>
+
+          <line class="dg-line" x1="52" y1="166" x2="52" y2="192" marker-start="url(#tip)" marker-end="url(#tip)"></line>
+          <text class="dg-flow" x="68" y="183">THISFORM.lblGreeting.Caption = cMsg</text>
+
+          <rect class="dg-box-lead" x="24" y="194" width="376" height="52" rx="5"></rect>
+          <text class="dg-name" x="44" y="218">The virtual machine</text>
+          <text class="dg-sub" x="44" y="235">your code, compiled to bytecode, run in WebAssembly</text>
+
+          <line class="dg-line" x1="52" y1="248" x2="52" y2="274" marker-start="url(#tip)" marker-end="url(#tip)"></line>
+          <text class="dg-flow" x="68" y="265">yields a request, never blocks</text>
+
+          <rect class="dg-box" x="24" y="276" width="376" height="52" rx="5"></rect>
+          <text class="dg-name" x="44" y="300">The host</text>
+          <text class="dg-sub" x="44" y="317">files, tables, COM, and 64-bit libraries in process</text>
+
+          <line class="dg-line" x1="402" y1="302" x2="450" y2="302" marker-end="url(#tip)"></line>
+          <text class="dg-flow" x="426" y="288" text-anchor="middle">SET LIBRARY TO</text>
+
+          <rect class="dg-box" x="454" y="276" width="202" height="52" rx="5"></rect>
+          <text class="dg-name" x="472" y="300">fllhost.exe</text>
+          <text class="dg-sub" x="472" y="317">a 32-bit process, holding your .fll</text>
+        </svg>
+      </div>
+
+      <div class="layers">
+        <div class="layer">
+          <span class="kicker">64-bit, end to end</span>
+          <h3>The ceiling that came with 32 bits is gone</h3>
+          <p>
+            Visual FoxPro is a 32-bit program, and that decides more than it appears to. It is why
+            a table stops at two gigabytes, why a memo file stops at two gigabytes, and why a big
+            report runs out of memory on a machine with plenty to spare. The limits are signed
+            32-bit numbers buried in the file handling, not a licensing decision anybody made.
+          </p>
+          <p>
+            FoxDev Studio is <strong>64-bit throughout</strong>. Every file offset is 64-bit and a
+            table is never read into memory at all, so the same <code>.dbf</code> that used to
+            stop dead carries on into the <strong>hundreds of gigabytes</strong>. One thing to know
+            before you lean on it: a table grown past two gigabytes will not open in Visual FoxPro
+            again. If you still work in both, that is a one-way door.
+          </p>
+
+          <div class="diagram-frame figure">
+            <div class="listing-bar"><b>The offset</b><span>/</span><span>and what it reaches</span></div>
+            <svg
+              class="diagram"
+              viewBox="0 0 680 320"
+              role="img"
+              aria-label="Visual FoxPro addresses a file with a signed 32-bit offset, reaching 2,147,483,647 bytes, so a table stops at 2 GB. FoxDev Studio uses a 64-bit offset, reaching 9,223,372,036,854,775,807 bytes. Below, a grid of 279 small squares, each one 2 GB, shows the size of a single FoxDev table of 130-byte records: 558 GB."
+            >
+              <defs>
+                <pattern id="bits32" width="8" height="20" patternUnits="userSpaceOnUse">
+                  <rect width="6.6" height="20" rx="1" fill="var(--brand)" opacity=".38"></rect>
+                </pattern>
+                <pattern id="bits64" width="4" height="20" patternUnits="userSpaceOnUse">
+                  <rect width="2.9" height="20" rx=".8" fill="var(--brand)"></rect>
+                </pattern>
+              </defs>
+
+              <text class="dg-name" x="24" y="54">Visual FoxPro</text>
+              <rect x="150" y="38" width="256" height="20" fill="url(#bits32)"></rect>
+              <rect x="150" y="38" width="6.6" height="20" rx="1" fill="var(--muted)" opacity=".5"></rect>
+              <text class="dg-num" x="422" y="48">2,147,483,647</text>
+              <text class="dg-sub" x="422" y="63">bytes: the table stops at 2 GB</text>
+              <text class="dg-flow" x="150" y="78">the leading bit carries the sign, which is why it is 2 GB and not 4</text>
+
+              <text class="dg-name" x="24" y="120">FoxDev Studio</text>
+              <rect x="150" y="104" width="256" height="20" fill="url(#bits64)"></rect>
+              <text class="dg-num" x="422" y="114">9,223,372,036,854,775,807</text>
+              <text class="dg-sub" x="422" y="129">bytes: the offset is never what stops</text>
+              <text class="dg-flow" x="150" y="144">every byte of every read and write is addressed this way</text>
+
+              <line class="dg-rule" x1="24" y1="170" x2="656" y2="170"></line>
+
+              <text class="dg-name" x="24" y="198">What that buys one table</text>
+              <text class="dg-sub" x="24" y="216">Every square below is 2 GB: the whole of what a Visual FoxPro table could hold.</text>
+
+              {
+                squares.map((s, i) => (
+                  <rect x={s.x} y={s.y} width="5.6" height="5.6" rx="1" fill={i === 0 ? 'var(--brand)' : 'var(--line)'} />
+                ))
+              }
+              <line class="dg-split" x1="27" y1="298" x2="27" y2="306"></line>
+              <text class="dg-edge" x="24" y="317">2 GB</text>
+
+              <text class="dg-sub" x="272" y="252">279 squares: one FoxDev table of 130-byte records, 558 GB.</text>
+              <text class="dg-sub" x="272" y="272">At 1 KB records it reaches 4.4 TB, which is 2,200 of them.</text>
+              <text class="dg-flow" x="272" y="294">what stops it now is the DBF header's own record count</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="layer">
+          <span class="kicker">The virtual machine</span>
+          <h3>A compiler, and a machine built to run what it makes</h3>
+          <p>
+            Visual FoxPro compiled your program to p-code and shipped a runtime to execute it. This
+            is the same arrangement, made again: a compiler and a bytecode interpreter written in
+            Rust and compiled to <strong>WebAssembly</strong>, so one machine runs your code
+            wherever the application runs. The editor checks what you type through that very
+            compiler, so what it underlines and what the runtime refuses cannot drift apart.
+          </p>
+          <p>
+            A running program is a fiber. When it needs something from the world outside (a
+            message box, a modal form, the next record) it does not call out and block; it yields,
+            the work is done while the machine is off the stack, and the answer is handed back.
+            That is why <code>MESSAGEBOX()</code> stops your program without freezing the window
+            behind it, why <code>READ EVENTS</code> waits without spinning, and why
+            <code>SetFocus</code> can fire <code>GotFocus</code>, and <code>Init</code> can run
+            while a form is still being built, in the order FoxPro always did it.
+          </p>
+          <p class="more"><a href="/docs/vm">How the machine works</a> and <a href="/docs/bytecode">what it runs</a>.</p>
+        </div>
+
+        <div class="layer">
+          <span class="kicker">The screen</span>
+          <h3>The form you see is the object tree, not a picture of it</h3>
+          <p>
+            A running form is a live tree of objects with the properties you would expect, and the
+            interface is drawn straight from that tree by React. Each object watches only itself,
+            so <code>THISFORM.lblGreeting.Caption = cMsg</code> repaints one label rather than the
+            whole form. On a dense screen that is the difference between instant and sluggish.
+          </p>
+          <p>
+            The same tree is what the designer edits, one step earlier. There is no second model
+            kept in step with the first, which is the usual place a form and its designer start
+            telling different stories.
+          </p>
+        </div>
+
+        <div class="layer">
+          <span class="kicker">The 32-bit bridge</span>
+          <h3>Your old libraries still load, though nothing here is 32-bit</h3>
+          <p>
+            An <code>.fll</code> is a 32-bit image, and every process in a 64-bit application is
+            64-bit, so nothing inside the application itself could ever open one. Rather than tell
+            you it is impossible, <code>SET LIBRARY TO</code> starts a <strong>small 32-bit process
+            whose only job is to hold your library</strong>, and the runtime talks to it. The calls
+            are synchronous, because a program may call into a library halfway through an
+            expression, and an answer that arrived later would not be an answer. It is measured
+            against real libraries: the encryption library, FoxTools, and libraries built from
+            Microsoft's own API samples.
+          </p>
+          <p>
+            Nothing 64-bit needs the bridge: <code>DECLARE ... DLL</code> reaches a modern library
+            in the same process, and automation objects are reached the way they always were. The
+            old road stays open; it just is not the only one any more.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="foxscript">
+      <div class="section-head">
+        <h2>FoxScript: the same language, with more room</h2>
+        <p>
+          Everything you have written still means what it always meant. FoxScript only adds on
+          top: a block you can hand to something else to run later, and a way to answer a web
+          request from the code that already knows your business.
+        </p>
+      </div>
+
+      <div class="listing">
+        <div class="listing-bar"><b>server.prg</b><span>/</span><span>FoxScript</span></div>
+        <div class="code-scroll">
+<pre><code><span class="cmt">&amp;&amp; your old add-in libraries load just as before</span>
+<span class="kw">SET LIBRARY TO</span> <span class="str">"vfpencryption71.fll"</span> <span class="kw">ADDITIVE</span>
+
+<span class="kw">LOCAL</span> oServer
+oServer = FoxScript.Http.CreateServer()
+
+oServer.Get(<span class="str">"/api/v1/customers/:id"</span>, <span class="kw">LAMBDA</span>(req, res)
+    <span class="kw">LOCAL</span> lnId
+    lnId = <span class="fn">VAL</span>(req.Params(<span class="str">"id"</span>))
+
+    <span class="kw">SELECT</span> * <span class="kw">FROM</span> customer <span class="kw">WHERE</span> cust_id = lnId <span class="kw">INTO CURSOR</span> c_cust
+
+    <span class="kw">IF</span> <span class="fn">RECCOUNT</span>(<span class="str">"c_cust"</span>) &gt; 0
+        res.Status(200).Json(FoxScript.Data.CursorToJson(<span class="str">"c_cust"</span>))
+    <span class="kw">ELSE</span>
+        res.Status(404).Json(<span class="str">'&#123;"error": "Not found"&#125;'</span>)
+    <span class="kw">ENDIF</span>
+
+    <span class="kw">USE IN</span> c_cust
+<span class="kw">ENDLAMBDA</span>)
+
+oServer.Listen(8080)
+<span class="kw">READ EVENTS</span>
+</code></pre>
+        </div>
+      </div>
+
+      <p class="note">
+        Every line of that runs on the same runtime your forms do. The queries, the cursor and
+        the library call are ordinary FoxPro; the lambda and the server are what FoxScript adds:
+        no second language, no service to stand up beside it.
+        <a href="/docs/foxscript">The keywords</a> and <a href="/docs/http-api">the HTTP API</a>
+        are each written down in full.
+      </p>
+    </section>
+
+    <section id="download">
+      <div class="section-head">
+        <h2>Download</h2>
+        <p>
+          The nightly is rebuilt from every push to main and published as a pre-release on
+          GitHub. Unsigned, so the first launch asks you to confirm.
+        </p>
+      </div>
+
+      <div class="downloads">
+        <a class="dl" href="https://github.com/FoxDevCommunity/FoxDevStudio/releases/tag/nightly">
+          <svg class="dl-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 5.4 10.8 4.3v7.2H3zM12 4.1 21 2.8v8.7h-9zM3 12.5h7.8v7.2L3 18.6zM12 12.5h9v8.7L12 19.9z"></path>
+          </svg>
+          <b>Windows</b>
+          <span>The installer (<code>.exe</code>) and the runtime (<code>.zip</code>), x64.</span>
+        </a>
+        <a class="dl" href="https://github.com/FoxDevCommunity/FoxDevStudio/releases/tag/nightly">
+          <svg class="dl-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.8"></circle>
+            <circle cx="12" cy="4.3" r="2.1"></circle>
+            <circle cx="5.3" cy="15.9" r="2.1"></circle>
+            <circle cx="18.7" cy="15.9" r="2.1"></circle>
+          </svg>
+          <b>Ubuntu and other Linux</b>
+          <span>An AppImage and a <code>.deb</code>, x64.</span>
+        </a>
+        <a class="dl" href="https://github.com/FoxDevCommunity/FoxDevStudio">
+          <svg class="dl-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          <b>Source, on GitHub</b>
+          <span>FoxDevCommunity/FoxDevStudio: the IDE, the VM, this site, and every release.</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="docs">
+      <div class="section-head">
+        <h2>Read the documentation</h2>
+        <p>Each part of the product is written down, including the parts that are not there yet.</p>
+      </div>
+      <div class="doc-grid">
+        {
+          docs.flatMap((g) => g.pages).map((p) => (
+            <a class="doc-card" href={p.href}>
+              <b>{p.title}</b>
+              <span>{p.summary}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section id="later">
+      <div class="section-head">
+        <h2>What is coming</h2>
+        <p>Work already mapped out, roughly in the order it is being built.</p>
+      </div>
+
+      <div class="later">
+        <div>
+          <b>The last of the language</b>
+          <span>A short list of corners is still open, each one checked against the original as it closes.</span>
+        </div>
+        <div>
+          <b>Reports</b>
+          <span>The report designer and the report engine, band by band, measured the same way the rest was.</span>
+        </div>
+        <div>
+          <b>Tables past two gigabytes, as a format of their own</b>
+          <span>The 64-bit offsets are there today; a container that is honest about the DBF header's limits comes next.</span>
+        </div>
+        <div>
+          <b>An installer for what you ship</b>
+          <span>Your application handed to the people who use it as a single thing they can run, with nothing to set up first.</span>
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---- hero ----------------------------------------------------------- */
+  .hero {
+    position: relative;
+    padding-block: 64px 52px;
+    display: grid;
+    gap: 40px;
+    align-items: center;
+  }
+  /* the designer's own grid, faded out: the surface every FoxPro form was drawn on */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(var(--line) 1px, transparent 1.2px);
+    background-size: 15px 15px;
+    -webkit-mask-image: linear-gradient(to bottom, #000, transparent 72%);
+    mask-image: linear-gradient(to bottom, #000, transparent 72%);
+  }
+  .hero > * {
+    position: relative;
+    z-index: 1;
+  }
+  .hero-copy {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+  .hero-art {
+    width: 100%;
+    max-width: 420px;
+    justify-self: center;
+  }
+  @media (min-width: 880px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+    }
+    .hero-art {
+      justify-self: end;
+    }
+  }
+  .hero-mark {
+    width: 72px;
+    height: 72px;
+  }
+  .vignette {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 18px 30px rgba(10, 23, 37, 0.16));
+  }
+  .vg-title {
+    font: 600 11.5px 'IBM Plex Sans', sans-serif;
+    fill: var(--on-brand);
+  }
+  .vg-label {
+    font: 500 10.5px 'IBM Plex Sans', sans-serif;
+    fill: var(--muted);
+  }
+  .vg-value {
+    font: 400 11px 'IBM Plex Mono', monospace;
+    fill: var(--text);
+  }
+  .vg-btn {
+    font: 600 11px 'IBM Plex Sans', sans-serif;
+    fill: var(--text);
+  }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+  }
+  .lede {
+    font-size: clamp(1.08rem, 1.9vw, 1.3rem);
+    color: var(--muted);
+    max-width: 56ch;
+    margin: 0;
+  }
+  .lede strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  /* ---- sections -------------------------------------------------------- */
+  section {
+    padding-block: 52px;
+    border-top: 1px solid var(--line);
+  }
+  .section-head {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 28px;
+    max-width: 58ch;
+  }
+  h2 {
+    font-size: clamp(1.45rem, 3vw, 1.95rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .section-head p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15.5px;
+  }
+
+  .cards {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 22px 22px 24px;
+    display: grid;
+    gap: 8px;
+    align-content: start;
+    box-shadow: var(--shadow);
+  }
+  .card h3 {
+    font-size: 1.08rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .card p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+  .card-icon {
+    width: 26px;
+    height: 26px;
+    display: block;
+    margin-bottom: 4px;
+    fill: none;
+    stroke: var(--brand);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .card-icon .solid {
+    fill: var(--brand);
+    stroke: none;
+  }
+
+  /* ---- the screenshots -------------------------------------------------- */
+  .shots {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  .shot {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .shot.wide {
+    grid-column: 1 / -1;
+  }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    background: var(--surface);
+    transition: border-color 0.12s ease;
+  }
+  .shot:hover img {
+    border-color: var(--brand);
+  }
+  .shot span {
+    padding-inline: 2px;
+  }
+
+  /* ---- the quiet band -------------------------------------------------- */
+  .band {
+    background: var(--surface-sunk);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px 30px;
+    display: grid;
+    gap: 14px;
+  }
+  .band h2 {
+    font-size: clamp(1.3rem, 2.6vw, 1.7rem);
+  }
+  .band p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15.5px;
+    max-width: 64ch;
+  }
+  .band p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .figures {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    margin-top: 12px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .figure-stat {
+    display: grid;
+    gap: 4px;
+  }
+  .figure-stat b {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .figure-stat span {
+    font-size: 13.5px;
+    color: var(--muted);
+    max-width: 30ch;
+  }
+
+  /* ---- the architecture briefing ---------------------------------------- */
+  .layers {
+    display: grid;
+    gap: 18px;
+  }
+  .layer {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 24px 26px;
+    display: grid;
+    gap: 10px;
+    box-shadow: var(--shadow);
+  }
+  .layer h3 {
+    font-size: 1.12rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+  .layer p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 68ch;
+  }
+  .layer p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .layer .more a {
+    color: var(--brand-deep);
+  }
+  .layer code {
+    font-size: 0.92em;
+    color: var(--text);
+    background: var(--brand-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .diagram-frame {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+    margin-bottom: 18px;
+  }
+  .diagram {
+    display: block;
+    width: 100%;
+    min-width: 600px;
+    height: auto;
+    padding: 6px;
+  }
+  .dg-box {
+    fill: var(--surface-sunk);
+    stroke: var(--line);
+  }
+  .dg-box-lead {
+    fill: var(--brand-soft);
+    stroke: var(--brand);
+  }
+  .dg-name {
+    font: 600 13px 'IBM Plex Sans', sans-serif;
+    fill: var(--ink);
+  }
+  .dg-sub {
+    font: 400 11.5px 'IBM Plex Sans', sans-serif;
+    fill: var(--muted);
+  }
+  .dg-flow {
+    font: 400 11px 'IBM Plex Mono', monospace;
+    fill: var(--muted);
+  }
+  .dg-edge {
+    font: 500 10.5px 'IBM Plex Mono', monospace;
+    fill: var(--brand);
+    letter-spacing: 0.08em;
+  }
+  .dg-line {
+    stroke: var(--muted);
+    stroke-width: 1.2;
+    fill: none;
+  }
+  .dg-num {
+    font: 500 12.5px 'IBM Plex Mono', monospace;
+    fill: var(--ink);
+  }
+  .dg-rule {
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+  .figure {
+    margin-top: 6px;
+  }
+  .figure .diagram {
+    min-width: 620px;
+  }
+  .dg-split {
+    stroke: var(--brand);
+    stroke-width: 1.2;
+    stroke-dasharray: 5 5;
+    opacity: 0.65;
+  }
+
+  .note {
+    margin: 16px 0 0;
+    font-size: 14.5px;
+    color: var(--muted);
+    max-width: 62ch;
+  }
+  .note a {
+    color: var(--brand-deep);
+  }
+
+  /* ---- downloads --------------------------------------------------------- */
+  .downloads {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .dl {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    text-decoration: none;
+    padding: 22px 22px 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    color: var(--muted);
+    transition: border-color 0.12s ease;
+  }
+  .dl:hover {
+    border-color: var(--brand);
+  }
+  .dl-icon {
+    width: 30px;
+    height: 30px;
+    fill: var(--brand);
+    color: var(--brand);
+    margin-bottom: 6px;
+  }
+  .dl b {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .dl span {
+    font-size: 14.5px;
+  }
+  .dl code {
+    font-size: 0.92em;
+    color: var(--text);
+    background: var(--brand-soft);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ---- the documentation map ------------------------------------------ */
+  .doc-grid {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .doc-card {
+    display: grid;
+    gap: 4px;
+    text-decoration: none;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    transition: border-color 0.12s ease;
+  }
+  .doc-card:hover {
+    border-color: var(--brand);
+  }
+  .doc-card b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .doc-card span {
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* ---- what is coming --------------------------------------------------- */
+  .later {
+    display: grid;
+    gap: 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .later div {
+    background: var(--surface);
+    padding: 18px 22px;
+    display: grid;
+    gap: 4px;
+    border-bottom: 1px solid var(--line);
+  }
+  .later div:last-child {
+    border-bottom: 0;
+  }
+  .later b {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .later span {
+    font-size: 14.5px;
+    color: var(--muted);
+  }
+</style>

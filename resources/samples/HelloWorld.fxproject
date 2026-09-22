@@ -1,0 +1,20 @@
+{
+  "$schema": "foxdev-project",
+  "version": 1,
+  "name": "HelloWorld",
+  "main": "HelloWorld.fxf",
+  "items": [
+    {
+      "kind": "form",
+      "path": "HelloWorld.fxf"
+    },
+    {
+      "kind": "menu",
+      "path": "Main.fxm"
+    },
+    {
+      "kind": "program",
+      "path": "main.prg"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+BINDEVENT(4) first delegate          1
+BINDEVENT(5) second delegate          2
+----
+UNBINDEVENTS(4)          1
+UNBINDEVENTS(2) errors         11
+UNBINDEVENTS(3) errors         11
+----
+UNBINDEVENTS(0) errors       1229 Too few arguments.
+cleanup          1

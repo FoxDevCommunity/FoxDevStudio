@@ -1,0 +1,11 @@
+CAPSLOCK returns the state from before the change .T.
+NUMLOCK returns the state from before the change .T.
+INSMODE returns the state from before the change .T.
+READKEY with no argument 0
+READKEY(1) 1
+READKEY(0) 1
+CHRSAW with nothing queued .F.
+CHRSAW takes the queued key at once .T.
+INKEY takes the queued key at once 122
+INKEY(nSeconds, cHideCursor) does the same 121
+INKEY with nothing queued times out to 0 0

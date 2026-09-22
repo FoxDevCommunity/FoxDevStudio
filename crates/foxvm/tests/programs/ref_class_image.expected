@@ -1,0 +1,18 @@
+Image Image Image []
+100 17 0 0
+[] [] 1 0
+6579300 .T. .T. .T.
+.T. .F. .F.
+Line Line 100 17
+[\] 1 1 13
+0 []
+[/]
+Shape Shape 0 1 0
+15790320 1 1 1
+99
+.T. .F. .F.
+Timer Timer Timer 0 .T.
+0 0 100 17
+500
+.T. .T. .T.
+.F. .F. .F.

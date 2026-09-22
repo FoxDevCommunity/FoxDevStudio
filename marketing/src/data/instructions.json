@@ -1,0 +1,2694 @@
+{
+  "generated": "by marketing/scripts/instructions.mjs from crates/foxvm/src/bytecode.rs; do not edit",
+  "MAGIC": "FXVM",
+  "FORMAT_VERSION": 9,
+  "count": 199,
+  "groups": [
+    {
+      "name": "statements",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Stmt",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Statement boundary: records the current source line (and is the breakpoint hook)."
+        }
+      ]
+    },
+    {
+      "name": "constants",
+      "note": "[] -> [v]",
+      "instructions": [
+        {
+          "name": "Const",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "True",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "False",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Null",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Omitted",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "The value of a skipped argument (`f(1,,3)`): .F."
+        }
+      ]
+    },
+    {
+      "name": "stack",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Pop",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Dup",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Nop",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "",
+          "moved": true
+        }
+      ]
+    },
+    {
+      "name": "variables",
+      "note": "",
+      "instructions": [
+        {
+          "name": "LoadLocal",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> [v]",
+          "doc": ""
+        },
+        {
+          "name": "StoreLocal",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[v] -> []",
+          "doc": ""
+        },
+        {
+          "name": "LoadName",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Dynamic lookup: privates in this frame, then callers, then PUBLIC. [] -> [v]"
+        },
+        {
+          "name": "StoreName",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Dynamic store; an unknown name becomes a PRIVATE of the current frame. [v] -> []"
+        },
+        {
+          "name": "DeclLocal",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Sets the slot to .F. (LOCAL declaration)."
+        },
+        {
+          "name": "DeclPrivate",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Declares a PRIVATE (hides any outer variable of that name) initialised to .F."
+        },
+        {
+          "name": "DeclPublic",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Declares a PUBLIC initialised to .F. (keeps an existing value)."
+        },
+        {
+          "name": "DeclareNamed",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "public",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[name] -> []",
+          "doc": "`PRIVATE (cName)` / `PUBLIC (cName)`: the same declaration for a name the program worked out when it ran."
+        },
+        {
+          "name": "StoreByName",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[value, name] -> []",
+          "doc": "`STORE x TO (cName)`: writes the value to whatever the name names - a variable, or a property some way down an object - which is only known when it runs. The name is read as a target and the value taken off the stack by the code compiled for it, so anything that can be assigned to can be named here."
+        },
+        {
+          "name": "ParamToPrivate",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "arg",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`PARAMETERS`-style: pops the n-th argument and stores it as a PRIVATE. [] -> []"
+        },
+        {
+          "name": "Dim",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "target",
+              "type": "Var",
+              "doc": ""
+            },
+            {
+              "name": "ndims",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Creates an array in the target. [dims...] -> []"
+        },
+        {
+          "name": "LoadIndex",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[array, i (, j)] -> [v]",
+          "doc": ""
+        },
+        {
+          "name": "StoreIndex",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[v, array, i (, j)] -> []",
+          "doc": ""
+        },
+        {
+          "name": "Ref",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Var",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Pushes a by-reference cell for the variable (converts it in place). [] -> [ref]"
+        },
+        {
+          "name": "RefOrMakeArray",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Var",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "The same, for a name that need not exist yet: an array function is handed the array it is to fill, and Visual FoxPro makes one when the program never declared it. [] -> [ref]"
+        },
+        {
+          "name": "ReleaseName",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Releases variables: `RELEASE a, b`."
+        },
+        {
+          "name": "ReleaseLocal",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`RELEASE` of a LOCAL. A local lives in a numbered slot, so there is nowhere to take it from: the slot is marked instead, and reads as a variable that is not there until something writes it again."
+        },
+        {
+          "name": "ReleaseAll",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        }
+      ]
+    },
+    {
+      "name": "operators",
+      "note": "[a, b] -> [r] / [a] -> [r]",
+      "instructions": [
+        {
+          "name": "Neg",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Not",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Add",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Sub",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Mul",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Div",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Mod",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Pow",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Eq",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "ExactEq",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Ne",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Lt",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Le",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Gt",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Ge",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Contains",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "And",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "Three-valued AND/OR applied after the short-circuit jump kept the left operand."
+        },
+        {
+          "name": "Or",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        }
+      ]
+    },
+    {
+      "name": "control flow (targets are absolute pcs)",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Jump",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "JumpIfFalse",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Pops; jumps when .F. or NULL; errors on a non-logical."
+        },
+        {
+          "name": "JumpIfTrue",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "JumpIfFalseKeep",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Short-circuit for AND: peeks (never pops); jumps when the top is .F. The left operand stays on the stack either way, so `a AND b` compiles to `a; JumpIfFalseKeep(end); b; And; end:`."
+        },
+        {
+          "name": "JumpIfTrueKeep",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Short-circuit for OR: peeks; jumps when the top is .T."
+        },
+        {
+          "name": "ForTest",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "FOR loop test. [var, end, step] -> [] ; jumps to the exit when the loop is finished."
+        },
+        {
+          "name": "ForEachNext",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "FOR EACH support: [array, index] -> [array, index+1, element]; at the end pops both and jumps to the exit."
+        },
+        {
+          "name": "ReturnTo",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`RETURN TO`: leave every routine between here and the one this names, which is the program the run started in when the name is empty (`RETURN TO MASTER`).",
+          "moved": true
+        }
+      ]
+    },
+    {
+      "name": "calls",
+      "note": "",
+      "instructions": [
+        {
+          "name": "IndexOrCall",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`name(args)`: array element access when `name` resolves to an array, else a user function (this module, then loaded programs). [args...] -> [v]"
+        },
+        {
+          "name": "CallBuiltin",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "id",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Built-in function by id (see `builtins::REGISTRY`). [args...] -> [v]"
+        },
+        {
+          "name": "Do",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "in_prog",
+              "type": "bool",
+              "doc": "A program name went on the stack under the arguments."
+            }
+          ],
+          "effect": "",
+          "doc": "`DO name [WITH args] [IN prog]`: procedure call as a statement. [args...] -> []"
+        },
+        {
+          "name": "DoDynamic",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "in_prog",
+              "type": "bool",
+              "doc": "A program name went on the stack under the arguments."
+            }
+          ],
+          "effect": "[name, args...] -> []",
+          "doc": "`DO (cProgram)`: the name is computed, not written in the source."
+        },
+        {
+          "name": "Return",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "[v] -> returns v to the caller (RETURN without a value pushes .T. first)."
+        },
+        {
+          "name": "MakeLambda",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`LAMBDA(...) ... ENDLAMBDA`: builds a function value out of the function at this index, the captured slots its proto lists, and the frame's THIS. [] -> [f]"
+        },
+        {
+          "name": "IndexOrCallValue",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`f(args)` where `f` is a local: the value under the arguments is subscripted when it is an array and called when it is a function, which is the same question `IndexOrCall` asks about a name. [v, args...] -> [result]"
+        }
+      ]
+    },
+    {
+      "name": "objects",
+      "note": "",
+      "instructions": [
+        {
+          "name": "LoadThis",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "LoadThisForm",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "LoadThisFormSet",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "`THISFORMSET`: the formset the object belongs to. A formset is a container whose members are whole forms, shown together, so this is not the form above the object but the thing above that; an object in no formset raises error 1938 rather than answering."
+        },
+        {
+          "name": "LoadScreen",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "GetMember",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[obj] -> [value or child object]",
+          "doc": ""
+        },
+        {
+          "name": "GetMemberByName",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[obj, name] -> [value]",
+          "doc": "the same, for a member named by a variable: `obj.&cName`."
+        },
+        {
+          "name": "SetMemberByName",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "`obj.&cName = v`: the member a variable names is written. [value, obj, name] -> []"
+        },
+        {
+          "name": "CallMethodByName",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[obj, name, a1 .. an] -> [value]",
+          "doc": "(yields HostRequest::CallMethod) for `obj.&cName(...)`."
+        },
+        {
+          "name": "SetMember",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[v, obj] -> []",
+          "doc": "(yields HostRequest::SetProp)"
+        },
+        {
+          "name": "SetMemberIndex",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[v, obj, subs...] -> []",
+          "doc": "(yields HostRequest::SetPropIndex) for `obj.Prop[1] = v`"
+        },
+        {
+          "name": "DimMember",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "ndims",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[obj, d1 .. dn] -> []",
+          "doc": "(yields HostRequest::DimProp) for `DIMENSION obj.aProp[2, 3]`.  Sizing an array property is its own instruction rather than an assignment of a fresh array, because the two are different statements: `DIMENSION` keeps the elements that still fit, and a plain assignment of an array to a property is not a way to give a property an array at all."
+        },
+        {
+          "name": "CallMethod",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[obj, args...] -> [v]",
+          "doc": "(yields HostRequest::CallMethod)"
+        },
+        {
+          "name": "PushWith",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[obj] -> []",
+          "doc": "pushes onto the WITH stack"
+        },
+        {
+          "name": "PopWith",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "LoadWith",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> [obj]",
+          "doc": ""
+        },
+        {
+          "name": "ReleaseObject",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[obj] -> []",
+          "doc": "(yields HostRequest::ReleaseObject)"
+        },
+        {
+          "name": "DoMenu",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`DO menu.fxm`: installs a menu. [] -> []  (yields HostRequest::DoMenu)"
+        }
+      ]
+    },
+    {
+      "name": "runtime compilation",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Macro",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "`&name` in an expression: compiles the text on the stack as an expression in this frame. [text] -> [v]"
+        },
+        {
+          "name": "ToText",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "TEXTMERGE `<<expr>>`: replaces the top of the stack with its display text. [v] -> [text]"
+        },
+        {
+          "name": "MergeText",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "always",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Text merge: replaces the raw text on the stack with the same text, every expression between the merge delimiters worked out and put in its place. Which characters those delimiters are, and whether the merge happens at all, is what SET TEXTMERGE says at the time; `always` is the TEXTMERGE clause of TEXT, which merges whatever the setting says. [raw] -> [text]"
+        },
+        {
+          "name": "TextOut",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "newline",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "noshow",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`\\`, `\\\\` and a TEXT block with nowhere to go: sends the text on the stack to wherever SET TEXTMERGE TO points. `newline` ends the line before it first, and `noshow` is the command's own NOSHOW, which stops it also being shown. [text] -> []"
+        }
+      ]
+    },
+    {
+      "name": "statements with host effects",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Print",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "newline",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`?` / `??`. [items...] -> []"
+        },
+        {
+          "name": "WaitWindow",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[text? , timeout?] -> []",
+          "doc": "per `wait_flags`; `TO var` is a following StoreName."
+        },
+        {
+          "name": "ReadEvents",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "ClearEvents",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Quit",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "Cancel",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "DoForm",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[name, args...] -> [obj?, result?]",
+          "doc": "per `form_flags`."
+        },
+        {
+          "name": "SetCmd",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "name",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "to",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`SET name ON|OFF|TO args`. [args...] -> [] ; ON/OFF push True/False first.  `to` says the command was the TO form. One setting can hold two things at once - `SET HELP ON` and `SET HELP TO afile` are both remembered, and `SET(\"HELP\")` answers the first where `SET(\"HELP\", 1)` answers the second - so which of them the command wrote has to travel with the instruction. The values alone cannot say."
+        },
+        {
+          "name": "NoDefault",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": ""
+        },
+        {
+          "name": "DoDefault",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[args...] -> [v]",
+          "doc": ""
+        }
+      ]
+    },
+    {
+      "name": "exceptions",
+      "note": "",
+      "instructions": [
+        {
+          "name": "TryPush",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "catch",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "finally",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "Installs a handler; either target may be `NO_TARGET`. On an error the VM unwinds to the stack depth at the push, then jumps to `catch` (installing a finally-only handler for the CATCH block) or, without CATCH, to `finally` with the error pending for `EndFinally`."
+        },
+        {
+          "name": "TryPop",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "Removes the innermost handler; when it has a FINALLY block a \"no error pending\" entry is recorded and the compiler jumps to the block next."
+        },
+        {
+          "name": "Erase",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[path] -> []",
+          "doc": "(yields HostRequest::FileDelete) for `ERASE`."
+        },
+        {
+          "name": "Retry",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "Returns from this frame and runs the statement that called it again, for `RETRY`.",
+          "moved": true
+        },
+        {
+          "name": "Throw",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "[v] -> raises a user error carrying v (a NULL re-raises the last caught error).",
+          "moved": true
+        },
+        {
+          "name": "CatchObject",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> [exception object]",
+          "doc": "(yields HostRequest::CreateException) for `CATCH TO oErr`.",
+          "moved": true
+        },
+        {
+          "name": "EndFinally",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "End of a FINALLY block: re-raises the error that was propagating when the block was entered.",
+          "moved": true
+        },
+        {
+          "name": "OnError",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Option<u32>",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`ON ERROR command`: installs (`Some(const)`) or clears (`None`) the error handler text.",
+          "moved": true
+        }
+      ]
+    },
+    {
+      "name": "data",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Use",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "alias",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "named_alias",
+              "type": "bool",
+              "doc": "An alias went on the stack under the path, worked out when the statement ran."
+            },
+            {
+              "name": "exclusive",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "online",
+              "type": "bool",
+              "doc": "`ONLINE` or `ADMIN`: the table opens, and then the command answers for what those two ask of it, which only an offline view can give."
+            },
+            {
+              "name": "in_area",
+              "type": "bool",
+              "doc": "True when a work area was pushed under the path: `USE x IN 0` opens the table somewhere else and leaves the selected area where it was."
+            }
+          ],
+          "effect": "[path] -> []",
+          "doc": "`USE table [ALIAS x] [EXCLUSIVE|SHARED] [AGAIN]`; an empty path closes the work area. `alias` is the name index of an explicit ALIAS, if there was one."
+        },
+        {
+          "name": "SelectArea",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Option<u32>",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`SELECT n` / `SELECT alias`: `name` is a name index, or none when a number is on the stack."
+        },
+        {
+          "name": "Go",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "GoTarget",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`GO TOP` / `GO BOTTOM` / `GO n` (the record number is on the stack for `Record`)."
+        },
+        {
+          "name": "Skip",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "`SKIP [n]`, with the count on the stack."
+        },
+        {
+          "name": "PushArea",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[area] -> []",
+          "doc": "The work area a command says `IN`: it is selected, and what was selected before is remembered so `PopArea` can put it back."
+        },
+        {
+          "name": "PopArea",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "The work area `PushArea` remembered, selected again."
+        },
+        {
+          "name": "CloseTables",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "all",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`USE` with nothing open to close, or `CLOSE TABLES`/`CLOSE ALL`."
+        },
+        {
+          "name": "SetFound",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[flag] -> []",
+          "doc": "what FOUND() will report for the selected work area, after a LOCATE."
+        },
+        {
+          "name": "ReplaceField",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "field",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "additive",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[value] -> []",
+          "doc": "Changes one field of the record the pointer is on, in the page in hand. `additive` is `REPLACE ... ADDITIVE`, which adds to a memo field rather than replacing it."
+        },
+        {
+          "name": "ReplaceFieldNamed",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "additive",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[name, value] -> []",
+          "doc": "`REPLACE (expr) WITH value`: the field the name works out to."
+        },
+        {
+          "name": "MarkDeleted",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "DELETE and RECALL: the flag at the front of the record."
+        },
+        {
+          "name": "Zap",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "ZAP: empties the selected table."
+        },
+        {
+          "name": "FileCommand",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "A file command: 1 COPY FILE, 2 RENAME, 3 MD, 4 RD, 5 DIR, 6 TYPE. Pops its names."
+        },
+        {
+          "name": "DeclareDll",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "DECLARE ... DLL: pops the library name and registers the declaration at that index."
+        },
+        {
+          "name": "EndOfCode",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "The routine ran out of statements: it returns the value on top of the stack, and stops there. A `RETURN` the program wrote goes further - out of a line a macro put together and out of the routine that line belongs to - so the two are not the same instruction."
+        },
+        {
+          "name": "ExecMacroText",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "A command with a macro in it, kept as the source text at that constant: every `&name` in it is replaced by the text that variable holds, and what comes out is compiled and run in this frame."
+        },
+        {
+          "name": "CreateTable",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "index",
+              "type": "u32",
+              "doc": "The definition in the module: the columns the new table has."
+            },
+            {
+              "name": "from_array",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "columns",
+              "type": "u8",
+              "doc": "How many column names went on the stack instead, worked out when it ran."
+            }
+          ],
+          "effect": "",
+          "doc": "CREATE TABLE: pops a path and asks the host to write an empty table of the fields in `Module::cursors` at that index. With `from_array` the columns are described by an array on the stack under the path instead, and the module holds none."
+        },
+        {
+          "name": "CreateTableAllowed",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[path] -> [logical]",
+          "doc": "Asks the open database whether a table of its own may be made: dbc_BeforeCreateTable, answering whether the statement is to go ahead. A .F. stops the whole of CREATE TABLE - no file is written and no work area taken - so the rest of the statement is jumped over rather than run. A free table never reaches this."
+        },
+        {
+          "name": "RaiseError",
+          "shape": "unit",
+          "operands": [],
+          "effect": "",
+          "doc": "ERROR: pops a message (or Omitted) and a number or text, and raises it."
+        },
+        {
+          "name": "AppendBlank",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "APPEND BLANK: an empty record at the end, which the pointer moves to."
+        },
+        {
+          "name": "InsertBlank",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "before",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`INSERT [BEFORE] [BLANK]`: an empty record beside the one the pointer is on, with everything below it moved down one. The pointer ends on the new record."
+        },
+        {
+          "name": "InsertFrom",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "from",
+              "type": "u8",
+              "doc": "0 an array, 1 a variable per field, 2 an object - as GATHER numbers them."
+            }
+          ],
+          "effect": "[source, row] -> [more, next]",
+          "doc": "One record of `INSERT INTO ... FROM ARRAY | MEMVAR | NAME`: appends a blank and fills it from that row of the source, then says whether another row follows and which it is. An array of two dimensions holds a record per row, so the statement loops over this; the other two sources have the one row."
+        },
+        {
+          "name": "CreateCursorFromArray",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "index",
+              "type": "u32",
+              "doc": "The name written in the statement, when it was not worked out on the stack."
+            },
+            {
+              "name": "named",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[array] -> []",
+          "doc": "`CREATE CURSOR name FROM ARRAY a`: a cursor whose columns the array describes, in the shape `AFIELDS()` hands back. The name works the same way as `CreateCursor`'s."
+        },
+        {
+          "name": "FlushRecord",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "Sends the changed record back to the host, if anything changed it."
+        },
+        {
+          "name": "NewDocument",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[path] -> []",
+          "doc": "`CREATE FORM`, `CREATE MENU` and the rest: a new one of that kind, in its designer. The constant says which kind."
+        },
+        {
+          "name": "Import",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "sheet",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`IMPORT`: the file is on the stack, with the sheet name over it when there is one. Reads the workbook, gathers the table it describes, and pushes where it is to go."
+        },
+        {
+          "name": "Build",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "what",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "recompile",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`BUILD`: the kind is a constant, the target and `count` sources are on the stack."
+        },
+        {
+          "name": "Compile",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "what",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "",
+          "doc": "`COMPILE`: the kind is a constant and the file expression is on the stack."
+        },
+        {
+          "name": "ModifyInContainer",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "what",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u16",
+              "doc": "`NOWAIT` and `NOEDIT`, which dbc_ModifyData is handed."
+            }
+          ],
+          "effect": "[path] -> []",
+          "doc": "`MODIFY TABLE`, `MODIFY VIEW`, `MODIFY PROCEDURE` and `MODIFY DATABASE`: the designer for something the open database holds, which the database is told about either side of. 0 a table, 1 a view, 2 the stored procedures, 3 the database itself."
+        },
+        {
+          "name": "Unsupported",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "A command this runtime cannot honour: raises \"Feature is not available\" with the constant's text when the line is reached. It compiles, as it does in the product."
+        },
+        {
+          "name": "Redefined",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "Assigning to THIS, THISFORM, THISFORMSET or _SCREEN: \"Cannot redefine X.\", which the constant names. The line compiles, as it does in the product."
+        },
+        {
+          "name": "OpenDocument",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[path] -> []",
+          "doc": "(yields HostRequest::OpenDocument) for MODIFY and BROWSE. The constant holds the word that followed MODIFY, because each kind of document brings its own extension when the name written has none: MODIFY DATABASE dvds opens dvds.dbc."
+        },
+        {
+          "name": "LoadTablePath",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> [path]",
+          "doc": "The file behind the selected work area, for BROWSE."
+        },
+        {
+          "name": "MakeArray",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[d1 .. dn] -> [array]",
+          "doc": "A fresh array of that shape, for `DIMENSION` of something that is not a variable: an array property, which is assigned to rather than declared."
+        },
+        {
+          "name": "CreateCursor",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "index",
+              "type": "u32",
+              "doc": "The definition in the module: its columns, and the name it was written with."
+            },
+            {
+              "name": "named",
+              "type": "bool",
+              "doc": "A name went on the stack instead, worked out when the statement ran."
+            },
+            {
+              "name": "columns",
+              "type": "u8",
+              "doc": "How many column names went on the stack too, under that name."
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`CREATE CURSOR`: an empty table of that shape, in a free work area."
+        },
+        {
+          "name": "ReplaceFieldAt",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[value] -> []",
+          "doc": "Changes the field at that position of the record the pointer is on, for an `INSERT` that gave its values in the table's own order."
+        },
+        {
+          "name": "ClearAll",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "tables",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`CLEAR MEMORY` and, with `tables`, `CLEAR ALL`."
+        },
+        {
+          "name": "LoadField",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "area",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "field",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> [value]",
+          "doc": "a field, or a member: `area` is a bare name the VM resolves - an object variable, the `m.` memory-variable prefix, or the alias of an open table.",
+          "moved": true
+        },
+        {
+          "name": "Blank",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`BLANK`: the fields of the record in hand go back to empty. The constant names the fields, a comma apart, or is empty for all of them.",
+          "moved": true
+        }
+      ]
+    },
+    {
+      "name": "SELECT-SQL",
+      "note": "The loops are ordinary bytecode; these four hold the query together.",
+      "instructions": [
+        {
+          "name": "SqlOpen",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "table",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "alias",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "named",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[name?] -> []",
+          "doc": "Opens (or borrows) one FROM source and selects it. `table` is a constant and `alias` a name index; `named` says the name is on the stack instead, which is what `FROM (cPath)` compiles to."
+        },
+        {
+          "name": "SelectSource",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "Selects the work area of the query's nth FROM source. The source is named by where it is in the FROM clause rather than by what it is called, because a source named by an expression is only called something once it has been opened."
+        },
+        {
+          "name": "JoinMiss",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "The nth FROM source has no record matching the row being built, so it is parked past its last record and every field of it reads as .NULL. until it is moved again. That is what an outer join puts on the side that missed."
+        },
+        {
+          "name": "SqlBegin",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[top?] -> []",
+          "doc": "Starts gathering rows for the plan at `plan`, expanding its `*` columns against the sources just opened."
+        },
+        {
+          "name": "SqlRow",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[v1 .. vn] -> []",
+          "doc": "One gathered row: the column values, then the GROUP BY keys, then the ORDER BY keys."
+        },
+        {
+          "name": "SqlEnd",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "Folds, sorts and installs the result, then lets go of the sources."
+        },
+        {
+          "name": "SqlHavingNext",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> [logical]",
+          "doc": "Folds the gathered rows the first time, then moves the HAVING clause on to the next group and says whether there is one. The three that follow are the loop the compiler emits between the gathering and `SqlEnd`: HAVING is an expression of the program's own, so it is run as bytecode, a group at a time."
+        },
+        {
+          "name": "SqlHavingValue",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> [value]",
+          "doc": "The nth thing the plan's HAVING clause names, out of the group being asked about."
+        },
+        {
+          "name": "SqlHavingKeep",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[logical] -> []",
+          "doc": "What the predicate came to for that group: keeps it or drops it."
+        },
+        {
+          "name": "SqlSourceField",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> [value]",
+          "doc": "The field of that name in whichever of the query's sources has one, read from the record that source is on, or .NULL. when none of them has such a field. It is what a HAVING clause gathers for a name the select list gave with AS, since the name itself means nothing to a record but a field of the same name would shadow it."
+        },
+        {
+          "name": "SqlRequireGroupBy",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "Raises 1807 unless SET ENGINEBEHAVIOR 70 is in force. It stands in front of a query whose HAVING clause names an aggregate the select list has not got and which groups by nothing, which the older rules allow and the current ones do not."
+        },
+        {
+          "name": "InCursor",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[value] -> [logical]",
+          "doc": "Is the value one of those in the first column of that cursor: what `IN (SELECT ...)` and `= ANY (SELECT ...)` come to once the subquery has been run."
+        }
+      ]
+    },
+    {
+      "name": "indexes",
+      "note": "",
+      "instructions": [
+        {
+          "name": "OpenIndex",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "Reads the compound index beside the table a USE has just opened, when the table's header says one sits there."
+        },
+        {
+          "name": "SetOrder",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "descending",
+              "type": "Option<bool>",
+              "doc": ""
+            }
+          ],
+          "effect": "[tag] -> []",
+          "doc": "`SET ORDER TO`: a tag name, a tag number, or Omitted for record order. `descending` overrides the tag's own direction when the command said which way to go."
+        },
+        {
+          "name": "Seek",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[key] -> []",
+          "doc": "`SEEK`: to the first record the controlling order holds under that key, or to end of file. FOUND() answers with whether it was there."
+        },
+        {
+          "name": "IndexBegin",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[path?, name, key, for, flags] -> []",
+          "doc": "`INDEX ON`: starts gathering the keys of a new index. The flags are 1 UNIQUE, 2 CANDIDATE, 4 DESCENDING, 8 a single-entry index of its own rather than a tag, 16 COMPACT, 32 ADDITIVE; the path is there when 8 is set."
+        },
+        {
+          "name": "IndexKey",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[key] -> []",
+          "doc": "One key of the tag being built, for the record the pointer is on."
+        },
+        {
+          "name": "IndexEnd",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "The tag is complete: it is sorted, becomes the controlling order, and the index is written back beside the table."
+        },
+        {
+          "name": "DeleteTag",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "all",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[name] -> []",
+          "doc": "`DELETE TAG`: that tag, or every tag, and the index is written back."
+        },
+        {
+          "name": "Reindex",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "`REINDEX`: writes the index back beside the table."
+        },
+        {
+          "name": "OpenIdx",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "count",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[path...] -> []",
+          "doc": "`USE ... INDEX x, y`: single-entry indexes opened beside the table, the first of them the controlling order. What `SET INDEX TO` does goes through `set_cmd` instead, so that the setting and the command stay one thing."
+        },
+        {
+          "name": "CopyIndexes",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "count",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "all",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[path..., target] -> []",
+          "doc": "`COPY INDEXES`: a tag per single-entry index, in the structural compound index or in the file the target names. `all` copies every index open beside the table and leaves the list empty."
+        },
+        {
+          "name": "CopyTag",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[tag, of, target] -> []",
+          "doc": "`COPY TAG`: that tag of the compound index, or of the file `of` names, written out as a single-entry index of its own."
+        }
+      ]
+    },
+    {
+      "name": "tables, databases and transactions",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Unlock",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "record",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "area",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "all",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[record?] -> []",
+          "doc": "`UNLOCK`: one record, or everything the work area has locked."
+        },
+        {
+          "name": "AlterTable",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Vec<AlterStep>",
+              "doc": ""
+            }
+          ],
+          "effect": "[path, names...] -> []",
+          "doc": "`ALTER TABLE`: the table is read, given its new columns and written back. The names the program worked out sit above the path, in the order the changes were written."
+        },
+        {
+          "name": "Transaction",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "A transaction: 0 begins one, 1 writes what it held, 2 throws it away."
+        },
+        {
+          "name": "DbCommand",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "named",
+              "type": "bool",
+              "doc": "A name was pushed for it."
+            },
+            {
+              "name": "target",
+              "type": "bool",
+              "doc": "A second name was pushed, for a rename."
+            },
+            {
+              "name": "sql",
+              "type": "Option<u32>",
+              "doc": "The SELECT a view stands for, as a constant."
+            },
+            {
+              "name": "flags",
+              "type": "u16",
+              "doc": "The clauses the command was written with, as `crate::ast::db_flags` bits: what the database event that goes with the command is handed."
+            }
+          ],
+          "effect": "[name?, target?] -> []",
+          "doc": "A command that works on a database container. `kind` is 0 create, 1 open, 2 close, 3 set, 4 delete, 5 validate, 6 add a table, 7 remove one, 8 free one, 9 rename one, 10 create a view, 11 drop one, 12 list what is in it."
+        }
+      ]
+    },
+    {
+      "name": "listing, reports and browsing",
+      "note": "",
+      "instructions": [
+        {
+          "name": "ShowInfo",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "skeleton",
+              "type": "bool",
+              "doc": "A `LIKE` skeleton is on the stack, narrowing what is listed to the names it matches."
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`LIST` and `DISPLAY` of something the runtime holds: 0 the structure of the table, 1 the variables, 2 the settings and work areas, 3 the files, 4 the database's tables, 5 its views, 6 the declared library functions, 7 the loaded programs, 8 the objects, 9 the connections."
+        },
+        {
+          "name": "ListBegin",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "A record listing is starting, so the row of field names is due. It is written above the first record there is to write and not before, because a `LIST` that matches nothing writes nothing at all. `SET HEADINGS OFF` means none is due."
+        },
+        {
+          "name": "ListRecord",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "fields",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "numbers",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "One record, written out as `LIST` writes it. `fields` is a constant naming the fields the command asked for, a comma apart, or empty for every field of the table; `numbers` is false when the command said `OFF`, which drops the record-number column."
+        },
+        {
+          "name": "ReportBegin",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "label",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "to_file",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[path, file?] -> []",
+          "doc": "`REPORT FORM`: reads the report file and starts it, writing the bands that print once at the top. `flags` is the statement's own."
+        },
+        {
+          "name": "ReportRow",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "One record of it: the detail band, worked out against the record the pointer is on."
+        },
+        {
+          "name": "ReportEnd",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "The bands that print once at the end, and the report goes where it was told."
+        },
+        {
+          "name": "Browse",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "fields",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "cond",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "titled",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[title?] -> []",
+          "doc": "`BROWSE`: the records of the work area go to the host, which shows them in a window of their own. The constant names the columns, a comma apart."
+        }
+      ]
+    },
+    {
+      "name": "events, memos and saved variables",
+      "note": "",
+      "instructions": [
+        {
+          "name": "OnEvent",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "what",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "given",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[command?] -> []",
+          "doc": "The `ON` family: what it hangs off, and the command it hangs there. A command of nothing takes the one that was there away."
+        },
+        {
+          "name": "Memo",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "what",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "fields",
+              "type": "u32",
+              "doc": ""
+            },
+            {
+              "name": "pathed",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "named",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[field?, path?] -> []",
+          "doc": "`APPEND MEMO`, `COPY MEMO`, `MODIFY MEMO`, `CLOSE MEMO` and `APPEND GENERAL`. The constant names the fields, a comma apart; `named` says the one field is on the stack instead, under the file, because the program worked its name out."
+        },
+        {
+          "name": "Variables",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "save",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "memo",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "skeleton",
+              "type": "bool",
+              "doc": "A skeleton went on the stack after the target."
+            },
+            {
+              "name": "except",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "additive",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[target, skeleton?] -> []",
+          "doc": "`SAVE TO` and `RESTORE FROM`."
+        }
+      ]
+    },
+    {
+      "name": "input, windows and menus",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Mouse",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "clicks",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "at",
+              "type": "bool",
+              "doc": "An AT position went on the stack first."
+            },
+            {
+              "name": "drags",
+              "type": "u8",
+              "doc": "How many DRAG TO positions followed it."
+            },
+            {
+              "name": "window",
+              "type": "bool",
+              "doc": "A WINDOW name went on last."
+            },
+            {
+              "name": "style",
+              "type": "u32",
+              "doc": "The words that came after, as one constant."
+            }
+          ],
+          "effect": "[row?, col?, drag rows and columns ...] -> []",
+          "doc": "`MOUSE`: the pointer moves and presses."
+        },
+        {
+          "name": "Ask",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "prompted",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "target",
+              "type": "u32",
+              "doc": "The variable the answer goes into."
+            }
+          ],
+          "effect": "[prompt?] -> []",
+          "doc": "`INPUT`, `ACCEPT` or `GETEXPR`: ask, and put the answer where the statement said. `kind` is 0 text, 1 worked out as an expression, 2 an expression kept as text."
+        },
+        {
+          "name": "Run",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "nowait",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[command] -> []",
+          "doc": "`RUN`: a command line handed to the operating system."
+        },
+        {
+          "name": "Diagnostic",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "checked",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "argc",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[cond?, v1 .. vn] -> []",
+          "doc": "`ASSERT` and `DEBUGOUT`."
+        },
+        {
+          "name": "Yield",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "events",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`FLUSH` and `DOEVENTS`: let the host catch up."
+        },
+        {
+          "name": "Keyboard",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "plain",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "clear",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[keys] -> []",
+          "doc": "`KEYBOARD`: keys into the buffer as if they had been typed."
+        },
+        {
+          "name": "KeyStack",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "push",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "clear",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`PUSH KEY` / `POP KEY`."
+        },
+        {
+          "name": "Eject",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "`EJECT`: the page ends here."
+        },
+        {
+          "name": "WindowCommand",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "given",
+              "type": "u8",
+              "doc": "One bit each from the least significant: the name, the two corners and the title."
+            },
+            {
+              "name": "text",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[name?, r1?, c1?, r2?, c2?, title?] -> []",
+          "doc": "A window command. `kind` says which one, and `text` the words that say how the window looks."
+        },
+        {
+          "name": "AtCommand",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "given",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "style",
+              "type": "Option<u32>",
+              "doc": "The words that say how it is drawn, what a GET is called, and its two conditions."
+            },
+            {
+              "name": "name",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "valid",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "when",
+              "type": "Option<u32>",
+              "doc": ""
+            }
+          ],
+          "effect": "[row?, col?, value?, r2?, c2?, picture?, function?, amount?] -> []",
+          "doc": "One thing an `@` line draws. `given` is one bit each, in that order."
+        },
+        {
+          "name": "MenuCommand",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "given",
+              "type": "u8",
+              "doc": "Which of the operands were pushed, one bit each from the least significant: the name, the OF, the number, the prompt, the key and the message."
+            },
+            {
+              "name": "text",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "flags",
+              "type": "u8",
+              "doc": ""
+            }
+          ],
+          "effect": "[name?, of?, number?, prompt?, key?, message?] -> []",
+          "doc": "A menu command. `kind` says which one, and `text` the command a choice runs or the condition it is skipped for."
+        }
+      ]
+    },
+    {
+      "name": "copying, appending and aggregates",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Pack",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "`PACK`: the table is read, the records that are left are written back from the top, and the header is told how many there are."
+        },
+        {
+          "name": "AppendFrom",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "except",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "cond",
+              "type": "Option<u32>",
+              "doc": ""
+            },
+            {
+              "name": "text",
+              "type": "u8",
+              "doc": "0 a table, 1 fixed-width text, 2 comma-separated, 3 delimited."
+            }
+          ],
+          "effect": "[path, name1 .. nameN] -> []",
+          "doc": "`APPEND FROM`: the file to read and which columns to take from it. `cond` is the FOR condition as written, or 0 when there is none."
+        },
+        {
+          "name": "CopyBegin",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "kind",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "except",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "descending",
+              "type": "u32",
+              "doc": "Which sort keys run backwards, one bit per key from the least significant."
+            },
+            {
+              "name": "text",
+              "type": "u8",
+              "doc": "0 a table, 1 fixed-width text, 2 comma-separated, 3 delimited by what follows."
+            }
+          ],
+          "effect": "[path, name1 .. nameN] -> []",
+          "doc": "`COPY TO`, `SORT TO` and `TOTAL ON`: the table to make and which of the columns go in it. `kind` is 0 records, 1 structure, 2 sorted, 3 totals."
+        },
+        {
+          "name": "CopyRow",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[key1 .. keyN] -> []",
+          "doc": "One record for the copy: its keys, and the record itself."
+        },
+        {
+          "name": "CopyEnd",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> []",
+          "doc": "The copy is complete: the file is written."
+        },
+        {
+          "name": "AggBegin",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "Vec<u8>",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`COUNT`/`SUM`/`AVERAGE`/`CALCULATE`: starts one accumulator per column, each named by what it works out - 0 CNT, 1 SUM, 2 AVG, 3 MIN, 4 MAX, 5 STD, 6 VAR, 7 NPV."
+        },
+        {
+          "name": "AggStep",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[value] -> []",
+          "doc": "One record's worth for the column at that index. NPV takes the rate and the flow, so it pops two."
+        },
+        {
+          "name": "AggEnd",
+          "shape": "unit",
+          "operands": [],
+          "effect": "[] -> [array]",
+          "doc": "The columns worked out, in the order they were asked for."
+        },
+        {
+          "name": "Scatter",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "to",
+              "type": "u8",
+              "doc": "0 an array, 1 a variable each, 2 an object."
+            },
+            {
+              "name": "except",
+              "type": "bool",
+              "doc": "The names are the fields to leave out rather than the ones to take."
+            },
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "blank",
+              "type": "bool",
+              "doc": "BLANK: the shape of the record rather than what is in it."
+            }
+          ],
+          "effect": "[name1 .. nameN] -> [row?]",
+          "doc": "`SCATTER`: the record's fields, as an array or an object on the stack, or as a variable each. The field names named by FIELDS are on the stack, or none of them when the command named none."
+        },
+        {
+          "name": "Gather",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "to",
+              "type": "u8",
+              "doc": ""
+            },
+            {
+              "name": "except",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            }
+          ],
+          "effect": "[row?, name1 .. nameN] -> []",
+          "doc": "`GATHER`: the other way, into the record in hand."
+        },
+        {
+          "name": "SetFilter",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "u32",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`SET FILTER TO`: the condition at that constant, empty for none."
+        },
+        {
+          "name": "SetRelation",
+          "shape": "struct",
+          "operands": [
+            {
+              "name": "count",
+              "type": "u16",
+              "doc": ""
+            },
+            {
+              "name": "additive",
+              "type": "bool",
+              "doc": ""
+            },
+            {
+              "name": "off",
+              "type": "bool",
+              "doc": ""
+            }
+          ],
+          "effect": "[expr1, alias1, ...] -> []",
+          "doc": "`SET RELATION TO ... INTO ...`: `count` pairs of expression text and work-area alias. `off` takes one relation away instead of setting them."
+        }
+      ]
+    },
+    {
+      "name": "the debugger",
+      "note": "",
+      "instructions": [
+        {
+          "name": "Debug",
+          "shape": "tuple",
+          "operands": [
+            {
+              "name": "",
+              "type": "DebugVerb",
+              "doc": ""
+            }
+          ],
+          "effect": "[] -> []",
+          "doc": "`SUSPEND` and `RESUME`: hand the program over to the debugger, or take it back."
+        }
+      ]
+    }
+  ]
+}

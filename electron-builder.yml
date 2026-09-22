@@ -1,0 +1,46 @@
+appId: com.foxdevstudio.app
+productName: FoxDev Studio
+directories:
+  buildResources: build
+  output: release
+files:
+  - out/**
+  - resources/**
+  - package.json
+asar: true
+# the COM addon is loaded by the main process with process.dlopen and the .fll host is started
+# as a child process: both need a real file on disk rather than an entry inside the archive
+asarUnpack:
+  - resources/native/**
+linux:
+  artifactName: FoxDevStudio-${version}-linux-${arch}.${ext}
+  target:
+    - AppImage
+    - deb
+  category: Development
+  icon: build/icon.png
+  maintainer: Dev <dev@foxscript.org>
+win:
+  artifactName: FoxDevStudio-${version}-win-${arch}.${ext}
+  target:
+    # nsis installs the IDE; the zip is the runtime that Build Executable copies
+    - nsis
+    - zip
+  icon: build/icon.png
+mac:
+  artifactName: FoxDevStudio-${version}-mac-${arch}.${ext}
+  target: dmg
+  category: public.app-category.developer-tools
+fileAssociations:
+  - ext: fxproject
+    name: FoxDev Project
+    role: Editor
+  - ext: fxf
+    name: FoxDev Form
+    role: Editor
+  - ext: fxm
+    name: FoxDev Menu
+    role: Editor
+  - ext: fxa
+    name: FoxDev Application
+    role: Viewer

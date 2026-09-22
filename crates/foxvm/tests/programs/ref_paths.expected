@@ -1,0 +1,21 @@
+C:
+[] []
+C:\ONE\TWO\B.TXT
+C:\ONE\B.TXT
+C:\ALREADY\THERE.TXT
+C:\ONE\TWO\B.TXT
+C:\...\five\file.txt
+C:\one\file.txt
+C:\...\file.txt
+file.txt
+at 9: error 11
+C C
+.T.
+L
+10 8 0
+FDATE: error 1
+FTIME: error 1
+D C
+0
+.T.
+.F. .F.

@@ -1,0 +1,7 @@
+.fx-code-editor { flex: 1; min-height: 0; overflow: hidden; display: flex; }
+.fx-code-editor .cm-editor { flex: 1; height: 100%; font-family: Consolas, 'Cascadia Mono', monospace; font-size: 13px; background: var(--colorNeutralBackground1); color: var(--colorNeutralForeground1); }
+.fx-code-editor .cm-editor.cm-focused { outline: none; }
+.fx-code-editor .cm-gutters { background: var(--colorNeutralBackground2); color: var(--colorNeutralForeground3); border-right: 1px solid var(--colorNeutralStroke2); }
+.fx-code-editor .cm-activeLine { background: var(--colorNeutralBackground1Hover); }
+.fx-code-editor .cm-activeLineGutter { background: var(--colorNeutralBackground3); }
+.fx-method-header { display: flex; gap: 8px; padding: 4px 8px; border-bottom: 1px solid var(--colorNeutralStroke2); align-items: center; }

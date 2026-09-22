@@ -1,0 +1,80 @@
+---
+/** The bar across the top of every page: the wordmark, and the two places to go. */
+interface Props {
+  current?: 'home' | 'docs';
+}
+const { current } = Astro.props;
+---
+
+<header class="masthead">
+  <a class="wordmark" href="/"><span class="mark-img" aria-hidden="true"></span>FoxDev <em>Studio</em></a>
+  <nav class="links" aria-label="Site">
+    <a href="/docs" aria-current={current === 'docs' ? 'page' : undefined}>Documentation</a>
+    <a href="/#architecture">How it is built</a>
+    <a href="/#foxscript">FoxScript</a>
+    <a href="/#download">Download</a>
+    <a href="https://github.com/FoxDevCommunity/FoxDevStudio">GitHub</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="stamp">For Visual FoxPro 9 applications</span>
+</header>
+
+<style>
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    align-items: center;
+    padding-block: 22px;
+    border-bottom: 1px solid var(--line);
+  }
+  .wordmark {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-weight: 800;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .wordmark .mark-img {
+    width: 26px;
+    height: 26px;
+  }
+  .wordmark em {
+    font-style: normal;
+    color: var(--brand);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+  .links a {
+    text-decoration: none;
+    color: var(--muted);
+    padding-block: 2px;
+    border-bottom: 1.5px solid transparent;
+  }
+  .links a:hover,
+  .links a[aria-current='page'] {
+    color: var(--text);
+    border-bottom-color: var(--brand);
+  }
+  .spacer {
+    flex: 1;
+  }
+  .stamp {
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .stamp {
+      display: none;
+    }
+  }
+</style>

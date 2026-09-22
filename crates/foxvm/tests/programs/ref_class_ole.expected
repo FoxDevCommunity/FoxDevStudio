@@ -1,0 +1,13 @@
+Olecontrol Olecontrol OLEDOC []
+100 17 0 0
+2 .F. .F. .T.
+1 1033 0
+[] [] .T. .F.
+Oleboundcontrol Oleboundcontrol OLEFLD
+2 .T. []
+-1 -1 []
+[] []
+.T. .T. .T.
+.T. .T. .T.
+.T. .T. .T.
+.F. .F. .F.

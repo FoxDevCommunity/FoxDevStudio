@@ -1,0 +1,4 @@
+HOME(1) is a nonempty path .T.
+HOME(2) is a nonempty path .T.
+CURDIR(cDrive) is a string .T.
+VERSION(1) is a nonempty string .T.

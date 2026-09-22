@@ -1,0 +1,23 @@
+     2.000     10.000
+    25.000     80.000
+     0.000      0.000
+WNOTE WNOTE .T. .T.
+        10         39          3         40
+Notes           0
+.T. .F. .F. .F.
+.F.
+         0          0         25 .T.
+Still notes
+.F.
+.T.
+.T. WNOTE
+.T.
+         1 CNAME NRATE
+         0
+Acme          5
+NRATE          0
+         0
+         0
+         0          0 .F. .T.
+        40 F2 CTRL+F1
+         5

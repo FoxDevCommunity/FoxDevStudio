@@ -1,0 +1,22 @@
+IDXNAME NAME IDXNAME.IDX .T. .T.
+alpha
+echo          5
+IDXAGE          1
+alpha  10
+.T. charlie          3
+.F. .T.
+IDXNAME IDXNAME.IDX IDXAGE.IDX          2
+alpha
+.T.          3
+IDXAGE .T. echo
+IDXNAME IDXNAME.IDX .T.
+alpha
+.T. .T.
+delta
+IDXUPPER UPPER(NAME) IDXUPPER.IDX
+alpha
+.T.          5
+.T.
+         3 UPNAME IDXNAME IDXAGE
+AGE .T.
+alpha

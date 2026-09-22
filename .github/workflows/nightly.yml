@@ -1,0 +1,102 @@
+# Every push to main becomes the nightly: one rolling pre-release, tagged `nightly`, that
+# holds the latest build and nothing older. The repository is private and runner minutes
+# are billed, so a push builds on Windows only; run the workflow by hand with all three
+# runners for a full set.
+name: Nightly
+
+on:
+  push:
+    branches: [master, main]
+    paths-ignore:
+      - 'marketing/**'
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: JSON list of runners to package on
+        type: string
+        default: '["windows-latest"]'
+
+permissions:
+  contents: write
+
+# a second push cancels the nightly still building from the first
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      # a semver pre-release, so it sorts below the next stable version
+      - id: v
+        run: echo "version=$(node -p "require('./package.json').version")-nightly.$(date -u +%Y%m%d).$(git rev-parse --short=7 HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: version
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+      platforms: ${{ inputs.platforms || '["windows-latest"]' }}
+
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VERSION: ${{ needs.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
+
+      - name: Move the nightly tag to this commit
+        run: |
+          git tag -f nightly
+          git push -f origin nightly
+
+      # one nightly at a time: the previous release goes before the new one is made
+      - name: Drop the previous nightly
+        run: gh release delete nightly --yes || true
+
+      - name: Write the notes
+        run: |
+          short=$(git rev-parse --short=7 HEAD)
+          {
+            echo "Built from \`$short\` on $(date -u +%Y-%m-%d) at $(date -u +%H:%M) UTC. Every push to main replaces this release; the assets are unsigned."
+            echo
+            echo "| Asset | What it is |"
+            echo "| --- | --- |"
+            for f in dist/*; do
+              n=$(basename "$f")
+              case "$n" in
+                FoxDevStudio-*-win-*.exe) what="the IDE installer for Windows" ;;
+                FoxDevStudio-*-win-*.zip) what="the Windows runtime: what Build Executable copies, unpacked" ;;
+                FoxDevStudio-*.AppImage) what="the IDE for Linux, as an AppImage" ;;
+                FoxDevStudio-*.deb) what="the IDE for Debian and Ubuntu" ;;
+                FoxDevStudio-*.dmg) what="the IDE for macOS, unsigned" ;;
+                foxvm-wasm-*.zip) what="the compiled VM: the wasm module, its glue and its types" ;;
+                foxvm-*) what="the command-line runner: foxvm run, check, disasm, audit" ;;
+                *) what="" ;;
+              esac
+              echo "| \`$n\` | $what |"
+            done
+          } > notes.md
+          cat notes.md
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          target_commitish: ${{ github.sha }}
+          name: Nightly ${{ needs.version.outputs.version }}
+          body_path: notes.md
+          prerelease: true
+          files: dist/*
+          fail_on_unmatched_files: true

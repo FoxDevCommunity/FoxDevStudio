@@ -1,0 +1,48 @@
+
+--- dow/week under fdow 1..7, fweek 1..3
+fdow 1 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 1 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 1 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 2 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 2 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 2 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 3 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 3 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 3 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 4 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 4 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 4 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 5 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 5 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 5 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 6 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 6 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 6 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 7 fweek 1 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 7 fweek 2 [2][1][ 1][37][ 1][ 1][ 2]
+fdow 7 fweek 3 [2][1][ 1][37][ 1][ 1][ 2]
+readback [3][2]
+explicit args win [2][ 1]
+cdow/cmonth [Monday][September]   
+reset [1][1][2]
+--- mdy/dmy padding 
+[September 07, 26][07 September 26][December 25, 26][25 December 26]   
+--- ttoc 2 under hours/seconds
+24 [13:05:09]
+24/nosec [13:05][00:00]
+12/nosec [01:05 PM][  /  /     :  :   AM]
+24/nosec empty [  /  /     :  :  ]
+24/sec empty [  /  /     :  :  ]
+--- empty date under formats
+german [  .  .  ][  .  .     :  :   AM]
+italian [  -  -  ]
+short [  /  /  ][9/7/2026][  /  /     :  :   AM]
+long [  /  /  ]
+mark [  *  *  ][  *  *     :  :   AM]
+--- ctod under date/mark
+german [07.09.26][07.09.26]
+german mark - [07-09-26][07-09-26]
+--- str/time
+[23:11:28]
+--- set date bad word
+before [AMERICAN]  

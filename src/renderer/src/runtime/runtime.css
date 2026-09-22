@@ -1,0 +1,25 @@
+/*
+ * What a running form looks like, where Fluent's own metrics are not Windows'.
+ *
+ * Fluent lays a control out for a finger: sixteen pixels of indicator with eight more all round
+ * it, a thirty-two pixel minimum height, and a label held away from the box it belongs to.
+ * Visual FoxPro draws into the box the form measured, with the metrics Windows draws a dialog
+ * with - a check box is thirteen pixels and its caption starts three pixels later - so inside a
+ * running form that padding is taken back out. The controls keep Fluent's look; they stop
+ * keeping its spacing, which is the form designer's to decide and is stored in the .scx.
+ */
+
+.fx-form-client .fui-Checkbox,
+.fx-form-client .fui-Radio {
+  align-items: center;
+}
+
+.fx-form-client .fui-Checkbox__indicator,
+.fx-form-client .fui-Radio__indicator {
+  margin: 0 3px 0 0;
+}
+
+.fx-form-client .fui-Checkbox__label,
+.fx-form-client .fui-Radio__label {
+  padding: 0;
+}

@@ -1,0 +1,11 @@
+ON OFF OFF OFF .T.
+ON ON
+counted 42 .T.
+the count is wrong
+Assertion failed on line 16 of procedure main.
+OFF
+TRACE.TXT
+into the file
+.T.
+        42
+DEEPER         42

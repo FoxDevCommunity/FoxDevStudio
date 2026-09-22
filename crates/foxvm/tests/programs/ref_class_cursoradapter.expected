@@ -1,0 +1,42 @@
+Cursoradapter Cursoradapter Cursoradapter []
+[] [] []
+.T. .T. .T. .T.
+3 3 1
+100 -1 1
+.F. .T. .T. 255
+.T. .F. .F. .F.
+.F. .F. .F. .F.
+0 0 0
+0 .F. .F.
+[] [] []
+[] [] []
+[] [] []
+X X
+X X
+X X
+[] []
+[] []
+[] []
+[] []
+[] []
+[] []
+[] [] []
+[] []
+[] [] []
+[customer] [SELECT * FROM customer] 100
+.T. .T. .T.
+.T. .T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T.
+.T. .T. .T.
+.T. .T.
+.T. .T. .T.
+.F. .F. .F.

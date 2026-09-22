@@ -1,0 +1,73 @@
+import type { ObjectDescriptor } from '../types';
+import * as c from '../common';
+
+/**
+ * The database container as an object: not something a program creates, but something it can
+ * put procedures in. Visual FoxPro calls a procedure named after each thing that happens to the
+ * database - a table opened, a view created, a property read - and a `Before` one that answers
+ * .F. stops it happening.
+ */
+export const database: ObjectDescriptor = {
+  displayName: 'Database',
+  baseClass: 'database',
+  defaultEvent: 'dbc_OpenData',
+  properties: c.props(
+    c.prop('Comment', 'multiline', 'Other', ''),
+    c.prop('Version', 'number', 'Other', 10, { readOnly: true }),
+    c.prop('Path', 'text', 'Other', '', { readOnly: true }),
+  ),
+  events: c.events([
+    c.ev('dbc_Activate', ''),
+    c.ev('dbc_Deactivate', ''),
+    c.ev('dbc_OpenData', ''),
+    c.ev('dbc_CloseData', ''),
+    c.ev('dbc_ModifyData', ''),
+    c.ev('dbc_PackData', ''),
+    c.ev('dbc_BeforeAddTable', 'cTableName, cLongTableName'),
+    c.ev('dbc_AfterAddTable', 'cTableName, cLongTableName'),
+    c.ev('dbc_BeforeRemoveTable', 'cTableName, lDeleteFile'),
+    c.ev('dbc_AfterRemoveTable', 'cTableName, lDeleteFile'),
+    c.ev('dbc_BeforeRenameTable', 'cTableName, cNewTableName'),
+    c.ev('dbc_AfterRenameTable', 'cTableName, cNewTableName'),
+    c.ev('dbc_BeforeCreateTable', 'cTableName'),
+    c.ev('dbc_AfterCreateTable', 'cTableName'),
+    c.ev('dbc_BeforeDropTable', 'cTableName'),
+    c.ev('dbc_AfterDropTable', 'cTableName'),
+    c.ev('dbc_BeforeOpenTable', 'cTableName'),
+    c.ev('dbc_AfterOpenTable', 'cTableName'),
+    c.ev('dbc_BeforeCloseTable', 'cTableName'),
+    c.ev('dbc_AfterCloseTable', 'cTableName'),
+    c.ev('dbc_BeforeCreateView', 'cViewName'),
+    c.ev('dbc_AfterCreateView', 'cViewName'),
+    c.ev('dbc_BeforeRenameView', 'cViewName, cNewViewName'),
+    c.ev('dbc_AfterRenameView', 'cViewName, cNewViewName'),
+    c.ev('dbc_BeforeCreateConnection', 'cConnectionName'),
+    c.ev('dbc_AfterCreateConnection', 'cConnectionName'),
+    c.ev('dbc_BeforeDeleteConnection', 'cConnectionName'),
+    c.ev('dbc_AfterDeleteConnection', 'cConnectionName'),
+    c.ev('dbc_BeforeModifyConnection', 'cConnectionName'),
+    c.ev('dbc_AfterModifyConnection', 'cConnectionName'),
+    c.ev('dbc_BeforeRenameConnection', 'cConnectionName, cNewConnectionName'),
+    c.ev('dbc_AfterRenameConnection', 'cConnectionName, cNewConnectionName'),
+    c.ev('dbc_BeforeModifyTable', 'cTableName'),
+    c.ev('dbc_AfterModifyTable', 'cTableName'),
+    c.ev('dbc_BeforeModifyView', 'cViewName'),
+    c.ev('dbc_AfterModifyView', 'cViewName'),
+    c.ev('dbc_BeforeModifyProc', ''),
+    c.ev('dbc_AfterModifyProc', ''),
+    c.ev('dbc_BeforeCreateOffline', 'cViewName'),
+    c.ev('dbc_AfterCreateOffline', 'cViewName'),
+    c.ev('dbc_BeforeDropOffline', 'cViewName'),
+    c.ev('dbc_AfterDropOffline', 'cViewName'),
+    c.ev('dbc_BeforeDBGetProp', 'cName, cType, cProperty'),
+    c.ev('dbc_AfterDBGetProp', 'cName, cType, cProperty'),
+    c.ev('dbc_BeforeDBSetProp', 'cName, cType, cProperty'),
+    c.ev('dbc_AfterDBSetProp', 'cName, cType, cProperty'),
+    c.ev('dbc_BeforeValidateData', ''),
+    c.ev('dbc_AfterValidateData', ''),
+    c.ev('dbc_BeforeAppendProc', 'cFileName'),
+    c.ev('dbc_AfterAppendProc', 'cFileName'),
+    c.ev('dbc_BeforeCopyProc', 'cFileName'),
+    c.ev('dbc_AfterCopyProc', 'cFileName'),
+  ]),
+};

@@ -1,0 +1,13 @@
+FILE() finds a plain file .T.
+FILE(name, 1) agrees for a plain file .T.
+FILE() misses one that is not there .F.
+FILE(name, 1) agrees there too .F.
+plain write hello
+additive appends .T.
+0 overwrites same as omitted .T.
+flag 2 leads with FF FE .T.
+flag 4 leads with EF BB BF .T.
+EDITSOURCE(cFile) answers 0 headless .T.
+EDITSOURCE(cFile, nLine) does too .T.
+EDITSOURCE(cFile, nLine, cClass) answers 0 .T.
+so does the four-argument form .T.

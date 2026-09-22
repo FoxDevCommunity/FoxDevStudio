@@ -1,0 +1,3363 @@
+# Every Visual FoxPro 9 base class, as the product itself answers about it.
+# Written by `node scripts/vfp-base-classes.mjs`; read by tests/shared/baseClasses.test.ts.
+#
+# type is the VARTYPE letter of the value a brand new object holds, "varies" when two fresh
+# objects - or two runs of the product - already disagree (a window handle, a process id),
+# and "error" when reading it raises instead.
+# readonly is the error the product raised when the property was written the value it already
+# held, and empty when it took the write. 1743 is FoxPro refusing one of its own; 1429 with
+# dispatch code 533 is an object out of a type library - the application, a project - saying
+# the same thing through OLE.
+#
+# A few of the colours - the selected-item ones - are the Windows theme the measuring machine
+# was wearing, so a re-measurement somewhere else will differ in those and nothing else.
+class	kind	name	type	default	readonly
+Form	class				
+Form	property	ACTIVECONTROL	error		1924
+Form	property	ACTIVEFORM	error		1734
+Form	property	ALLOWOUTPUT	L	.T.	
+Form	property	ALWAYSONBOTTOM	L	.F.	
+Form	property	ALWAYSONTOP	L	.F.	
+Form	property	Application	O	object	
+Form	property	AUTOCENTER	L	.F.	
+Form	property	BACKCOLOR	N	15790320	
+Form	property	BASECLASS	C	Form	1743
+Form	property	BINDCONTROLS	L	.T.	
+Form	property	BORDERSTYLE	N	3	
+Form	property	BUFFERMODE	N	0	
+Form	property	CAPTION	C	Form	
+Form	property	CLASS	C	Form	1743
+Form	property	CLASSLIBRARY	C		1743
+Form	property	CLIPCONTROLS	L	.T.	
+Form	property	CLOSABLE	L	.T.	
+Form	property	COLORSOURCE	N	4	
+Form	property	COMMENT	C		
+Form	property	CONTINUOUSSCROLL	L	.T.	
+Form	property	CONTROLBOX	L	.T.	
+Form	property	CONTROLCOUNT	N	0	1743
+Form	property	CONTROLS	error		1924
+Form	property	CURRENTX	N	0	
+Form	property	CURRENTY	N	0	
+Form	property	DATASESSION	N	1	1743
+Form	property	DATASESSIONID	N	1	
+Form	property	DECLASS	C		1743
+Form	property	DECLASSLIBRARY	C		1743
+Form	property	DEFOLELCID	N	0	
+Form	property	DESKTOP	L	.F.	1743
+Form	property	DOCKABLE	N	0	
+Form	property	DOCKED	L	.F.	1743
+Form	property	DOCKPOSITION	N	-1	1743
+Form	property	DRAWMODE	N	13	
+Form	property	DRAWSTYLE	N	0	
+Form	property	DRAWWIDTH	N	1	
+Form	property	ENABLED	L	.T.	
+Form	property	FILLCOLOR	N	0	
+Form	property	FILLSTYLE	N	1	
+Form	property	FONTBOLD	L	.F.	
+Form	property	FONTCHARSET	N	1	
+Form	property	FONTCONDENSE	L	.F.	
+Form	property	FONTEXTEND	L	.F.	
+Form	property	FONTITALIC	L	.F.	
+Form	property	FONTNAME	C	Arial	
+Form	property	FONTOUTLINE	L	.F.	
+Form	property	FONTSHADOW	L	.F.	
+Form	property	FONTSIZE	N	9	
+Form	property	FONTSTRIKETHRU	L	.F.	
+Form	property	FONTUNDERLINE	L	.F.	
+Form	property	FORECOLOR	N	0	
+Form	property	HALFHEIGHTCAPTION	L	.F.	
+Form	property	HEIGHT	N	250	
+Form	property	HELPCONTEXTID	N	0	
+Form	property	HSCROLLSMALLCHANGE	N	10	
+Form	property	HWND	varies		1743
+Form	property	ICON	C		
+Form	property	KEYPREVIEW	L	.F.	
+Form	property	LEFT	N	0	
+Form	property	LOCKSCREEN	L	.F.	
+Form	property	MACDESKTOP	N	0	
+Form	property	MAXBUTTON	L	.T.	
+Form	property	MAXHEIGHT	N	-1	
+Form	property	MAXLEFT	N	-1	
+Form	property	MAXTOP	N	-1	
+Form	property	MAXWIDTH	N	-1	
+Form	property	MDIFORM	L	.F.	
+Form	property	MINBUTTON	L	.T.	
+Form	property	MINHEIGHT	N	-1	
+Form	property	MINWIDTH	N	-1	
+Form	property	MOUSEICON	C		
+Form	property	MOUSEPOINTER	N	0	
+Form	property	MOVABLE	L	.T.	
+Form	property	NAME	C	Form	
+Form	property	OBJECTS	error		1924
+Form	property	OLEDRAGMODE	N	0	
+Form	property	OLEDRAGPICTURE	C		
+Form	property	OLEDROPEFFECTS	N	3	
+Form	property	OLEDROPHASDATA	N	-1	
+Form	property	OLEDROPMODE	N	0	
+Form	property	PARENT	error		1924
+Form	property	PARENTCLASS	C		1743
+Form	property	PICTURE	C		
+Form	property	RELEASETYPE	N	0	1743
+Form	property	RIGHTTOLEFT	L	.F.	
+Form	property	SCALEMODE	N	3	
+Form	property	SCROLLBARS	N	0	
+Form	property	SHOWINTASKBAR	L	.T.	1743
+Form	property	SHOWTIPS	L	.F.	
+Form	property	SHOWWINDOW	N	0	1743
+Form	property	SIZEBOX	L	.F.	
+Form	property	TABINDEX	N	0	
+Form	property	TABSTOP	L	.T.	
+Form	property	TAG	C		
+Form	property	THEMES	L	.T.	
+Form	property	TITLEBAR	N	1	
+Form	property	TOP	N	0	
+Form	property	VIEWPORTHEIGHT	N	250	1743
+Form	property	VIEWPORTLEFT	N	0	1743
+Form	property	VIEWPORTTOP	N	0	1743
+Form	property	VIEWPORTWIDTH	N	375	1743
+Form	property	VISIBLE	L	.F.	
+Form	property	VSCROLLSMALLCHANGE	N	10	
+Form	property	WHATSTHISBUTTON	L	.F.	1743
+Form	property	WHATSTHISHELP	L	.F.	1743
+Form	property	WHATSTHISHELPID	N	-1	
+Form	property	WIDTH	N	375	
+Form	property	WINDOWSTATE	N	0	
+Form	property	WINDOWTYPE	N	0	
+Form	property	ZOOMBOX	L	.F.	
+Form	event	ACTIVATE			
+Form	event	AFTERDOCK			
+Form	event	BEFOREDOCK			
+Form	event	CLICK			
+Form	event	DBLCLICK			
+Form	event	DEACTIVATE			
+Form	event	DESTROY			
+Form	event	DRAGDROP			
+Form	event	DRAGOVER			
+Form	event	ERROR			
+Form	event	GOTFOCUS			
+Form	event	INIT			
+Form	event	KEYPRESS			
+Form	event	LOAD			
+Form	event	LOSTFOCUS			
+Form	event	MIDDLECLICK			
+Form	event	MOUSEDOWN			
+Form	event	MOUSEMOVE			
+Form	event	MOUSEUP			
+Form	event	MOUSEWHEEL			
+Form	event	MOVED			
+Form	event	OLECOMPLETEDRAG			
+Form	event	OLEDRAGDROP			
+Form	event	OLEDRAGOVER			
+Form	event	OLEGIVEFEEDBACK			
+Form	event	OLESETDATA			
+Form	event	OLESTARTDRAG			
+Form	event	PAINT			
+Form	event	QUERYUNLOAD			
+Form	event	RESIZE			
+Form	event	RIGHTCLICK			
+Form	event	SCROLLED			
+Form	event	UNDOCK			
+Form	event	UNLOAD			
+Form	method	ADDOBJECT			
+Form	method	ADDPROPERTY			
+Form	method	BOX			
+Form	method	CIRCLE			
+Form	method	CLS			
+Form	method	DOCK			
+Form	method	DRAW			
+Form	method	GETDOCKSTATE			
+Form	method	HIDE			
+Form	method	LINE			
+Form	method	MOVE			
+Form	method	NEWOBJECT			
+Form	method	OLEDRAG			
+Form	method	POINT			
+Form	method	PRINT			
+Form	method	PSET			
+Form	method	READEXPRESSION			
+Form	method	READMETHOD			
+Form	method	REFRESH			
+Form	method	RELEASE			
+Form	method	REMOVEOBJECT			
+Form	method	RESETTODEFAULT			
+Form	method	SAVEAS			
+Form	method	SAVEASCLASS			
+Form	method	SETALL			
+Form	method	SETVIEWPORT			
+Form	method	SHOW			
+Form	method	SHOWWHATSTHIS			
+Form	method	TEXTHEIGHT			
+Form	method	TEXTWIDTH			
+Form	method	WHATSTHISMODE			
+Form	method	WRITEEXPRESSION			
+Form	method	WRITEMETHOD			
+Form	method	ZORDER			
+Label	class				
+Label	property	ALIGNMENT	N	0	
+Label	property	ANCHOR	N	0	
+Label	property	Application	O	object	
+Label	property	AUTOSIZE	L	.F.	
+Label	property	BACKCOLOR	N	16777215	
+Label	property	BACKSTYLE	N	1	
+Label	property	BASECLASS	C	Label	1743
+Label	property	BORDERSTYLE	N	0	
+Label	property	CAPTION	C	Label	
+Label	property	CLASS	C	Label	1743
+Label	property	CLASSLIBRARY	C		1743
+Label	property	COLORSCHEME	N	1	
+Label	property	COLORSOURCE	N	4	
+Label	property	COMMENT	C		
+Label	property	DISABLEDBACKCOLOR	N	16777215	
+Label	property	DISABLEDFORECOLOR	N	7171437	
+Label	property	DRAGICON	C		
+Label	property	DRAGMODE	N	0	
+Label	property	ENABLED	L	.T.	
+Label	property	FONTBOLD	L	.F.	
+Label	property	FONTCHARSET	N	1	
+Label	property	FONTCONDENSE	L	.F.	
+Label	property	FONTEXTEND	L	.F.	
+Label	property	FONTITALIC	L	.F.	
+Label	property	FONTNAME	C	Arial	
+Label	property	FONTOUTLINE	L	.F.	
+Label	property	FONTSHADOW	L	.F.	
+Label	property	FONTSIZE	N	9	
+Label	property	FONTSTRIKETHRU	L	.F.	
+Label	property	FONTUNDERLINE	L	.F.	
+Label	property	FORECOLOR	N	0	
+Label	property	HEIGHT	N	17	
+Label	property	HELPCONTEXTID	N	0	
+Label	property	LEFT	N	0	
+Label	property	MOUSEICON	C		
+Label	property	MOUSEPOINTER	N	0	
+Label	property	NAME	C	Label	
+Label	property	OLEDRAGMODE	N	0	
+Label	property	OLEDRAGPICTURE	C		
+Label	property	OLEDROPEFFECTS	N	3	
+Label	property	OLEDROPHASDATA	N	-1	
+Label	property	OLEDROPMODE	N	0	
+Label	property	PARENT	error		1924
+Label	property	PARENTCLASS	C		1743
+Label	property	RIGHTTOLEFT	L	.F.	
+Label	property	ROTATION	N	0	
+Label	property	STATUSBARTEXT	C		
+Label	property	STYLE	N	0	
+Label	property	TABINDEX	N	0	
+Label	property	TAG	C		
+Label	property	TOOLTIPTEXT	C		
+Label	property	TOP	N	0	
+Label	property	VISIBLE	L	.T.	
+Label	property	WHATSTHISHELPID	N	-1	
+Label	property	WIDTH	N	100	
+Label	property	WORDWRAP	L	.F.	
+Label	event	CLICK			
+Label	event	DBLCLICK			
+Label	event	DESTROY			
+Label	event	DRAGDROP			
+Label	event	DRAGOVER			
+Label	event	ERROR			
+Label	event	INIT			
+Label	event	MIDDLECLICK			
+Label	event	MOUSEDOWN			
+Label	event	MOUSEENTER			
+Label	event	MOUSELEAVE			
+Label	event	MOUSEMOVE			
+Label	event	MOUSEUP			
+Label	event	MOUSEWHEEL			
+Label	event	OLECOMPLETEDRAG			
+Label	event	OLEDRAGDROP			
+Label	event	OLEDRAGOVER			
+Label	event	OLEGIVEFEEDBACK			
+Label	event	OLESETDATA			
+Label	event	OLESTARTDRAG			
+Label	event	RIGHTCLICK			
+Label	event	UIENABLE			
+Label	method	ADDPROPERTY			
+Label	method	DRAG			
+Label	method	MOVE			
+Label	method	OLEDRAG			
+Label	method	READEXPRESSION			
+Label	method	READMETHOD			
+Label	method	REFRESH			
+Label	method	RESETTODEFAULT			
+Label	method	SAVEASCLASS			
+Label	method	SHOWWHATSTHIS			
+Label	method	WRITEEXPRESSION			
+Label	method	WRITEMETHOD			
+Label	method	ZORDER			
+Label	contained	BACKCOLOR	N	15790320	
+Label	contained	DISABLEDBACKCOLOR	N	15790320	
+TextBox	class				
+TextBox	property	ALIGNMENT	N	3	
+TextBox	property	ANCHOR	N	0	
+TextBox	property	Application	O	object	
+TextBox	property	AUTOCOMPLETE	N	0	
+TextBox	property	AUTOCOMPSOURCE	C		
+TextBox	property	AUTOCOMPTABLE	C		
+TextBox	property	BACKCOLOR	N	16777215	
+TextBox	property	BACKSTYLE	N	1	
+TextBox	property	BASECLASS	C	Textbox	1743
+TextBox	property	BORDERCOLOR	N	6579300	
+TextBox	property	BORDERSTYLE	N	1	
+TextBox	property	CENTURY	N	1	
+TextBox	property	CLASS	C	Textbox	1743
+TextBox	property	CLASSLIBRARY	C		1743
+TextBox	property	COLORSCHEME	N	1	
+TextBox	property	COLORSOURCE	N	4	
+TextBox	property	COMMENT	C		
+TextBox	property	CONTROLSOURCE	C		
+TextBox	property	DATEFORMAT	N	0	
+TextBox	property	DATEMARK	C		
+TextBox	property	DISABLEDBACKCOLOR	N	16777215	
+TextBox	property	DISABLEDFORECOLOR	N	7171437	
+TextBox	property	DRAGICON	C		
+TextBox	property	DRAGMODE	N	0	
+TextBox	property	ENABLED	L	.T.	
+TextBox	property	ENABLEHYPERLINKS	L	.F.	
+TextBox	property	FONTBOLD	L	.F.	
+TextBox	property	FONTCHARSET	N	1	
+TextBox	property	FONTCONDENSE	L	.F.	
+TextBox	property	FONTEXTEND	L	.F.	
+TextBox	property	FONTITALIC	L	.F.	
+TextBox	property	FONTNAME	C	Arial	
+TextBox	property	FONTOUTLINE	L	.F.	
+TextBox	property	FONTSHADOW	L	.F.	
+TextBox	property	FONTSIZE	N	9	
+TextBox	property	FONTSTRIKETHRU	L	.F.	
+TextBox	property	FONTUNDERLINE	L	.F.	
+TextBox	property	FORECOLOR	N	0	
+TextBox	property	FORMAT	C		
+TextBox	property	HEIGHT	N	21	
+TextBox	property	HELPCONTEXTID	N	0	
+TextBox	property	HIDESELECTION	L	.T.	
+TextBox	property	HOURS	N	0	
+TextBox	property	IMEMODE	N	0	
+TextBox	property	INPUTMASK	C		
+TextBox	property	INTEGRALHEIGHT	L	.F.	
+TextBox	property	LEFT	N	0	
+TextBox	property	MARGIN	N	2	
+TextBox	property	MAXLENGTH	N	0	
+TextBox	property	MEMOWINDOW	C		
+TextBox	property	MOUSEICON	C		
+TextBox	property	MOUSEPOINTER	N	0	
+TextBox	property	NAME	C	Text	
+TextBox	property	NULLDISPLAY	C		
+TextBox	property	OLEDRAGMODE	N	0	
+TextBox	property	OLEDRAGPICTURE	C		
+TextBox	property	OLEDROPEFFECTS	N	3	
+TextBox	property	OLEDROPHASDATA	N	-1	
+TextBox	property	OLEDROPMODE	N	0	
+TextBox	property	OLEDROPTEXTINSERTION	N	0	
+TextBox	property	OPENWINDOW	L	.F.	
+TextBox	property	PARENT	error		1924
+TextBox	property	PARENTCLASS	C		1743
+TextBox	property	PASSWORDCHAR	C		
+TextBox	property	READONLY	L	.F.	
+TextBox	property	RIGHTTOLEFT	L	.F.	
+TextBox	property	SECONDS	N	2	
+TextBox	property	SELECTEDBACKCOLOR	N	13924352	
+TextBox	property	SELECTEDFORECOLOR	N	16777215	
+TextBox	property	SELECTONENTRY	L	.F.	
+TextBox	property	SELLENGTH	N	0	
+TextBox	property	SELSTART	N	0	
+TextBox	property	SELTEXT	C		
+TextBox	property	SPECIALEFFECT	N	0	
+TextBox	property	STATUSBARTEXT	C		
+TextBox	property	STRICTDATEENTRY	N	1	
+TextBox	property	STYLE	N	0	
+TextBox	property	TABINDEX	N	0	
+TextBox	property	TABSTOP	L	.T.	
+TextBox	property	TAG	C		
+TextBox	property	TERMINATEREAD	L	.F.	
+TextBox	property	TEXT	C	                 	1743
+TextBox	property	THEMES	L	.T.	
+TextBox	property	TOOLTIPTEXT	C		
+TextBox	property	TOP	N	0	
+TextBox	property	VALUE	C		
+TextBox	property	VISIBLE	L	.T.	
+TextBox	property	WHATSTHISHELPID	N	-1	
+TextBox	property	WIDTH	N	100	
+TextBox	event	CLICK			
+TextBox	event	DBLCLICK			
+TextBox	event	DESTROY			
+TextBox	event	DRAGDROP			
+TextBox	event	DRAGOVER			
+TextBox	event	ERROR			
+TextBox	event	ERRORMESSAGE			
+TextBox	event	GOTFOCUS			
+TextBox	event	INIT			
+TextBox	event	INTERACTIVECHANGE			
+TextBox	event	KEYPRESS			
+TextBox	event	LOSTFOCUS			
+TextBox	event	MESSAGE			
+TextBox	event	MIDDLECLICK			
+TextBox	event	MOUSEDOWN			
+TextBox	event	MOUSEENTER			
+TextBox	event	MOUSELEAVE			
+TextBox	event	MOUSEMOVE			
+TextBox	event	MOUSEUP			
+TextBox	event	MOUSEWHEEL			
+TextBox	event	OLECOMPLETEDRAG			
+TextBox	event	OLEDRAGDROP			
+TextBox	event	OLEDRAGOVER			
+TextBox	event	OLEGIVEFEEDBACK			
+TextBox	event	OLESETDATA			
+TextBox	event	OLESTARTDRAG			
+TextBox	event	PROGRAMMATICCHANGE			
+TextBox	event	RANGEHIGH			
+TextBox	event	RANGELOW			
+TextBox	event	RIGHTCLICK			
+TextBox	event	UIENABLE			
+TextBox	event	VALID			
+TextBox	event	WHEN			
+TextBox	method	ADDPROPERTY			
+TextBox	method	DRAG			
+TextBox	method	MOVE			
+TextBox	method	OLEDRAG			
+TextBox	method	READEXPRESSION			
+TextBox	method	READMETHOD			
+TextBox	method	REFRESH			
+TextBox	method	RESETTODEFAULT			
+TextBox	method	SAVEASCLASS			
+TextBox	method	SETFOCUS			
+TextBox	method	SHOWWHATSTHIS			
+TextBox	method	WRITEEXPRESSION			
+TextBox	method	WRITEMETHOD			
+TextBox	method	ZORDER			
+TextBox	contained	DISABLEDBACKCOLOR	N	15790320	
+EditBox	class				
+EditBox	property	ADDLINEFEEDS	L	.T.	
+EditBox	property	ALIGNMENT	N	0	
+EditBox	property	ALLOWTABS	L	.F.	
+EditBox	property	ANCHOR	N	0	
+EditBox	property	Application	O	object	
+EditBox	property	BACKCOLOR	N	16777215	
+EditBox	property	BACKSTYLE	N	1	
+EditBox	property	BASECLASS	C	Editbox	1743
+EditBox	property	BORDERCOLOR	N	6579300	
+EditBox	property	BORDERSTYLE	N	1	
+EditBox	property	CLASS	C	Editbox	1743
+EditBox	property	CLASSLIBRARY	C		1743
+EditBox	property	COLORSCHEME	N	2	
+EditBox	property	COLORSOURCE	N	4	
+EditBox	property	COMMENT	C		
+EditBox	property	CONTROLSOURCE	C		
+EditBox	property	DISABLEDBACKCOLOR	N	16777215	
+EditBox	property	DISABLEDFORECOLOR	N	7171437	
+EditBox	property	DRAGICON	C		
+EditBox	property	DRAGMODE	N	0	
+EditBox	property	ENABLED	L	.T.	
+EditBox	property	ENABLEHYPERLINKS	L	.F.	
+EditBox	property	FONTBOLD	L	.F.	
+EditBox	property	FONTCHARSET	N	1	
+EditBox	property	FONTCONDENSE	L	.F.	
+EditBox	property	FONTEXTEND	L	.F.	
+EditBox	property	FONTITALIC	L	.F.	
+EditBox	property	FONTNAME	C	Arial	
+EditBox	property	FONTOUTLINE	L	.F.	
+EditBox	property	FONTSHADOW	L	.F.	
+EditBox	property	FONTSIZE	N	9	
+EditBox	property	FONTSTRIKETHRU	L	.F.	
+EditBox	property	FONTUNDERLINE	L	.F.	
+EditBox	property	FORECOLOR	N	0	
+EditBox	property	FORMAT	C		
+EditBox	property	HEIGHT	N	75	
+EditBox	property	HELPCONTEXTID	N	0	
+EditBox	property	HIDESELECTION	L	.T.	
+EditBox	property	IMEMODE	N	0	
+EditBox	property	INTEGRALHEIGHT	L	.F.	
+EditBox	property	LEFT	N	0	
+EditBox	property	MARGIN	N	2	
+EditBox	property	MAXLENGTH	N	0	
+EditBox	property	MOUSEICON	C		
+EditBox	property	MOUSEPOINTER	N	0	
+EditBox	property	NAME	C	Edit	
+EditBox	property	NULLDISPLAY	C		
+EditBox	property	OLEDRAGMODE	N	0	
+EditBox	property	OLEDRAGPICTURE	C		
+EditBox	property	OLEDROPEFFECTS	N	3	
+EditBox	property	OLEDROPHASDATA	N	-1	
+EditBox	property	OLEDROPMODE	N	0	
+EditBox	property	OLEDROPTEXTINSERTION	N	0	
+EditBox	property	PARENT	error		1924
+EditBox	property	PARENTCLASS	C		1743
+EditBox	property	PASSWORDCHAR	C		
+EditBox	property	READONLY	L	.F.	
+EditBox	property	RIGHTTOLEFT	L	.F.	
+EditBox	property	SCROLLBARS	N	2	
+EditBox	property	SELECTEDBACKCOLOR	N	13924352	
+EditBox	property	SELECTEDFORECOLOR	N	16777215	
+EditBox	property	SELECTONENTRY	L	.F.	
+EditBox	property	SELLENGTH	N	0	
+EditBox	property	SELSTART	N	0	
+EditBox	property	SELTEXT	C		
+EditBox	property	SPECIALEFFECT	N	0	
+EditBox	property	STATUSBARTEXT	C		
+EditBox	property	TABINDEX	N	0	
+EditBox	property	TABSTOP	L	.T.	
+EditBox	property	TAG	C		
+EditBox	property	TERMINATEREAD	L	.F.	
+EditBox	property	TEXT	C		1743
+EditBox	property	THEMES	L	.T.	
+EditBox	property	TOOLTIPTEXT	C		
+EditBox	property	TOP	N	0	
+EditBox	property	VALUE	C		
+EditBox	property	VISIBLE	L	.T.	
+EditBox	property	WHATSTHISHELPID	N	-1	
+EditBox	property	WIDTH	N	100	
+EditBox	event	CLICK			
+EditBox	event	DBLCLICK			
+EditBox	event	DESTROY			
+EditBox	event	DRAGDROP			
+EditBox	event	DRAGOVER			
+EditBox	event	ERROR			
+EditBox	event	ERRORMESSAGE			
+EditBox	event	GOTFOCUS			
+EditBox	event	INIT			
+EditBox	event	INTERACTIVECHANGE			
+EditBox	event	KEYPRESS			
+EditBox	event	LOSTFOCUS			
+EditBox	event	MESSAGE			
+EditBox	event	MIDDLECLICK			
+EditBox	event	MOUSEDOWN			
+EditBox	event	MOUSEENTER			
+EditBox	event	MOUSELEAVE			
+EditBox	event	MOUSEMOVE			
+EditBox	event	MOUSEUP			
+EditBox	event	MOUSEWHEEL			
+EditBox	event	OLECOMPLETEDRAG			
+EditBox	event	OLEDRAGDROP			
+EditBox	event	OLEDRAGOVER			
+EditBox	event	OLEGIVEFEEDBACK			
+EditBox	event	OLESETDATA			
+EditBox	event	OLESTARTDRAG			
+EditBox	event	PROGRAMMATICCHANGE			
+EditBox	event	RIGHTCLICK			
+EditBox	event	UIENABLE			
+EditBox	event	VALID			
+EditBox	event	WHEN			
+EditBox	method	ADDPROPERTY			
+EditBox	method	DRAG			
+EditBox	method	MOVE			
+EditBox	method	OLEDRAG			
+EditBox	method	READEXPRESSION			
+EditBox	method	READMETHOD			
+EditBox	method	REFRESH			
+EditBox	method	RESETTODEFAULT			
+EditBox	method	SAVEASCLASS			
+EditBox	method	SETFOCUS			
+EditBox	method	SHOWWHATSTHIS			
+EditBox	method	WRITEEXPRESSION			
+EditBox	method	WRITEMETHOD			
+EditBox	method	ZORDER			
+EditBox	contained	DISABLEDBACKCOLOR	N	15790320	
+CommandButton	class				
+CommandButton	property	ALIGNMENT	N	2	
+CommandButton	property	ANCHOR	N	0	
+CommandButton	property	Application	O	object	
+CommandButton	property	AUTOSIZE	L	.F.	
+CommandButton	property	BACKCOLOR	N	15790320	
+CommandButton	property	BASECLASS	C	Commandbutton	1743
+CommandButton	property	CANCEL	L	.F.	
+CommandButton	property	CAPTION	C	Command	
+CommandButton	property	CLASS	C	Commandbutton	1743
+CommandButton	property	CLASSLIBRARY	C		1743
+CommandButton	property	COLORSCHEME	N	1	
+CommandButton	property	COLORSOURCE	N	4	
+CommandButton	property	COMMENT	C		
+CommandButton	property	DEFAULT	L	.F.	
+CommandButton	property	DISABLEDBACKCOLOR	N	15790320	
+CommandButton	property	DISABLEDFORECOLOR	N	7171437	
+CommandButton	property	DISABLEDPICTURE	C		
+CommandButton	property	DOWNPICTURE	C		
+CommandButton	property	DRAGICON	C		
+CommandButton	property	DRAGMODE	N	0	
+CommandButton	property	ENABLED	L	.T.	
+CommandButton	property	FONTBOLD	L	.F.	
+CommandButton	property	FONTCHARSET	N	1	
+CommandButton	property	FONTCONDENSE	L	.F.	
+CommandButton	property	FONTEXTEND	L	.F.	
+CommandButton	property	FONTITALIC	L	.F.	
+CommandButton	property	FONTNAME	C	Arial	
+CommandButton	property	FONTOUTLINE	L	.F.	
+CommandButton	property	FONTSHADOW	L	.F.	
+CommandButton	property	FONTSIZE	N	9	
+CommandButton	property	FONTSTRIKETHRU	L	.F.	
+CommandButton	property	FONTUNDERLINE	L	.F.	
+CommandButton	property	FORECOLOR	N	0	
+CommandButton	property	HEIGHT	N	17	
+CommandButton	property	HELPCONTEXTID	N	0	
+CommandButton	property	LEFT	N	0	
+CommandButton	property	MOUSEICON	C		
+CommandButton	property	MOUSEPOINTER	N	0	
+CommandButton	property	NAME	C	Command	
+CommandButton	property	OLEDRAGMODE	N	0	
+CommandButton	property	OLEDRAGPICTURE	C		
+CommandButton	property	OLEDROPEFFECTS	N	3	
+CommandButton	property	OLEDROPHASDATA	N	-1	
+CommandButton	property	OLEDROPMODE	N	0	
+CommandButton	property	PARENT	error		1924
+CommandButton	property	PARENTCLASS	C		1743
+CommandButton	property	PICTURE	C		
+CommandButton	property	PICTUREMARGIN	N	0	
+CommandButton	property	PICTUREPOSITION	N	13	
+CommandButton	property	PICTURESPACING	N	0	
+CommandButton	property	RIGHTTOLEFT	L	.F.	
+CommandButton	property	SPECIALEFFECT	N	0	
+CommandButton	property	STATUSBARTEXT	C		
+CommandButton	property	STYLE	N	0	
+CommandButton	property	TABINDEX	N	0	
+CommandButton	property	TABSTOP	L	.T.	
+CommandButton	property	TAG	C		
+CommandButton	property	TERMINATEREAD	L	.F.	
+CommandButton	property	THEMES	L	.T.	
+CommandButton	property	TOOLTIPTEXT	C		
+CommandButton	property	TOP	N	0	
+CommandButton	property	VISIBLE	L	.T.	
+CommandButton	property	VISUALEFFECT	N	0	
+CommandButton	property	WHATSTHISHELPID	N	-1	
+CommandButton	property	WIDTH	N	100	
+CommandButton	property	WORDWRAP	L	.F.	
+CommandButton	event	CLICK			
+CommandButton	event	DESTROY			
+CommandButton	event	DRAGDROP			
+CommandButton	event	DRAGOVER			
+CommandButton	event	ERROR			
+CommandButton	event	ERRORMESSAGE			
+CommandButton	event	GOTFOCUS			
+CommandButton	event	INIT			
+CommandButton	event	KEYPRESS			
+CommandButton	event	LOSTFOCUS			
+CommandButton	event	MESSAGE			
+CommandButton	event	MIDDLECLICK			
+CommandButton	event	MOUSEDOWN			
+CommandButton	event	MOUSEENTER			
+CommandButton	event	MOUSELEAVE			
+CommandButton	event	MOUSEMOVE			
+CommandButton	event	MOUSEUP			
+CommandButton	event	MOUSEWHEEL			
+CommandButton	event	OLECOMPLETEDRAG			
+CommandButton	event	OLEDRAGDROP			
+CommandButton	event	OLEDRAGOVER			
+CommandButton	event	OLEGIVEFEEDBACK			
+CommandButton	event	OLESETDATA			
+CommandButton	event	OLESTARTDRAG			
+CommandButton	event	RIGHTCLICK			
+CommandButton	event	UIENABLE			
+CommandButton	event	VALID			
+CommandButton	event	WHEN			
+CommandButton	method	ADDPROPERTY			
+CommandButton	method	DRAG			
+CommandButton	method	MOVE			
+CommandButton	method	OLEDRAG			
+CommandButton	method	READEXPRESSION			
+CommandButton	method	READMETHOD			
+CommandButton	method	REFRESH			
+CommandButton	method	RESETTODEFAULT			
+CommandButton	method	SAVEASCLASS			
+CommandButton	method	SETFOCUS			
+CommandButton	method	SHOWWHATSTHIS			
+CommandButton	method	WRITEEXPRESSION			
+CommandButton	method	WRITEMETHOD			
+CommandButton	method	ZORDER			
+CommandGroup	class				
+CommandGroup	property	ANCHOR	N	0	
+CommandGroup	property	Application	O	object	
+CommandGroup	property	AUTOSIZE	L	.F.	
+CommandGroup	property	BACKCOLOR	N	16777215	
+CommandGroup	property	BACKSTYLE	N	1	
+CommandGroup	property	BASECLASS	C	Commandgroup	1743
+CommandGroup	property	BORDERCOLOR	N	6579300	
+CommandGroup	property	BORDERSTYLE	N	1	
+CommandGroup	property	BUTTONCOUNT	N	0	
+CommandGroup	property	BUTTONS	error		1924
+CommandGroup	property	CLASS	C	Commandgroup	1743
+CommandGroup	property	CLASSLIBRARY	C		1743
+CommandGroup	property	COLORSOURCE	N	4	
+CommandGroup	property	COMMENT	C		
+CommandGroup	property	CONTROLSOURCE	C		
+CommandGroup	property	DRAGICON	C		
+CommandGroup	property	DRAGMODE	N	0	
+CommandGroup	property	ENABLED	L	.T.	
+CommandGroup	property	HEIGHT	N	17	
+CommandGroup	property	HELPCONTEXTID	N	0	
+CommandGroup	property	LEFT	N	0	
+CommandGroup	property	MEMBERCLASS	C		
+CommandGroup	property	MEMBERCLASSLIBRARY	C		
+CommandGroup	property	MOUSEICON	C		
+CommandGroup	property	MOUSEPOINTER	N	0	
+CommandGroup	property	NAME	C	Commandgroup	
+CommandGroup	property	OBJECTS	error		1924
+CommandGroup	property	OLEDRAGMODE	N	0	
+CommandGroup	property	OLEDRAGPICTURE	C		
+CommandGroup	property	OLEDROPEFFECTS	N	3	
+CommandGroup	property	OLEDROPHASDATA	N	-1	
+CommandGroup	property	OLEDROPMODE	N	0	
+CommandGroup	property	PARENT	error		1924
+CommandGroup	property	PARENTCLASS	C		1743
+CommandGroup	property	SPECIALEFFECT	N	0	
+CommandGroup	property	STATUSBARTEXT	C		
+CommandGroup	property	TABINDEX	N	0	
+CommandGroup	property	TAG	C		
+CommandGroup	property	TERMINATEREAD	L	.F.	
+CommandGroup	property	THEMES	L	.T.	
+CommandGroup	property	TOOLTIPTEXT	C		
+CommandGroup	property	TOP	N	0	
+CommandGroup	property	VALUE	N	0	
+CommandGroup	property	VISIBLE	L	.T.	
+CommandGroup	property	WHATSTHISHELPID	N	-1	
+CommandGroup	property	WIDTH	N	10	
+CommandGroup	event	CLICK			
+CommandGroup	event	DBLCLICK			
+CommandGroup	event	DESTROY			
+CommandGroup	event	DRAGDROP			
+CommandGroup	event	DRAGOVER			
+CommandGroup	event	ERROR			
+CommandGroup	event	ERRORMESSAGE			
+CommandGroup	event	INIT			
+CommandGroup	event	INTERACTIVECHANGE			
+CommandGroup	event	MESSAGE			
+CommandGroup	event	MIDDLECLICK			
+CommandGroup	event	MOUSEDOWN			
+CommandGroup	event	MOUSEENTER			
+CommandGroup	event	MOUSELEAVE			
+CommandGroup	event	MOUSEMOVE			
+CommandGroup	event	MOUSEUP			
+CommandGroup	event	MOUSEWHEEL			
+CommandGroup	event	OLECOMPLETEDRAG			
+CommandGroup	event	OLEDRAGDROP			
+CommandGroup	event	OLEDRAGOVER			
+CommandGroup	event	OLEGIVEFEEDBACK			
+CommandGroup	event	OLESETDATA			
+CommandGroup	event	OLESTARTDRAG			
+CommandGroup	event	PROGRAMMATICCHANGE			
+CommandGroup	event	RIGHTCLICK			
+CommandGroup	event	UIENABLE			
+CommandGroup	event	VALID			
+CommandGroup	event	WHEN			
+CommandGroup	method	ADDOBJECT			
+CommandGroup	method	ADDPROPERTY			
+CommandGroup	method	DRAG			
+CommandGroup	method	MOVE			
+CommandGroup	method	NEWOBJECT			
+CommandGroup	method	OLEDRAG			
+CommandGroup	method	READEXPRESSION			
+CommandGroup	method	READMETHOD			
+CommandGroup	method	REFRESH			
+CommandGroup	method	REMOVEOBJECT			
+CommandGroup	method	RESETTODEFAULT			
+CommandGroup	method	SAVEASCLASS			
+CommandGroup	method	SETALL			
+CommandGroup	method	SHOWWHATSTHIS			
+CommandGroup	method	WRITEEXPRESSION			
+CommandGroup	method	WRITEMETHOD			
+CommandGroup	method	ZORDER			
+CommandGroup	contained	BACKCOLOR	N	15790320	
+CheckBox	class				
+CheckBox	property	ALIGNMENT	N	0	
+CheckBox	property	ANCHOR	N	0	
+CheckBox	property	Application	O	object	
+CheckBox	property	AUTOSIZE	L	.F.	
+CheckBox	property	BACKCOLOR	N	16777215	
+CheckBox	property	BACKSTYLE	N	1	
+CheckBox	property	BASECLASS	C	Checkbox	1743
+CheckBox	property	CAPTION	C	Check	
+CheckBox	property	CENTERED	L	.F.	
+CheckBox	property	CLASS	C	Checkbox	1743
+CheckBox	property	CLASSLIBRARY	C		1743
+CheckBox	property	COLORSCHEME	N	1	
+CheckBox	property	COLORSOURCE	N	4	
+CheckBox	property	COMMENT	C		
+CheckBox	property	CONTROLSOURCE	C		
+CheckBox	property	DISABLEDBACKCOLOR	N	16777215	
+CheckBox	property	DISABLEDFORECOLOR	N	7171437	
+CheckBox	property	DISABLEDPICTURE	C		
+CheckBox	property	DOWNPICTURE	C		
+CheckBox	property	DRAGICON	C		
+CheckBox	property	DRAGMODE	N	0	
+CheckBox	property	ENABLED	L	.T.	
+CheckBox	property	FONTBOLD	L	.F.	
+CheckBox	property	FONTCHARSET	N	1	
+CheckBox	property	FONTCONDENSE	L	.F.	
+CheckBox	property	FONTEXTEND	L	.F.	
+CheckBox	property	FONTITALIC	L	.F.	
+CheckBox	property	FONTNAME	C	Arial	
+CheckBox	property	FONTOUTLINE	L	.F.	
+CheckBox	property	FONTSHADOW	L	.F.	
+CheckBox	property	FONTSIZE	N	9	
+CheckBox	property	FONTSTRIKETHRU	L	.F.	
+CheckBox	property	FONTUNDERLINE	L	.F.	
+CheckBox	property	FORECOLOR	N	0	
+CheckBox	property	HEIGHT	N	17	
+CheckBox	property	HELPCONTEXTID	N	0	
+CheckBox	property	LEFT	N	0	
+CheckBox	property	MOUSEICON	C		
+CheckBox	property	MOUSEPOINTER	N	0	
+CheckBox	property	NAME	C	Check	
+CheckBox	property	OLEDRAGMODE	N	0	
+CheckBox	property	OLEDRAGPICTURE	C		
+CheckBox	property	OLEDROPEFFECTS	N	3	
+CheckBox	property	OLEDROPHASDATA	N	-1	
+CheckBox	property	OLEDROPMODE	N	0	
+CheckBox	property	PARENT	error		1924
+CheckBox	property	PARENTCLASS	C		1743
+CheckBox	property	PICTURE	C		
+CheckBox	property	PICTUREMARGIN	N	0	
+CheckBox	property	PICTUREPOSITION	N	13	
+CheckBox	property	PICTURESPACING	N	0	
+CheckBox	property	READONLY	L	.F.	
+CheckBox	property	RIGHTTOLEFT	L	.F.	
+CheckBox	property	SPECIALEFFECT	N	0	
+CheckBox	property	STATUSBARTEXT	C		
+CheckBox	property	STYLE	N	0	
+CheckBox	property	TABINDEX	N	0	
+CheckBox	property	TABSTOP	L	.T.	
+CheckBox	property	TAG	C		
+CheckBox	property	TERMINATEREAD	L	.F.	
+CheckBox	property	THEMES	L	.T.	
+CheckBox	property	TOOLTIPTEXT	C		
+CheckBox	property	TOP	N	0	
+CheckBox	property	VALUE	N	0	
+CheckBox	property	VISIBLE	L	.T.	
+CheckBox	property	WHATSTHISHELPID	N	-1	
+CheckBox	property	WIDTH	N	100	
+CheckBox	property	WORDWRAP	L	.F.	
+CheckBox	event	CLICK			
+CheckBox	event	DBLCLICK			
+CheckBox	event	DESTROY			
+CheckBox	event	DRAGDROP			
+CheckBox	event	DRAGOVER			
+CheckBox	event	ERROR			
+CheckBox	event	ERRORMESSAGE			
+CheckBox	event	GOTFOCUS			
+CheckBox	event	INIT			
+CheckBox	event	INTERACTIVECHANGE			
+CheckBox	event	KEYPRESS			
+CheckBox	event	LOSTFOCUS			
+CheckBox	event	MESSAGE			
+CheckBox	event	MIDDLECLICK			
+CheckBox	event	MOUSEDOWN			
+CheckBox	event	MOUSEENTER			
+CheckBox	event	MOUSELEAVE			
+CheckBox	event	MOUSEMOVE			
+CheckBox	event	MOUSEUP			
+CheckBox	event	MOUSEWHEEL			
+CheckBox	event	OLECOMPLETEDRAG			
+CheckBox	event	OLEDRAGDROP			
+CheckBox	event	OLEDRAGOVER			
+CheckBox	event	OLEGIVEFEEDBACK			
+CheckBox	event	OLESETDATA			
+CheckBox	event	OLESTARTDRAG			
+CheckBox	event	PROGRAMMATICCHANGE			
+CheckBox	event	RIGHTCLICK			
+CheckBox	event	UIENABLE			
+CheckBox	event	VALID			
+CheckBox	event	WHEN			
+CheckBox	method	ADDPROPERTY			
+CheckBox	method	DRAG			
+CheckBox	method	MOVE			
+CheckBox	method	OLEDRAG			
+CheckBox	method	READEXPRESSION			
+CheckBox	method	READMETHOD			
+CheckBox	method	REFRESH			
+CheckBox	method	RESETTODEFAULT			
+CheckBox	method	SAVEASCLASS			
+CheckBox	method	SETFOCUS			
+CheckBox	method	SHOWWHATSTHIS			
+CheckBox	method	WRITEEXPRESSION			
+CheckBox	method	WRITEMETHOD			
+CheckBox	method	ZORDER			
+CheckBox	contained	BACKCOLOR	N	15790320	
+CheckBox	contained	DISABLEDBACKCOLOR	N	15790320	
+OptionGroup	class				
+OptionGroup	property	ANCHOR	N	0	
+OptionGroup	property	Application	O	object	
+OptionGroup	property	AUTOSIZE	L	.F.	
+OptionGroup	property	BACKCOLOR	N	16777215	
+OptionGroup	property	BACKSTYLE	N	1	
+OptionGroup	property	BASECLASS	C	Optiongroup	1743
+OptionGroup	property	BORDERCOLOR	N	6579300	
+OptionGroup	property	BORDERSTYLE	N	1	
+OptionGroup	property	BUTTONCOUNT	N	0	
+OptionGroup	property	BUTTONS	error		1924
+OptionGroup	property	CLASS	C	Optiongroup	1743
+OptionGroup	property	CLASSLIBRARY	C		1743
+OptionGroup	property	COLORSOURCE	N	4	
+OptionGroup	property	COMMENT	C		
+OptionGroup	property	CONTROLSOURCE	C		
+OptionGroup	property	DRAGICON	C		
+OptionGroup	property	DRAGMODE	N	0	
+OptionGroup	property	ENABLED	L	.T.	
+OptionGroup	property	HEIGHT	N	15	
+OptionGroup	property	HELPCONTEXTID	N	0	
+OptionGroup	property	LEFT	N	0	
+OptionGroup	property	MEMBERCLASS	C		
+OptionGroup	property	MEMBERCLASSLIBRARY	C		
+OptionGroup	property	MOUSEICON	C		
+OptionGroup	property	MOUSEPOINTER	N	0	
+OptionGroup	property	NAME	C	Optiongroup	
+OptionGroup	property	OBJECTS	error		1924
+OptionGroup	property	OLEDRAGMODE	N	0	
+OptionGroup	property	OLEDRAGPICTURE	C		
+OptionGroup	property	OLEDROPEFFECTS	N	3	
+OptionGroup	property	OLEDROPHASDATA	N	-1	
+OptionGroup	property	OLEDROPMODE	N	0	
+OptionGroup	property	PARENT	error		1924
+OptionGroup	property	PARENTCLASS	C		1743
+OptionGroup	property	SPECIALEFFECT	N	0	
+OptionGroup	property	STATUSBARTEXT	C		
+OptionGroup	property	TABINDEX	N	0	
+OptionGroup	property	TAG	C		
+OptionGroup	property	TERMINATEREAD	L	.F.	
+OptionGroup	property	THEMES	L	.T.	
+OptionGroup	property	TOOLTIPTEXT	C		
+OptionGroup	property	TOP	N	0	
+OptionGroup	property	VALUE	N	0	
+OptionGroup	property	VISIBLE	L	.T.	
+OptionGroup	property	WHATSTHISHELPID	N	-1	
+OptionGroup	property	WIDTH	N	10	
+OptionGroup	event	CLICK			
+OptionGroup	event	DBLCLICK			
+OptionGroup	event	DESTROY			
+OptionGroup	event	DRAGDROP			
+OptionGroup	event	DRAGOVER			
+OptionGroup	event	ERROR			
+OptionGroup	event	ERRORMESSAGE			
+OptionGroup	event	INIT			
+OptionGroup	event	INTERACTIVECHANGE			
+OptionGroup	event	MESSAGE			
+OptionGroup	event	MIDDLECLICK			
+OptionGroup	event	MOUSEDOWN			
+OptionGroup	event	MOUSEENTER			
+OptionGroup	event	MOUSELEAVE			
+OptionGroup	event	MOUSEMOVE			
+OptionGroup	event	MOUSEUP			
+OptionGroup	event	MOUSEWHEEL			
+OptionGroup	event	OLECOMPLETEDRAG			
+OptionGroup	event	OLEDRAGDROP			
+OptionGroup	event	OLEDRAGOVER			
+OptionGroup	event	OLEGIVEFEEDBACK			
+OptionGroup	event	OLESETDATA			
+OptionGroup	event	OLESTARTDRAG			
+OptionGroup	event	PROGRAMMATICCHANGE			
+OptionGroup	event	RIGHTCLICK			
+OptionGroup	event	UIENABLE			
+OptionGroup	event	VALID			
+OptionGroup	event	WHEN			
+OptionGroup	method	ADDOBJECT			
+OptionGroup	method	ADDPROPERTY			
+OptionGroup	method	DRAG			
+OptionGroup	method	MOVE			
+OptionGroup	method	NEWOBJECT			
+OptionGroup	method	OLEDRAG			
+OptionGroup	method	READEXPRESSION			
+OptionGroup	method	READMETHOD			
+OptionGroup	method	REFRESH			
+OptionGroup	method	REMOVEOBJECT			
+OptionGroup	method	RESETTODEFAULT			
+OptionGroup	method	SAVEASCLASS			
+OptionGroup	method	SETALL			
+OptionGroup	method	SHOWWHATSTHIS			
+OptionGroup	method	WRITEEXPRESSION			
+OptionGroup	method	WRITEMETHOD			
+OptionGroup	method	ZORDER			
+OptionGroup	contained	BACKCOLOR	N	15790320	
+OptionButton	class				
+OptionButton	property	ALIGNMENT	N	0	
+OptionButton	property	ANCHOR	N	0	
+OptionButton	property	Application	O	object	
+OptionButton	property	AUTOSIZE	L	.F.	
+OptionButton	property	BACKCOLOR	N	16777215	
+OptionButton	property	BACKSTYLE	N	1	
+OptionButton	property	BASECLASS	C	Optionbutton	1743
+OptionButton	property	CAPTION	C	Option	
+OptionButton	property	CLASS	C	Optionbutton	1743
+OptionButton	property	CLASSLIBRARY	C		1743
+OptionButton	property	COLORSCHEME	N	1	
+OptionButton	property	COLORSOURCE	N	4	
+OptionButton	property	COMMENT	C		
+OptionButton	property	CONTROLSOURCE	C		
+OptionButton	property	DISABLEDBACKCOLOR	N	16777215	
+OptionButton	property	DISABLEDFORECOLOR	N	7171437	
+OptionButton	property	DISABLEDPICTURE	C		
+OptionButton	property	DOWNPICTURE	C		
+OptionButton	property	DRAGICON	C		
+OptionButton	property	DRAGMODE	N	0	
+OptionButton	property	ENABLED	L	.T.	
+OptionButton	property	FONTBOLD	L	.F.	
+OptionButton	property	FONTCHARSET	N	1	
+OptionButton	property	FONTCONDENSE	L	.F.	
+OptionButton	property	FONTEXTEND	L	.F.	
+OptionButton	property	FONTITALIC	L	.F.	
+OptionButton	property	FONTNAME	C	Arial	
+OptionButton	property	FONTOUTLINE	L	.F.	
+OptionButton	property	FONTSHADOW	L	.F.	
+OptionButton	property	FONTSIZE	N	9	
+OptionButton	property	FONTSTRIKETHRU	L	.F.	
+OptionButton	property	FONTUNDERLINE	L	.F.	
+OptionButton	property	FORECOLOR	N	0	
+OptionButton	property	HEIGHT	N	16	
+OptionButton	property	HELPCONTEXTID	N	0	
+OptionButton	property	LEFT	N	0	
+OptionButton	property	MOUSEICON	C		
+OptionButton	property	MOUSEPOINTER	N	0	
+OptionButton	property	NAME	C	Option	
+OptionButton	property	OLEDRAGMODE	N	0	
+OptionButton	property	OLEDRAGPICTURE	C		
+OptionButton	property	OLEDROPEFFECTS	N	3	
+OptionButton	property	OLEDROPHASDATA	N	-1	
+OptionButton	property	OLEDROPMODE	N	0	
+OptionButton	property	PARENT	error		1924
+OptionButton	property	PARENTCLASS	C		1743
+OptionButton	property	PICTURE	C		
+OptionButton	property	PICTUREMARGIN	N	0	
+OptionButton	property	PICTUREPOSITION	N	13	
+OptionButton	property	PICTURESPACING	N	0	
+OptionButton	property	RIGHTTOLEFT	L	.F.	
+OptionButton	property	SPECIALEFFECT	N	0	
+OptionButton	property	STATUSBARTEXT	C		
+OptionButton	property	STYLE	N	0	
+OptionButton	property	TABINDEX	N	0	
+OptionButton	property	TABSTOP	L	.T.	
+OptionButton	property	TAG	C		
+OptionButton	property	TERMINATEREAD	L	.F.	
+OptionButton	property	THEMES	L	.T.	
+OptionButton	property	TOOLTIPTEXT	C		
+OptionButton	property	TOP	N	0	
+OptionButton	property	VALUE	N	0	
+OptionButton	property	VISIBLE	L	.T.	
+OptionButton	property	WHATSTHISHELPID	N	-1	
+OptionButton	property	WIDTH	N	10	
+OptionButton	property	WORDWRAP	L	.F.	
+OptionButton	event	CLICK			
+OptionButton	event	DBLCLICK			
+OptionButton	event	DESTROY			
+OptionButton	event	DRAGDROP			
+OptionButton	event	DRAGOVER			
+OptionButton	event	ERROR			
+OptionButton	event	ERRORMESSAGE			
+OptionButton	event	GOTFOCUS			
+OptionButton	event	INIT			
+OptionButton	event	KEYPRESS			
+OptionButton	event	LOSTFOCUS			
+OptionButton	event	MESSAGE			
+OptionButton	event	MIDDLECLICK			
+OptionButton	event	MOUSEDOWN			
+OptionButton	event	MOUSEENTER			
+OptionButton	event	MOUSELEAVE			
+OptionButton	event	MOUSEMOVE			
+OptionButton	event	MOUSEUP			
+OptionButton	event	MOUSEWHEEL			
+OptionButton	event	OLECOMPLETEDRAG			
+OptionButton	event	OLEDRAGDROP			
+OptionButton	event	OLEDRAGOVER			
+OptionButton	event	OLEGIVEFEEDBACK			
+OptionButton	event	OLESETDATA			
+OptionButton	event	OLESTARTDRAG			
+OptionButton	event	RIGHTCLICK			
+OptionButton	event	UIENABLE			
+OptionButton	event	VALID			
+OptionButton	event	WHEN			
+OptionButton	method	ADDPROPERTY			
+OptionButton	method	DRAG			
+OptionButton	method	MOVE			
+OptionButton	method	OLEDRAG			
+OptionButton	method	READEXPRESSION			
+OptionButton	method	READMETHOD			
+OptionButton	method	REFRESH			
+OptionButton	method	RESETTODEFAULT			
+OptionButton	method	SAVEASCLASS			
+OptionButton	method	SETFOCUS			
+OptionButton	method	SHOWWHATSTHIS			
+OptionButton	method	WRITEEXPRESSION			
+OptionButton	method	WRITEMETHOD			
+OptionButton	method	ZORDER			
+OptionButton	contained	BACKCOLOR	N	15790320	
+OptionButton	contained	DISABLEDBACKCOLOR	N	15790320	
+ComboBox	class				
+ComboBox	property	ALIGNMENT	N	0	
+ComboBox	property	ANCHOR	N	0	
+ComboBox	property	Application	O	object	
+ComboBox	property	BACKCOLOR	N	16777215	
+ComboBox	property	BASECLASS	C	Combobox	1743
+ComboBox	property	BORDERCOLOR	N	6579300	
+ComboBox	property	BORDERSTYLE	N	1	
+ComboBox	property	BOUNDCOLUMN	N	1	
+ComboBox	property	BOUNDTO	L	.F.	
+ComboBox	property	CLASS	C	Combobox	1743
+ComboBox	property	CLASSLIBRARY	C		1743
+ComboBox	property	COLORSCHEME	N	2	
+ComboBox	property	COLORSOURCE	N	4	
+ComboBox	property	COLUMNCOUNT	N	0	
+ComboBox	property	COLUMNLINES	L	.T.	
+ComboBox	property	COLUMNWIDTHS	C		
+ComboBox	property	COMMENT	C		
+ComboBox	property	CONTROLSOURCE	C		
+ComboBox	property	DISABLEDBACKCOLOR	N	16777215	
+ComboBox	property	DISABLEDFORECOLOR	N	7171437	
+ComboBox	property	DISABLEDITEMBACKCOLOR	N	16777215	
+ComboBox	property	DISABLEDITEMFORECOLOR	N	7171437	
+ComboBox	property	DISPLAYCOUNT	N	0	
+ComboBox	property	DISPLAYVALUE	C		
+ComboBox	property	DRAGICON	C		
+ComboBox	property	DRAGMODE	N	0	
+ComboBox	property	ENABLED	L	.T.	
+ComboBox	property	FIRSTELEMENT	N	1	
+ComboBox	property	FONTBOLD	L	.F.	
+ComboBox	property	FONTCHARSET	N	1	
+ComboBox	property	FONTCONDENSE	L	.F.	
+ComboBox	property	FONTEXTEND	L	.F.	
+ComboBox	property	FONTITALIC	L	.F.	
+ComboBox	property	FONTNAME	C	Arial	
+ComboBox	property	FONTOUTLINE	L	.F.	
+ComboBox	property	FONTSHADOW	L	.F.	
+ComboBox	property	FONTSIZE	N	9	
+ComboBox	property	FONTSTRIKETHRU	L	.F.	
+ComboBox	property	FONTUNDERLINE	L	.F.	
+ComboBox	property	FORECOLOR	N	0	
+ComboBox	property	FORMAT	C		
+ComboBox	property	HEIGHT	N	24	
+ComboBox	property	HELPCONTEXTID	N	0	
+ComboBox	property	HIDESELECTION	L	.T.	
+ComboBox	property	IMEMODE	N	0	
+ComboBox	property	INCREMENTALSEARCH	L	.T.	
+ComboBox	property	INPUTMASK	C		
+ComboBox	property	ITEMBACKCOLOR	N	16777215	
+ComboBox	property	ITEMDATA	N	0	
+ComboBox	property	ITEMFORECOLOR	N	0	
+ComboBox	property	ITEMIDDATA	N	0	
+ComboBox	property	ITEMTIPS	L	.F.	
+ComboBox	property	LEFT	N	0	
+ComboBox	property	LIST	C		
+ComboBox	property	LISTCOUNT	N	0	1743
+ComboBox	property	LISTINDEX	N	0	
+ComboBox	property	LISTITEM	C		
+ComboBox	property	LISTITEMID	N	0	
+ComboBox	property	MARGIN	N	2	
+ComboBox	property	MAXLENGTH	N	0	
+ComboBox	property	MOUSEICON	C		
+ComboBox	property	MOUSEPOINTER	N	0	
+ComboBox	property	NAME	C	Combo	
+ComboBox	property	NEWINDEX	N	0	1743
+ComboBox	property	NEWITEMID	N	0	1743
+ComboBox	property	NULLDISPLAY	C		
+ComboBox	property	NUMBEROFELEMENTS	N	0	
+ComboBox	property	OLEDRAGMODE	N	0	
+ComboBox	property	OLEDRAGPICTURE	C		
+ComboBox	property	OLEDROPEFFECTS	N	3	
+ComboBox	property	OLEDROPHASDATA	N	-1	
+ComboBox	property	OLEDROPMODE	N	0	
+ComboBox	property	OLEDROPTEXTINSERTION	N	0	
+ComboBox	property	PARENT	error		1924
+ComboBox	property	PARENTCLASS	C		1743
+ComboBox	property	PICTURE	C		
+ComboBox	property	PICTURESELECTIONDISPLAY	N	0	
+ComboBox	property	READONLY	L	.F.	
+ComboBox	property	RIGHTTOLEFT	L	.F.	
+ComboBox	property	ROWSOURCE	C		
+ComboBox	property	ROWSOURCETYPE	N	0	
+ComboBox	property	SELECTED	L	.F.	
+ComboBox	property	SELECTEDBACKCOLOR	N	13924352	
+ComboBox	property	SELECTEDFORECOLOR	N	16777215	
+ComboBox	property	SELECTEDID	L	.F.	
+ComboBox	property	SELECTEDITEMBACKCOLOR	N	13924352	
+ComboBox	property	SELECTEDITEMFORECOLOR	N	16777215	
+ComboBox	property	SELECTONENTRY	L	.F.	
+ComboBox	property	SELLENGTH	N	0	
+ComboBox	property	SELSTART	N	0	
+ComboBox	property	SELTEXT	C		
+ComboBox	property	SORTED	L	.F.	
+ComboBox	property	SPECIALEFFECT	N	0	
+ComboBox	property	STATUSBARTEXT	C		
+ComboBox	property	STYLE	N	0	
+ComboBox	property	TABINDEX	N	0	
+ComboBox	property	TABSTOP	L	.T.	
+ComboBox	property	TAG	C		
+ComboBox	property	TERMINATEREAD	L	.F.	
+ComboBox	property	TEXT	C	              	1743
+ComboBox	property	THEMES	L	.T.	
+ComboBox	property	TOOLTIPTEXT	C		
+ComboBox	property	TOP	N	0	
+ComboBox	property	TOPINDEX	N	1	1743
+ComboBox	property	TOPITEMID	N	-1	1743
+ComboBox	property	VALUE	C		
+ComboBox	property	VISIBLE	L	.T.	
+ComboBox	property	WHATSTHISHELPID	N	-1	
+ComboBox	property	WIDTH	N	100	
+ComboBox	event	CLICK			
+ComboBox	event	DBLCLICK			
+ComboBox	event	DESTROY			
+ComboBox	event	DOWNCLICK			
+ComboBox	event	DRAGDROP			
+ComboBox	event	DRAGOVER			
+ComboBox	event	DROPDOWN			
+ComboBox	event	ERROR			
+ComboBox	event	ERRORMESSAGE			
+ComboBox	event	GOTFOCUS			
+ComboBox	event	INIT			
+ComboBox	event	INTERACTIVECHANGE			
+ComboBox	event	KEYPRESS			
+ComboBox	event	LOSTFOCUS			
+ComboBox	event	MESSAGE			
+ComboBox	event	MIDDLECLICK			
+ComboBox	event	MOUSEDOWN			
+ComboBox	event	MOUSEENTER			
+ComboBox	event	MOUSELEAVE			
+ComboBox	event	MOUSEMOVE			
+ComboBox	event	MOUSEUP			
+ComboBox	event	MOUSEWHEEL			
+ComboBox	event	OLECOMPLETEDRAG			
+ComboBox	event	OLEDRAGDROP			
+ComboBox	event	OLEDRAGOVER			
+ComboBox	event	OLEGIVEFEEDBACK			
+ComboBox	event	OLESETDATA			
+ComboBox	event	OLESTARTDRAG			
+ComboBox	event	PROGRAMMATICCHANGE			
+ComboBox	event	RANGEHIGH			
+ComboBox	event	RANGELOW			
+ComboBox	event	RIGHTCLICK			
+ComboBox	event	UIENABLE			
+ComboBox	event	UPCLICK			
+ComboBox	event	VALID			
+ComboBox	event	WHEN			
+ComboBox	method	ADDITEM			
+ComboBox	method	ADDLISTITEM			
+ComboBox	method	ADDPROPERTY			
+ComboBox	method	CLEAR			
+ComboBox	method	DRAG			
+ComboBox	method	INDEXTOITEMID			
+ComboBox	method	ITEMIDTOINDEX			
+ComboBox	method	MOVE			
+ComboBox	method	OLEDRAG			
+ComboBox	method	READEXPRESSION			
+ComboBox	method	READMETHOD			
+ComboBox	method	REFRESH			
+ComboBox	method	REMOVEITEM			
+ComboBox	method	REMOVELISTITEM			
+ComboBox	method	REQUERY			
+ComboBox	method	RESETTODEFAULT			
+ComboBox	method	SAVEASCLASS			
+ComboBox	method	SETFOCUS			
+ComboBox	method	SHOWWHATSTHIS			
+ComboBox	method	WRITEEXPRESSION			
+ComboBox	method	WRITEMETHOD			
+ComboBox	method	ZORDER			
+ComboBox	contained	DISABLEDBACKCOLOR	N	15790320	
+ListBox	class				
+ListBox	property	ANCHOR	N	0	
+ListBox	property	Application	O	object	
+ListBox	property	AUTOHIDESCROLLBAR	N	0	
+ListBox	property	BASECLASS	C	Listbox	1743
+ListBox	property	BORDERCOLOR	N	6579300	
+ListBox	property	BOUNDCOLUMN	N	1	
+ListBox	property	BOUNDTO	L	.F.	
+ListBox	property	CLASS	C	Listbox	1743
+ListBox	property	CLASSLIBRARY	C		1743
+ListBox	property	COLORSCHEME	N	1	
+ListBox	property	COLORSOURCE	N	4	
+ListBox	property	COLUMNCOUNT	N	0	
+ListBox	property	COLUMNLINES	L	.T.	
+ListBox	property	COLUMNWIDTHS	C		
+ListBox	property	COMMENT	C		
+ListBox	property	CONTROLSOURCE	C		
+ListBox	property	DISABLEDBACKCOLOR	N	16777215	
+ListBox	property	DISABLEDFORECOLOR	N	7171437	
+ListBox	property	DISABLEDITEMBACKCOLOR	N	16777215	
+ListBox	property	DISABLEDITEMFORECOLOR	N	7171437	
+ListBox	property	DISPLAYVALUE	C		
+ListBox	property	DRAGICON	C		
+ListBox	property	DRAGMODE	N	0	
+ListBox	property	ENABLED	L	.T.	
+ListBox	property	FIRSTELEMENT	N	1	
+ListBox	property	FONTBOLD	L	.F.	
+ListBox	property	FONTCHARSET	N	1	
+ListBox	property	FONTCONDENSE	L	.F.	
+ListBox	property	FONTEXTEND	L	.F.	
+ListBox	property	FONTITALIC	L	.F.	
+ListBox	property	FONTNAME	C	Arial	
+ListBox	property	FONTOUTLINE	L	.F.	
+ListBox	property	FONTSHADOW	L	.F.	
+ListBox	property	FONTSIZE	N	9	
+ListBox	property	FONTSTRIKETHRU	L	.F.	
+ListBox	property	FONTUNDERLINE	L	.F.	
+ListBox	property	HEIGHT	N	170	
+ListBox	property	HELPCONTEXTID	N	0	
+ListBox	property	INCREMENTALSEARCH	L	.T.	
+ListBox	property	INTEGRALHEIGHT	L	.F.	1743
+ListBox	property	ITEMBACKCOLOR	N	16777215	
+ListBox	property	ITEMDATA	N	0	
+ListBox	property	ITEMFORECOLOR	N	0	
+ListBox	property	ITEMIDDATA	N	0	
+ListBox	property	ITEMTIPS	L	.F.	
+ListBox	property	LEFT	N	0	
+ListBox	property	LIST	C		
+ListBox	property	LISTCOUNT	N	0	1743
+ListBox	property	LISTINDEX	N	0	
+ListBox	property	LISTITEM	C		
+ListBox	property	LISTITEMID	N	0	
+ListBox	property	MOUSEICON	C		
+ListBox	property	MOUSEPOINTER	N	0	
+ListBox	property	MOVERBARS	L	.F.	
+ListBox	property	MULTISELECT	L	.F.	
+ListBox	property	NAME	C	List	
+ListBox	property	NEWINDEX	N	0	1743
+ListBox	property	NEWITEMID	N	0	1743
+ListBox	property	NULLDISPLAY	C		
+ListBox	property	NUMBEROFELEMENTS	N	0	
+ListBox	property	OLEDRAGMODE	N	0	
+ListBox	property	OLEDRAGPICTURE	C		
+ListBox	property	OLEDROPEFFECTS	N	3	
+ListBox	property	OLEDROPHASDATA	N	-1	
+ListBox	property	OLEDROPMODE	N	0	
+ListBox	property	PARENT	error		1924
+ListBox	property	PARENTCLASS	C		1743
+ListBox	property	PICTURE	C		
+ListBox	property	RIGHTTOLEFT	L	.F.	
+ListBox	property	ROWSOURCE	C		
+ListBox	property	ROWSOURCETYPE	N	0	
+ListBox	property	SELECTED	L	.F.	
+ListBox	property	SELECTEDID	L	.F.	
+ListBox	property	SELECTEDITEMBACKCOLOR	N	13924352	
+ListBox	property	SELECTEDITEMFORECOLOR	N	16777215	
+ListBox	property	SORTED	L	.F.	
+ListBox	property	SPECIALEFFECT	N	0	
+ListBox	property	STATUSBARTEXT	C		
+ListBox	property	TABINDEX	N	0	
+ListBox	property	TABSTOP	L	.T.	
+ListBox	property	TAG	C		
+ListBox	property	TERMINATEREAD	L	.F.	
+ListBox	property	THEMES	L	.T.	
+ListBox	property	TOOLTIPTEXT	C		
+ListBox	property	TOP	N	0	
+ListBox	property	TOPINDEX	N	1	
+ListBox	property	TOPITEMID	N	-1	
+ListBox	property	VALUE	C		
+ListBox	property	VISIBLE	L	.T.	
+ListBox	property	WHATSTHISHELPID	N	-1	
+ListBox	property	WIDTH	N	100	
+ListBox	event	CLICK			
+ListBox	event	DBLCLICK			
+ListBox	event	DESTROY			
+ListBox	event	DRAGDROP			
+ListBox	event	DRAGOVER			
+ListBox	event	ERROR			
+ListBox	event	ERRORMESSAGE			
+ListBox	event	GOTFOCUS			
+ListBox	event	INIT			
+ListBox	event	INTERACTIVECHANGE			
+ListBox	event	KEYPRESS			
+ListBox	event	LOSTFOCUS			
+ListBox	event	MESSAGE			
+ListBox	event	MIDDLECLICK			
+ListBox	event	MOUSEDOWN			
+ListBox	event	MOUSEENTER			
+ListBox	event	MOUSELEAVE			
+ListBox	event	MOUSEMOVE			
+ListBox	event	MOUSEUP			
+ListBox	event	MOUSEWHEEL			
+ListBox	event	OLECOMPLETEDRAG			
+ListBox	event	OLEDRAGDROP			
+ListBox	event	OLEDRAGOVER			
+ListBox	event	OLEGIVEFEEDBACK			
+ListBox	event	OLESETDATA			
+ListBox	event	OLESTARTDRAG			
+ListBox	event	ONMOVEITEM			
+ListBox	event	PROGRAMMATICCHANGE			
+ListBox	event	RANGEHIGH			
+ListBox	event	RANGELOW			
+ListBox	event	RIGHTCLICK			
+ListBox	event	UIENABLE			
+ListBox	event	VALID			
+ListBox	event	WHEN			
+ListBox	method	ADDITEM			
+ListBox	method	ADDLISTITEM			
+ListBox	method	ADDPROPERTY			
+ListBox	method	CLEAR			
+ListBox	method	DRAG			
+ListBox	method	INDEXTOITEMID			
+ListBox	method	ITEMIDTOINDEX			
+ListBox	method	MOVE			
+ListBox	method	MOVEITEM			
+ListBox	method	OLEDRAG			
+ListBox	method	READEXPRESSION			
+ListBox	method	READMETHOD			
+ListBox	method	REFRESH			
+ListBox	method	REMOVEITEM			
+ListBox	method	REMOVELISTITEM			
+ListBox	method	REQUERY			
+ListBox	method	RESETTODEFAULT			
+ListBox	method	SAVEASCLASS			
+ListBox	method	SETFOCUS			
+ListBox	method	SHOWWHATSTHIS			
+ListBox	method	WRITEEXPRESSION			
+ListBox	method	WRITEMETHOD			
+ListBox	method	ZORDER			
+Spinner	class				
+Spinner	property	ALIGNMENT	N	1	
+Spinner	property	ANCHOR	N	0	
+Spinner	property	Application	O	object	
+Spinner	property	BACKCOLOR	N	16777215	
+Spinner	property	BASECLASS	C	Spinner	1743
+Spinner	property	BORDERCOLOR	N	6579300	
+Spinner	property	BORDERSTYLE	N	1	
+Spinner	property	CLASS	C	Spinner	1743
+Spinner	property	CLASSLIBRARY	C		1743
+Spinner	property	COLORSCHEME	N	1	
+Spinner	property	COLORSOURCE	N	4	
+Spinner	property	COMMENT	C		
+Spinner	property	CONTROLSOURCE	C		
+Spinner	property	DISABLEDBACKCOLOR	N	16777215	
+Spinner	property	DISABLEDFORECOLOR	N	7171437	
+Spinner	property	DRAGICON	C		
+Spinner	property	DRAGMODE	N	0	
+Spinner	property	ENABLED	L	.T.	
+Spinner	property	FONTBOLD	L	.F.	
+Spinner	property	FONTCHARSET	N	1	
+Spinner	property	FONTCONDENSE	L	.F.	
+Spinner	property	FONTEXTEND	L	.F.	
+Spinner	property	FONTITALIC	L	.F.	
+Spinner	property	FONTNAME	C	Arial	
+Spinner	property	FONTOUTLINE	L	.F.	
+Spinner	property	FONTSHADOW	L	.F.	
+Spinner	property	FONTSIZE	N	9	
+Spinner	property	FONTSTRIKETHRU	L	.F.	
+Spinner	property	FONTUNDERLINE	L	.F.	
+Spinner	property	FORECOLOR	N	0	
+Spinner	property	FORMAT	C		
+Spinner	property	HEIGHT	N	24	
+Spinner	property	HELPCONTEXTID	N	0	
+Spinner	property	HIDESELECTION	L	.T.	
+Spinner	property	INCREMENT	N	1	
+Spinner	property	INPUTMASK	C		
+Spinner	property	KEYBOARDHIGHVALUE	N	2147483647	
+Spinner	property	KEYBOARDLOWVALUE	N	-2147483647	
+Spinner	property	LEFT	N	0	
+Spinner	property	MARGIN	N	2	
+Spinner	property	MOUSEICON	C		
+Spinner	property	MOUSEPOINTER	N	0	
+Spinner	property	NAME	C	Spinner	
+Spinner	property	NULLDISPLAY	C		
+Spinner	property	OLEDRAGMODE	N	0	
+Spinner	property	OLEDRAGPICTURE	C		
+Spinner	property	OLEDROPEFFECTS	N	3	
+Spinner	property	OLEDROPHASDATA	N	-1	
+Spinner	property	OLEDROPMODE	N	0	
+Spinner	property	OLEDROPTEXTINSERTION	N	0	
+Spinner	property	PARENT	error		1924
+Spinner	property	PARENTCLASS	C		1743
+Spinner	property	READONLY	L	.F.	
+Spinner	property	RIGHTTOLEFT	L	.F.	
+Spinner	property	SELECTEDBACKCOLOR	N	13924352	
+Spinner	property	SELECTEDFORECOLOR	N	16777215	
+Spinner	property	SELECTONENTRY	L	.F.	
+Spinner	property	SELLENGTH	N	0	
+Spinner	property	SELSTART	N	0	
+Spinner	property	SELTEXT	C		
+Spinner	property	SPECIALEFFECT	N	0	
+Spinner	property	SPINNERHIGHVALUE	N	2147483647	
+Spinner	property	SPINNERLOWVALUE	N	-2147483647	
+Spinner	property	STATUSBARTEXT	C		
+Spinner	property	TABINDEX	N	0	
+Spinner	property	TABSTOP	L	.T.	
+Spinner	property	TAG	C		
+Spinner	property	TERMINATEREAD	L	.F.	
+Spinner	property	TEXT	C	         0	1743
+Spinner	property	THEMES	L	.T.	
+Spinner	property	TOOLTIPTEXT	C		
+Spinner	property	TOP	N	0	
+Spinner	property	VALUE	N	0	
+Spinner	property	VISIBLE	L	.T.	
+Spinner	property	WHATSTHISHELPID	N	-1	
+Spinner	property	WIDTH	N	100	
+Spinner	event	CLICK			
+Spinner	event	DBLCLICK			
+Spinner	event	DESTROY			
+Spinner	event	DOWNCLICK			
+Spinner	event	DRAGDROP			
+Spinner	event	DRAGOVER			
+Spinner	event	ERROR			
+Spinner	event	ERRORMESSAGE			
+Spinner	event	GOTFOCUS			
+Spinner	event	INIT			
+Spinner	event	INTERACTIVECHANGE			
+Spinner	event	KEYPRESS			
+Spinner	event	LOSTFOCUS			
+Spinner	event	MESSAGE			
+Spinner	event	MIDDLECLICK			
+Spinner	event	MOUSEDOWN			
+Spinner	event	MOUSEENTER			
+Spinner	event	MOUSELEAVE			
+Spinner	event	MOUSEMOVE			
+Spinner	event	MOUSEUP			
+Spinner	event	MOUSEWHEEL			
+Spinner	event	OLECOMPLETEDRAG			
+Spinner	event	OLEDRAGDROP			
+Spinner	event	OLEDRAGOVER			
+Spinner	event	OLEGIVEFEEDBACK			
+Spinner	event	OLESETDATA			
+Spinner	event	OLESTARTDRAG			
+Spinner	event	PROGRAMMATICCHANGE			
+Spinner	event	RANGEHIGH			
+Spinner	event	RANGELOW			
+Spinner	event	RIGHTCLICK			
+Spinner	event	UIENABLE			
+Spinner	event	UPCLICK			
+Spinner	event	VALID			
+Spinner	event	WHEN			
+Spinner	method	ADDPROPERTY			
+Spinner	method	DRAG			
+Spinner	method	MOVE			
+Spinner	method	OLEDRAG			
+Spinner	method	READEXPRESSION			
+Spinner	method	READMETHOD			
+Spinner	method	REFRESH			
+Spinner	method	RESETTODEFAULT			
+Spinner	method	SAVEASCLASS			
+Spinner	method	SETFOCUS			
+Spinner	method	SHOWWHATSTHIS			
+Spinner	method	WRITEEXPRESSION			
+Spinner	method	WRITEMETHOD			
+Spinner	method	ZORDER			
+Spinner	contained	DISABLEDBACKCOLOR	N	15790320	
+Container	class				
+Container	property	ACTIVECONTROL	error		1924
+Container	property	ANCHOR	N	0	
+Container	property	Application	O	object	
+Container	property	BACKCOLOR	N	15790320	
+Container	property	BACKSTYLE	N	1	
+Container	property	BASECLASS	C	Container	1743
+Container	property	BORDERCOLOR	N	6579300	
+Container	property	BORDERWIDTH	N	1	
+Container	property	CLASS	C	Container	1743
+Container	property	CLASSLIBRARY	C		1743
+Container	property	COLORSOURCE	N	4	
+Container	property	COMMENT	C		
+Container	property	CONTROLCOUNT	N	0	1743
+Container	property	CONTROLS	error		1924
+Container	property	DRAGICON	C		
+Container	property	DRAGMODE	N	0	
+Container	property	ENABLED	L	.T.	
+Container	property	FORECOLOR	N	0	
+Container	property	HEIGHT	N	75	
+Container	property	HELPCONTEXTID	N	0	
+Container	property	LEFT	N	0	
+Container	property	MOUSEICON	C		
+Container	property	MOUSEPOINTER	N	0	
+Container	property	NAME	C	Container	
+Container	property	OBJECTS	error		1924
+Container	property	OLEDRAGMODE	N	0	
+Container	property	OLEDRAGPICTURE	C		
+Container	property	OLEDROPEFFECTS	N	3	
+Container	property	OLEDROPHASDATA	N	-1	
+Container	property	OLEDROPMODE	N	0	
+Container	property	PARENT	error		1924
+Container	property	PARENTCLASS	C		1743
+Container	property	PICTURE	C		
+Container	property	SPECIALEFFECT	N	2	
+Container	property	STATUSBARTEXT	C		
+Container	property	STYLE	N	0	
+Container	property	TABINDEX	N	0	
+Container	property	TABSTOP	L	.T.	
+Container	property	TAG	C		
+Container	property	TOOLTIPTEXT	C		
+Container	property	TOP	N	0	
+Container	property	VISIBLE	L	.T.	
+Container	property	WHATSTHISHELPID	N	-1	
+Container	property	WIDTH	N	75	
+Container	event	CLICK			
+Container	event	DBLCLICK			
+Container	event	DESTROY			
+Container	event	DRAGDROP			
+Container	event	DRAGOVER			
+Container	event	ERROR			
+Container	event	GOTFOCUS			
+Container	event	INIT			
+Container	event	LOSTFOCUS			
+Container	event	MIDDLECLICK			
+Container	event	MOUSEDOWN			
+Container	event	MOUSEENTER			
+Container	event	MOUSELEAVE			
+Container	event	MOUSEMOVE			
+Container	event	MOUSEUP			
+Container	event	MOUSEWHEEL			
+Container	event	MOVED			
+Container	event	OLECOMPLETEDRAG			
+Container	event	OLEDRAGDROP			
+Container	event	OLEDRAGOVER			
+Container	event	OLEGIVEFEEDBACK			
+Container	event	OLESETDATA			
+Container	event	OLESTARTDRAG			
+Container	event	RESIZE			
+Container	event	RIGHTCLICK			
+Container	event	UIENABLE			
+Container	method	ADDOBJECT			
+Container	method	ADDPROPERTY			
+Container	method	DRAG			
+Container	method	DRAW			
+Container	method	MOVE			
+Container	method	NEWOBJECT			
+Container	method	OLEDRAG			
+Container	method	READEXPRESSION			
+Container	method	READMETHOD			
+Container	method	REFRESH			
+Container	method	REMOVEOBJECT			
+Container	method	RESETTODEFAULT			
+Container	method	SAVEASCLASS			
+Container	method	SETALL			
+Container	method	SETFOCUS			
+Container	method	SHOWWHATSTHIS			
+Container	method	WRITEEXPRESSION			
+Container	method	WRITEMETHOD			
+Container	method	ZORDER			
+PageFrame	class				
+PageFrame	property	ACTIVEPAGE	N	1	1881
+PageFrame	property	ANCHOR	N	0	
+PageFrame	property	Application	O	object	
+PageFrame	property	BASECLASS	C	Pageframe	1743
+PageFrame	property	BORDERCOLOR	N	6579300	1743
+PageFrame	property	BORDERWIDTH	N	1	1743
+PageFrame	property	CLASS	C	Pageframe	1743
+PageFrame	property	CLASSLIBRARY	C		1743
+PageFrame	property	COLORSOURCE	N	4	
+PageFrame	property	COMMENT	C		
+PageFrame	property	DRAGICON	C		
+PageFrame	property	DRAGMODE	N	0	
+PageFrame	property	ENABLED	L	.T.	
+PageFrame	property	HEIGHT	N	250	
+PageFrame	property	HELPCONTEXTID	N	0	
+PageFrame	property	LEFT	N	0	
+PageFrame	property	MEMBERCLASS	C		
+PageFrame	property	MEMBERCLASSLIBRARY	C		
+PageFrame	property	MOUSEICON	C		
+PageFrame	property	MOUSEPOINTER	N	0	
+PageFrame	property	NAME	C	Pageframe	
+PageFrame	property	OBJECTS	error		1924
+PageFrame	property	OLEDRAGMODE	N	0	
+PageFrame	property	OLEDRAGPICTURE	C		
+PageFrame	property	OLEDROPEFFECTS	N	3	
+PageFrame	property	OLEDROPHASDATA	N	-1	
+PageFrame	property	OLEDROPMODE	N	0	
+PageFrame	property	PAGECOUNT	N	0	
+PageFrame	property	PAGEHEIGHT	N	224	1743
+PageFrame	property	PAGES	error		1924
+PageFrame	property	PAGEWIDTH	N	371	1743
+PageFrame	property	PARENT	error		1924
+PageFrame	property	PARENTCLASS	C		1743
+PageFrame	property	RIGHTTOLEFT	L	.T.	
+PageFrame	property	SPECIALEFFECT	N	0	1743
+PageFrame	property	STATUSBARTEXT	C		
+PageFrame	property	TABINDEX	N	0	
+PageFrame	property	TABORIENTATION	N	0	
+PageFrame	property	TABS	L	.T.	
+PageFrame	property	TABSTOP	L	.T.	
+PageFrame	property	TABSTRETCH	N	1	
+PageFrame	property	TABSTYLE	N	0	
+PageFrame	property	TAG	C		
+PageFrame	property	THEMES	L	.T.	
+PageFrame	property	TOOLTIPTEXT	C		
+PageFrame	property	TOP	N	0	
+PageFrame	property	VISIBLE	L	.T.	
+PageFrame	property	WHATSTHISHELPID	N	-1	
+PageFrame	property	WIDTH	N	375	
+PageFrame	event	CLICK			
+PageFrame	event	DBLCLICK			
+PageFrame	event	DESTROY			
+PageFrame	event	DRAGDROP			
+PageFrame	event	DRAGOVER			
+PageFrame	event	ERROR			
+PageFrame	event	INIT			
+PageFrame	event	MIDDLECLICK			
+PageFrame	event	MOUSEDOWN			
+PageFrame	event	MOUSEENTER			
+PageFrame	event	MOUSELEAVE			
+PageFrame	event	MOUSEMOVE			
+PageFrame	event	MOUSEUP			
+PageFrame	event	MOUSEWHEEL			
+PageFrame	event	MOVED			
+PageFrame	event	OLECOMPLETEDRAG			
+PageFrame	event	OLEDRAGDROP			
+PageFrame	event	OLEDRAGOVER			
+PageFrame	event	OLEGIVEFEEDBACK			
+PageFrame	event	OLESETDATA			
+PageFrame	event	OLESTARTDRAG			
+PageFrame	event	RESIZE			
+PageFrame	event	RIGHTCLICK			
+PageFrame	event	UIENABLE			
+PageFrame	method	ADDOBJECT			
+PageFrame	method	ADDPROPERTY			
+PageFrame	method	DRAG			
+PageFrame	method	MOVE			
+PageFrame	method	NEWOBJECT			
+PageFrame	method	OLEDRAG			
+PageFrame	method	READEXPRESSION			
+PageFrame	method	READMETHOD			
+PageFrame	method	REFRESH			
+PageFrame	method	REMOVEOBJECT			
+PageFrame	method	RESETTODEFAULT			
+PageFrame	method	SAVEASCLASS			
+PageFrame	method	SETALL			
+PageFrame	method	SHOWWHATSTHIS			
+PageFrame	method	WRITEEXPRESSION			
+PageFrame	method	WRITEMETHOD			
+PageFrame	method	ZORDER			
+Page	class				
+Page	property	ACTIVECONTROL	error		1924
+Page	property	Application	O	object	
+Page	property	BACKCOLOR	N	15790320	
+Page	property	BACKSTYLE	N	1	
+Page	property	BASECLASS	C	Page	1743
+Page	property	CAPTION	C	Page	
+Page	property	CLASS	C	Page	1743
+Page	property	CLASSLIBRARY	C		1743
+Page	property	COLORSOURCE	N	4	
+Page	property	COMMENT	C		
+Page	property	CONTROLCOUNT	N	0	1743
+Page	property	CONTROLS	error		1924
+Page	property	DRAGICON	C		
+Page	property	DRAGMODE	N	0	
+Page	property	ENABLED	L	.T.	
+Page	property	FONTBOLD	L	.F.	
+Page	property	FONTCHARSET	N	1	
+Page	property	FONTCONDENSE	L	.F.	
+Page	property	FONTEXTEND	L	.F.	
+Page	property	FONTITALIC	L	.F.	
+Page	property	FONTNAME	C	Arial	
+Page	property	FONTOUTLINE	L	.F.	
+Page	property	FONTSHADOW	L	.F.	
+Page	property	FONTSIZE	N	9	
+Page	property	FONTSTRIKETHRU	L	.F.	
+Page	property	FONTUNDERLINE	L	.F.	
+Page	property	FORECOLOR	N	0	
+Page	property	HELPCONTEXTID	N	0	
+Page	property	MOUSEICON	C		
+Page	property	MOUSEPOINTER	N	0	
+Page	property	NAME	C	Page	
+Page	property	OBJECTS	error		1924
+Page	property	OLEDRAGMODE	N	0	
+Page	property	OLEDRAGPICTURE	C		
+Page	property	OLEDROPEFFECTS	N	3	
+Page	property	OLEDROPHASDATA	N	-1	
+Page	property	OLEDROPMODE	N	0	
+Page	property	PAGEORDER	N	0	
+Page	property	PARENT	error		1924
+Page	property	PARENTCLASS	C		1743
+Page	property	PICTURE	C		
+Page	property	STATUSBARTEXT	C		
+Page	property	TAG	C		
+Page	property	TOOLTIPTEXT	C		
+Page	property	WHATSTHISHELPID	N	-1	
+Page	event	ACTIVATE			
+Page	event	CLICK			
+Page	event	DBLCLICK			
+Page	event	DEACTIVATE			
+Page	event	DESTROY			
+Page	event	DRAGDROP			
+Page	event	DRAGOVER			
+Page	event	ERROR			
+Page	event	INIT			
+Page	event	MIDDLECLICK			
+Page	event	MOUSEDOWN			
+Page	event	MOUSEENTER			
+Page	event	MOUSELEAVE			
+Page	event	MOUSEMOVE			
+Page	event	MOUSEUP			
+Page	event	MOUSEWHEEL			
+Page	event	OLECOMPLETEDRAG			
+Page	event	OLEDRAGDROP			
+Page	event	OLEDRAGOVER			
+Page	event	OLEGIVEFEEDBACK			
+Page	event	OLESETDATA			
+Page	event	OLESTARTDRAG			
+Page	event	RIGHTCLICK			
+Page	method	ADDOBJECT			
+Page	method	ADDPROPERTY			
+Page	method	DRAG			
+Page	method	NEWOBJECT			
+Page	method	OLEDRAG			
+Page	method	READEXPRESSION			
+Page	method	READMETHOD			
+Page	method	REFRESH			
+Page	method	REMOVEOBJECT			
+Page	method	RESETTODEFAULT			
+Page	method	SETALL			
+Page	method	SETFOCUS			
+Page	method	SHOWWHATSTHIS			
+Page	method	WRITEEXPRESSION			
+Page	method	ZORDER			
+Grid	class				
+Grid	property	ACTIVECOLUMN	N	0	1743
+Grid	property	ACTIVEROW	N	0	1743
+Grid	property	ALLOWADDNEW	L	.F.	
+Grid	property	ALLOWAUTOCOLUMNFIT	N	0	
+Grid	property	ALLOWCELLSELECTION	L	.T.	
+Grid	property	ALLOWHEADERSIZING	L	.T.	
+Grid	property	ALLOWROWSIZING	L	.T.	
+Grid	property	ANCHOR	N	0	
+Grid	property	Application	O	object	
+Grid	property	BACKCOLOR	N	16777215	
+Grid	property	BASECLASS	C	Grid	1743
+Grid	property	CHILDORDER	C		
+Grid	property	CLASS	C	Grid	1743
+Grid	property	CLASSLIBRARY	C		1743
+Grid	property	COLUMNCOUNT	N	-1	
+Grid	property	COLUMNS	error		1924
+Grid	property	COMMENT	C		
+Grid	property	DELETEMARK	L	.T.	
+Grid	property	DRAGICON	C		
+Grid	property	DRAGMODE	N	0	
+Grid	property	ENABLED	L	.T.	
+Grid	property	FONTBOLD	L	.F.	
+Grid	property	FONTCHARSET	N	1	
+Grid	property	FONTCONDENSE	L	.F.	
+Grid	property	FONTEXTEND	L	.F.	
+Grid	property	FONTITALIC	L	.F.	
+Grid	property	FONTNAME	C	Arial	
+Grid	property	FONTOUTLINE	L	.F.	
+Grid	property	FONTSHADOW	L	.F.	
+Grid	property	FONTSIZE	N	9	
+Grid	property	FONTSTRIKETHRU	L	.F.	
+Grid	property	FONTUNDERLINE	L	.F.	
+Grid	property	FORECOLOR	N	0	
+Grid	property	GRIDLINECOLOR	N	0	
+Grid	property	GRIDLINES	N	3	
+Grid	property	GRIDLINEWIDTH	N	1	
+Grid	property	HEADERHEIGHT	N	19	
+Grid	property	HEIGHT	N	200	
+Grid	property	HELPCONTEXTID	N	0	
+Grid	property	HIGHLIGHT	L	.T.	
+Grid	property	HIGHLIGHTBACKCOLOR	N	16777215	
+Grid	property	HIGHLIGHTFORECOLOR	N	0	
+Grid	property	HIGHLIGHTROW	L	.T.	
+Grid	property	HIGHLIGHTROWLINEWIDTH	N	1	
+Grid	property	HIGHLIGHTSTYLE	N	0	
+Grid	property	LEFT	N	0	
+Grid	property	LEFTCOLUMN	N	1	1743
+Grid	property	LINKMASTER	C		
+Grid	property	LOCKCOLUMNS	N	0	
+Grid	property	LOCKCOLUMNSLEFT	N	0	
+Grid	property	MEMBERCLASS	C		
+Grid	property	MEMBERCLASSLIBRARY	C		
+Grid	property	MOUSEICON	C		
+Grid	property	MOUSEPOINTER	N	0	
+Grid	property	NAME	C	Grid	
+Grid	property	OBJECTS	error		1924
+Grid	property	OLEDRAGMODE	N	0	1743
+Grid	property	OLEDRAGPICTURE	C		
+Grid	property	OLEDROPEFFECTS	N	3	
+Grid	property	OLEDROPHASDATA	N	-1	
+Grid	property	OLEDROPMODE	N	0	
+Grid	property	OPTIMIZE	L	.F.	
+Grid	property	PANEL	N	1	
+Grid	property	PANELLINK	L	.T.	
+Grid	property	PARENT	error		1924
+Grid	property	PARENTCLASS	C		1743
+Grid	property	PARTITION	N	0	
+Grid	property	READONLY	L	.F.	
+Grid	property	RECORDMARK	L	.T.	
+Grid	property	RECORDSOURCE	C		
+Grid	property	RECORDSOURCETYPE	N	1	
+Grid	property	RELATIONALEXPR	C		
+Grid	property	RELATIVECOLUMN	N	0	1743
+Grid	property	RELATIVEROW	N	0	1743
+Grid	property	RIGHTTOLEFT	L	.F.	
+Grid	property	ROWCOLCHANGE	N	0	1743
+Grid	property	ROWHEIGHT	N	18	
+Grid	property	SCROLLBARS	N	3	
+Grid	property	SELECTEDITEMBACKCOLOR	N	16777215	
+Grid	property	SELECTEDITEMFORECOLOR	N	0	
+Grid	property	SPLITBAR	L	.T.	1743
+Grid	property	STATUSBARTEXT	C		
+Grid	property	TABINDEX	N	0	
+Grid	property	TABSTOP	L	.T.	
+Grid	property	TAG	C		
+Grid	property	THEMES	L	.T.	
+Grid	property	TOOLTIPTEXT	C		
+Grid	property	TOP	N	0	
+Grid	property	VALUE	N	0	
+Grid	property	VIEW	N	0	
+Grid	property	VISIBLE	L	.T.	
+Grid	property	WHATSTHISHELPID	N	-1	
+Grid	property	WIDTH	N	320	
+Grid	event	AFTERROWCOLCHANGE			
+Grid	event	BEFOREROWCOLCHANGE			
+Grid	event	CLICK			
+Grid	event	DBLCLICK			
+Grid	event	DELETED			
+Grid	event	DESTROY			
+Grid	event	DRAGDROP			
+Grid	event	DRAGOVER			
+Grid	event	ERROR			
+Grid	event	INIT			
+Grid	event	KEYPRESS			
+Grid	event	MIDDLECLICK			
+Grid	event	MOUSEDOWN			
+Grid	event	MOUSEENTER			
+Grid	event	MOUSELEAVE			
+Grid	event	MOUSEMOVE			
+Grid	event	MOUSEUP			
+Grid	event	MOUSEWHEEL			
+Grid	event	MOVED			
+Grid	event	OLECOMPLETEDRAG			
+Grid	event	OLEDRAGDROP			
+Grid	event	OLEDRAGOVER			
+Grid	event	OLEGIVEFEEDBACK			
+Grid	event	OLESETDATA			
+Grid	event	OLESTARTDRAG			
+Grid	event	RESIZE			
+Grid	event	RIGHTCLICK			
+Grid	event	SCROLLED			
+Grid	event	UIENABLE			
+Grid	event	VALID			
+Grid	event	WHEN			
+Grid	method	ACTIVATECELL			
+Grid	method	ADDCOLUMN			
+Grid	method	ADDOBJECT			
+Grid	method	ADDPROPERTY			
+Grid	method	AUTOFIT			
+Grid	method	DELETECOLUMN			
+Grid	method	DOSCROLL			
+Grid	method	DRAG			
+Grid	method	GRIDHITTEST			
+Grid	method	MOVE			
+Grid	method	NEWOBJECT			
+Grid	method	OLEDRAG			
+Grid	method	READEXPRESSION			
+Grid	method	READMETHOD			
+Grid	method	REFRESH			
+Grid	method	REMOVEOBJECT			
+Grid	method	RESETTODEFAULT			
+Grid	method	SAVEASCLASS			
+Grid	method	SETALL			
+Grid	method	SETFOCUS			
+Grid	method	SHOWWHATSTHIS			
+Grid	method	WRITEEXPRESSION			
+Grid	method	WRITEMETHOD			
+Grid	method	ZORDER			
+Grid	contained	HIGHLIGHTBACKCOLOR	N	13924352	
+Grid	contained	HIGHLIGHTFORECOLOR	N	16777215	
+Grid	contained	SELECTEDITEMBACKCOLOR	N	13924352	
+Grid	contained	SELECTEDITEMFORECOLOR	N	16777215	
+Column	class				
+Column	property	ALIGNMENT	N	3	
+Column	property	Application	O	object	
+Column	property	BACKCOLOR	N	16777215	
+Column	property	BASECLASS	C	Column	1743
+Column	property	BOUND	L	.T.	
+Column	property	CLASS	C	Column	1743
+Column	property	CLASSLIBRARY	C		1743
+Column	property	COLUMNORDER	N	0	
+Column	property	COMMENT	C		
+Column	property	CONTROLCOUNT	N	0	1743
+Column	property	CONTROLS	error		1924
+Column	property	CONTROLSOURCE	C		
+Column	property	CURRENTCONTROL	C		
+Column	property	DYNAMICALIGNMENT	C		
+Column	property	DYNAMICBACKCOLOR	C		
+Column	property	DYNAMICCURRENTCONTROL	C		
+Column	property	DYNAMICFONTBOLD	C		
+Column	property	DYNAMICFONTITALIC	C		
+Column	property	DYNAMICFONTNAME	C		
+Column	property	DYNAMICFONTOUTLINE	C		
+Column	property	DYNAMICFONTSHADOW	C		
+Column	property	DYNAMICFONTSIZE	C		
+Column	property	DYNAMICFONTSTRIKETHRU	C		
+Column	property	DYNAMICFONTUNDERLINE	C		
+Column	property	DYNAMICFORECOLOR	C		
+Column	property	DYNAMICINPUTMASK	C		
+Column	property	ENABLED	L	.T.	
+Column	property	FONTBOLD	L	.F.	
+Column	property	FONTCHARSET	N	1	
+Column	property	FONTCONDENSE	L	.F.	
+Column	property	FONTEXTEND	L	.F.	
+Column	property	FONTITALIC	L	.F.	
+Column	property	FONTNAME	C	Arial	
+Column	property	FONTOUTLINE	L	.F.	
+Column	property	FONTSHADOW	L	.F.	
+Column	property	FONTSIZE	N	9	
+Column	property	FONTSTRIKETHRU	L	.F.	
+Column	property	FONTUNDERLINE	L	.F.	
+Column	property	FORECOLOR	N	0	
+Column	property	FORMAT	C		
+Column	property	HEADERCLASS	C		
+Column	property	HEADERCLASSLIBRARY	C		
+Column	property	INPUTMASK	C		
+Column	property	MOUSEICON	C		
+Column	property	MOUSEPOINTER	N	0	
+Column	property	MOVABLE	L	.T.	
+Column	property	NAME	C	Column	
+Column	property	OBJECTS	error		1924
+Column	property	PARENT	error		1924
+Column	property	PARENTCLASS	C		1743
+Column	property	READONLY	L	.F.	
+Column	property	RESIZABLE	L	.T.	
+Column	property	SELECTONENTRY	L	.T.	
+Column	property	SPARSE	L	.T.	
+Column	property	STATUSBARTEXT	C		
+Column	property	TAG	C		
+Column	property	TOOLTIPTEXT	C		
+Column	property	VISIBLE	L	.T.	
+Column	property	WIDTH	N	75	
+Column	event	DESTROY			
+Column	event	ERROR			
+Column	event	INIT			
+Column	event	MOUSEENTER			
+Column	event	MOUSELEAVE			
+Column	event	MOUSEMOVE			
+Column	event	MOUSEWHEEL			
+Column	event	MOVED			
+Column	event	RESIZE			
+Column	method	ADDOBJECT			
+Column	method	ADDPROPERTY			
+Column	method	AUTOFIT			
+Column	method	NEWOBJECT			
+Column	method	READEXPRESSION			
+Column	method	READMETHOD			
+Column	method	REFRESH			
+Column	method	REMOVEOBJECT			
+Column	method	RESETTODEFAULT			
+Column	method	SETALL			
+Column	method	SETFOCUS			
+Column	method	WRITEEXPRESSION			
+Header	class				
+Header	property	ALIGNMENT	N	0	
+Header	property	Application	O	object	
+Header	property	BACKCOLOR	N	15790320	
+Header	property	BASECLASS	C	Header	1743
+Header	property	CAPTION	C	Header	
+Header	property	CLASS	C	Header	1743
+Header	property	CLASSLIBRARY	C		1743
+Header	property	COMMENT	C		
+Header	property	FONTBOLD	L	.F.	
+Header	property	FONTCHARSET	N	1	
+Header	property	FONTCONDENSE	L	.F.	
+Header	property	FONTEXTEND	L	.F.	
+Header	property	FONTITALIC	L	.F.	
+Header	property	FONTNAME	C	Arial	
+Header	property	FONTOUTLINE	L	.F.	
+Header	property	FONTSHADOW	L	.F.	
+Header	property	FONTSIZE	N	9	
+Header	property	FONTSTRIKETHRU	L	.F.	
+Header	property	FONTUNDERLINE	L	.F.	
+Header	property	FORECOLOR	N	0	
+Header	property	MOUSEICON	C		
+Header	property	MOUSEPOINTER	N	0	
+Header	property	NAME	C	Header	
+Header	property	PARENT	error		1924
+Header	property	PARENTCLASS	C		1743
+Header	property	PICTURE	C		
+Header	property	STATUSBARTEXT	C		
+Header	property	TAG	C		
+Header	property	TOOLTIPTEXT	C		
+Header	property	WORDWRAP	L	.F.	
+Header	event	CLICK			
+Header	event	DBLCLICK			
+Header	event	DESTROY			
+Header	event	ERROR			
+Header	event	INIT			
+Header	event	MIDDLECLICK			
+Header	event	MOUSEDOWN			
+Header	event	MOUSEENTER			
+Header	event	MOUSELEAVE			
+Header	event	MOUSEMOVE			
+Header	event	MOUSEUP			
+Header	event	MOUSEWHEEL			
+Header	event	RIGHTCLICK			
+Header	method	ADDPROPERTY			
+Header	method	READEXPRESSION			
+Header	method	READMETHOD			
+Header	method	REFRESH			
+Header	method	RESETTODEFAULT			
+Header	method	WRITEEXPRESSION			
+Image	class				
+Image	property	ANCHOR	N	0	
+Image	property	Application	O	object	
+Image	property	BACKSTYLE	N	1	
+Image	property	BASECLASS	C	Image	1743
+Image	property	BORDERCOLOR	N	6579300	
+Image	property	BORDERSTYLE	N	0	
+Image	property	CLASS	C	Image	1743
+Image	property	CLASSLIBRARY	C		1743
+Image	property	COLORSOURCE	N	4	
+Image	property	COMMENT	C		
+Image	property	DRAGICON	C		
+Image	property	DRAGMODE	N	0	
+Image	property	ENABLED	L	.T.	
+Image	property	HEIGHT	N	17	
+Image	property	HELPCONTEXTID	N	0	
+Image	property	LEFT	N	0	
+Image	property	MOUSEICON	C		
+Image	property	MOUSEPOINTER	N	0	
+Image	property	NAME	C	Image	
+Image	property	OLEDRAGMODE	N	0	
+Image	property	OLEDRAGPICTURE	C		
+Image	property	OLEDROPEFFECTS	N	3	
+Image	property	OLEDROPHASDATA	N	-1	
+Image	property	OLEDROPMODE	N	0	
+Image	property	PARENT	error		1924
+Image	property	PARENTCLASS	C		1743
+Image	property	PICTURE	C		
+Image	property	PICTUREVAL	C		
+Image	property	ROTATEFLIP	N	0	
+Image	property	STATUSBARTEXT	C		
+Image	property	STRETCH	N	0	
+Image	property	TAG	C		
+Image	property	THEMES	L	.T.	
+Image	property	TOOLTIPTEXT	C		
+Image	property	TOP	N	0	
+Image	property	VISIBLE	L	.T.	
+Image	property	WHATSTHISHELPID	N	-1	
+Image	property	WIDTH	N	100	
+Image	event	CLICK			
+Image	event	DBLCLICK			
+Image	event	DESTROY			
+Image	event	DRAGDROP			
+Image	event	DRAGOVER			
+Image	event	ERROR			
+Image	event	INIT			
+Image	event	MIDDLECLICK			
+Image	event	MOUSEDOWN			
+Image	event	MOUSEENTER			
+Image	event	MOUSELEAVE			
+Image	event	MOUSEMOVE			
+Image	event	MOUSEUP			
+Image	event	MOUSEWHEEL			
+Image	event	OLECOMPLETEDRAG			
+Image	event	OLEDRAGDROP			
+Image	event	OLEDRAGOVER			
+Image	event	OLEGIVEFEEDBACK			
+Image	event	OLESETDATA			
+Image	event	OLESTARTDRAG			
+Image	event	RIGHTCLICK			
+Image	event	UIENABLE			
+Image	method	ADDPROPERTY			
+Image	method	DRAG			
+Image	method	MOVE			
+Image	method	OLEDRAG			
+Image	method	READEXPRESSION			
+Image	method	READMETHOD			
+Image	method	RESETTODEFAULT			
+Image	method	SAVEASCLASS			
+Image	method	SHOWWHATSTHIS			
+Image	method	WRITEEXPRESSION			
+Image	method	WRITEMETHOD			
+Image	method	ZORDER			
+Line	class				
+Line	property	ANCHOR	N	0	
+Line	property	Application	O	object	
+Line	property	BASECLASS	C	Line	1743
+Line	property	BORDERCOLOR	N	6579300	
+Line	property	BORDERSTYLE	N	1	
+Line	property	BORDERWIDTH	N	1	
+Line	property	CLASS	C	Line	1743
+Line	property	CLASSLIBRARY	C		1743
+Line	property	COLORSOURCE	N	4	
+Line	property	COMMENT	C		
+Line	property	DRAGICON	C		
+Line	property	DRAGMODE	N	0	
+Line	property	DRAWMODE	N	13	
+Line	property	ENABLED	L	.T.	
+Line	property	HEIGHT	N	17	
+Line	property	HELPCONTEXTID	N	0	
+Line	property	LEFT	N	0	
+Line	property	LINESLANT	C	\	
+Line	property	MOUSEICON	C		
+Line	property	MOUSEPOINTER	N	0	
+Line	property	NAME	C	Line	
+Line	property	OLEDRAGMODE	N	0	
+Line	property	OLEDRAGPICTURE	C		
+Line	property	OLEDROPEFFECTS	N	3	
+Line	property	OLEDROPHASDATA	N	-1	
+Line	property	OLEDROPMODE	N	0	
+Line	property	PARENT	error		1924
+Line	property	PARENTCLASS	C		1743
+Line	property	POLYPOINTS	C		
+Line	property	ROTATION	N	0	
+Line	property	STATUSBARTEXT	C		
+Line	property	TAG	C		
+Line	property	TOOLTIPTEXT	C		
+Line	property	TOP	N	0	
+Line	property	VISIBLE	L	.T.	
+Line	property	WHATSTHISHELPID	N	-1	
+Line	property	WIDTH	N	100	
+Line	event	CLICK			
+Line	event	DBLCLICK			
+Line	event	DESTROY			
+Line	event	DRAGDROP			
+Line	event	DRAGOVER			
+Line	event	ERROR			
+Line	event	INIT			
+Line	event	MIDDLECLICK			
+Line	event	MOUSEDOWN			
+Line	event	MOUSEENTER			
+Line	event	MOUSELEAVE			
+Line	event	MOUSEMOVE			
+Line	event	MOUSEUP			
+Line	event	MOUSEWHEEL			
+Line	event	OLECOMPLETEDRAG			
+Line	event	OLEDRAGDROP			
+Line	event	OLEDRAGOVER			
+Line	event	OLEGIVEFEEDBACK			
+Line	event	OLESETDATA			
+Line	event	OLESTARTDRAG			
+Line	event	RIGHTCLICK			
+Line	event	UIENABLE			
+Line	method	ADDPROPERTY			
+Line	method	DRAG			
+Line	method	MOVE			
+Line	method	OLEDRAG			
+Line	method	READEXPRESSION			
+Line	method	READMETHOD			
+Line	method	REFRESH			
+Line	method	RESETTODEFAULT			
+Line	method	SAVEASCLASS			
+Line	method	SHOWWHATSTHIS			
+Line	method	WRITEEXPRESSION			
+Line	method	WRITEMETHOD			
+Line	method	ZORDER			
+Shape	class				
+Shape	property	ANCHOR	N	0	
+Shape	property	Application	O	object	
+Shape	property	BACKCOLOR	N	15790320	
+Shape	property	BACKSTYLE	N	1	
+Shape	property	BASECLASS	C	Shape	1743
+Shape	property	BORDERCOLOR	N	6579300	
+Shape	property	BORDERSTYLE	N	1	
+Shape	property	BORDERWIDTH	N	1	
+Shape	property	CLASS	C	Shape	1743
+Shape	property	CLASSLIBRARY	C		1743
+Shape	property	COLORSCHEME	N	1	
+Shape	property	COLORSOURCE	N	4	
+Shape	property	COMMENT	C		
+Shape	property	CURVATURE	N	0	
+Shape	property	DRAGICON	C		
+Shape	property	DRAGMODE	N	0	
+Shape	property	DRAWMODE	N	13	
+Shape	property	ENABLED	L	.T.	
+Shape	property	FILLCOLOR	N	0	
+Shape	property	FILLSTYLE	N	1	
+Shape	property	HEIGHT	N	17	
+Shape	property	HELPCONTEXTID	N	0	
+Shape	property	LEFT	N	0	
+Shape	property	MOUSEICON	C		
+Shape	property	MOUSEPOINTER	N	0	
+Shape	property	NAME	C	Shape	
+Shape	property	OLEDRAGMODE	N	0	
+Shape	property	OLEDRAGPICTURE	C		
+Shape	property	OLEDROPEFFECTS	N	3	
+Shape	property	OLEDROPHASDATA	N	-1	
+Shape	property	OLEDROPMODE	N	0	
+Shape	property	PARENT	error		1924
+Shape	property	PARENTCLASS	C		1743
+Shape	property	POLYPOINTS	C		
+Shape	property	ROTATION	N	0	
+Shape	property	SPECIALEFFECT	N	1	
+Shape	property	STATUSBARTEXT	C		
+Shape	property	STYLE	N	0	
+Shape	property	TAG	C		
+Shape	property	TOOLTIPTEXT	C		
+Shape	property	TOP	N	0	
+Shape	property	VISIBLE	L	.T.	
+Shape	property	WHATSTHISHELPID	N	-1	
+Shape	property	WIDTH	N	100	
+Shape	event	CLICK			
+Shape	event	DBLCLICK			
+Shape	event	DESTROY			
+Shape	event	DRAGDROP			
+Shape	event	DRAGOVER			
+Shape	event	ERROR			
+Shape	event	INIT			
+Shape	event	MIDDLECLICK			
+Shape	event	MOUSEDOWN			
+Shape	event	MOUSEENTER			
+Shape	event	MOUSELEAVE			
+Shape	event	MOUSEMOVE			
+Shape	event	MOUSEUP			
+Shape	event	MOUSEWHEEL			
+Shape	event	OLECOMPLETEDRAG			
+Shape	event	OLEDRAGDROP			
+Shape	event	OLEDRAGOVER			
+Shape	event	OLEGIVEFEEDBACK			
+Shape	event	OLESETDATA			
+Shape	event	OLESTARTDRAG			
+Shape	event	RIGHTCLICK			
+Shape	event	UIENABLE			
+Shape	method	ADDPROPERTY			
+Shape	method	DRAG			
+Shape	method	MOVE			
+Shape	method	OLEDRAG			
+Shape	method	READEXPRESSION			
+Shape	method	READMETHOD			
+Shape	method	REFRESH			
+Shape	method	RESETTODEFAULT			
+Shape	method	SAVEASCLASS			
+Shape	method	SHOWWHATSTHIS			
+Shape	method	WRITEEXPRESSION			
+Shape	method	WRITEMETHOD			
+Shape	method	ZORDER			
+Timer	class				
+Timer	property	Application	O	object	
+Timer	property	BASECLASS	C	Timer	1743
+Timer	property	CLASS	C	Timer	1743
+Timer	property	CLASSLIBRARY	C		1743
+Timer	property	COMMENT	C		
+Timer	property	ENABLED	L	.T.	
+Timer	property	HEIGHT	N	17	
+Timer	property	INTERVAL	N	0	
+Timer	property	LEFT	N	0	
+Timer	property	NAME	C	Timer	
+Timer	property	PARENT	error		1924
+Timer	property	PARENTCLASS	C		1743
+Timer	property	TAG	C		
+Timer	property	TOP	N	0	
+Timer	property	WIDTH	N	100	
+Timer	event	DESTROY			
+Timer	event	ERROR			
+Timer	event	INIT			
+Timer	event	TIMER			
+Timer	method	ADDPROPERTY			
+Timer	method	READEXPRESSION			
+Timer	method	READMETHOD			
+Timer	method	RESET			
+Timer	method	RESETTODEFAULT			
+Timer	method	SAVEASCLASS			
+Timer	method	WRITEEXPRESSION			
+Timer	method	WRITEMETHOD			
+Custom	class				
+Custom	property	Application	O	object	
+Custom	property	BASECLASS	C	Custom	1743
+Custom	property	CLASS	C	Custom	1743
+Custom	property	CLASSLIBRARY	C		1743
+Custom	property	COMMENT	C		
+Custom	property	CONTROLCOUNT	N	0	1743
+Custom	property	CONTROLS	error		1924
+Custom	property	HEIGHT	N	17	
+Custom	property	HELPCONTEXTID	N	0	
+Custom	property	LEFT	N	0	
+Custom	property	NAME	C	Custom	
+Custom	property	OBJECTS	error		1924
+Custom	property	PARENT	error		1924
+Custom	property	PARENTCLASS	C		1743
+Custom	property	PICTURE	C		
+Custom	property	TAG	C		
+Custom	property	TOP	N	0	
+Custom	property	WHATSTHISHELPID	N	-1	
+Custom	property	WIDTH	N	100	
+Custom	event	DESTROY			
+Custom	event	ERROR			
+Custom	event	INIT			
+Custom	method	ADDOBJECT			
+Custom	method	ADDPROPERTY			
+Custom	method	NEWOBJECT			
+Custom	method	READEXPRESSION			
+Custom	method	READMETHOD			
+Custom	method	REMOVEOBJECT			
+Custom	method	RESETTODEFAULT			
+Custom	method	SAVEASCLASS			
+Custom	method	SHOWWHATSTHIS			
+Custom	method	WRITEEXPRESSION			
+Custom	method	WRITEMETHOD			
+Session	class				
+Session	property	Application	O	object	
+Session	property	BASECLASS	C	Session	1743
+Session	property	CLASS	C	Session	1743
+Session	property	CLASSLIBRARY	C		1743
+Session	property	COMMENT	C		
+Session	property	DATASESSION	N	2	1743
+Session	property	DATASESSIONID	varies		
+Session	property	NAME	C	Session	
+Session	property	PARENT	error		1924
+Session	property	PARENTCLASS	C		1743
+Session	property	TAG	C		
+Session	event	DESTROY			
+Session	event	ERROR			
+Session	event	INIT			
+Session	method	ADDPROPERTY			
+Session	method	READEXPRESSION			
+Session	method	READMETHOD			
+Session	method	RESETTODEFAULT			
+Session	method	WRITEEXPRESSION			
+Session	contained	DATASESSIONID	N	1	
+Collection	class				
+Collection	property	Application	O	object	
+Collection	property	BASECLASS	C	Collection	1743
+Collection	property	CLASS	C	Collection	1743
+Collection	property	CLASSLIBRARY	C		1743
+Collection	property	COMMENT	C		
+Collection	property	COUNT	N	0	1743
+Collection	property	KEYSORT	N	0	
+Collection	property	NAME	C	Collection	
+Collection	property	PARENT	error		1924
+Collection	property	PARENTCLASS	C		1743
+Collection	property	TAG	C		
+Collection	event	DESTROY			
+Collection	event	ERROR			
+Collection	event	INIT			
+Collection	method	ADD			
+Collection	method	ADDPROPERTY			
+Collection	method	GETKEY			
+Collection	method	ITEM			
+Collection	method	READEXPRESSION			
+Collection	method	READMETHOD			
+Collection	method	REMOVE			
+Collection	method	RESETTODEFAULT			
+Collection	method	SAVEASCLASS			
+Collection	method	WRITEEXPRESSION			
+Collection	method	WRITEMETHOD			
+Exception	class				
+Exception	property	Application	O	object	
+Exception	property	BASECLASS	C	Exception	1743
+Exception	property	CLASS	C	Exception	1743
+Exception	property	CLASSLIBRARY	C		1743
+Exception	property	COMMENT	C		
+Exception	property	DETAILS	C		
+Exception	property	ERRORNO	N	0	
+Exception	property	LINECONTENTS	C		
+Exception	property	LINENO	N	0	
+Exception	property	MESSAGE	C		
+Exception	property	NAME	C	Exception	
+Exception	property	PARENT	error		1924
+Exception	property	PARENTCLASS	C		1743
+Exception	property	PROCEDURE	C		
+Exception	property	STACKLEVEL	N	0	
+Exception	property	TAG	C		
+Exception	property	USERVALUE	C		
+Exception	event	DESTROY			
+Exception	event	ERROR			
+Exception	event	INIT			
+Exception	method	ADDPROPERTY			
+Exception	method	READEXPRESSION			
+Exception	method	READMETHOD			
+Exception	method	RESETTODEFAULT			
+Exception	method	SAVEASCLASS			
+Exception	method	WRITEEXPRESSION			
+Exception	method	WRITEMETHOD			
+Empty	class				
+Relation	class				
+Relation	property	Application	O	object	
+Relation	property	BASECLASS	C	Relation	1743
+Relation	property	CHILDALIAS	C		
+Relation	property	CHILDORDER	C		
+Relation	property	CLASS	C	Relation	1743
+Relation	property	CLASSLIBRARY	C		1743
+Relation	property	COMMENT	C		
+Relation	property	NAME	C	Relation	
+Relation	property	ONETOMANY	L	.F.	
+Relation	property	PARENT	error		1924
+Relation	property	PARENTALIAS	C		
+Relation	property	PARENTCLASS	C		1743
+Relation	property	RELATIONALEXPR	C		
+Relation	property	TAG	C		
+Relation	event	DESTROY			
+Relation	event	ERROR			
+Relation	event	INIT			
+Relation	method	ADDPROPERTY			
+Relation	method	READEXPRESSION			
+Relation	method	READMETHOD			
+Relation	method	RESETTODEFAULT			
+Relation	method	SAVEASCLASS			
+Relation	method	WRITEEXPRESSION			
+Relation	method	WRITEMETHOD			
+Cursor	class				
+Cursor	property	ALIAS	C		
+Cursor	property	Application	O	object	
+Cursor	property	BASECLASS	C	Cursor	1743
+Cursor	property	BUFFERMODEOVERRIDE	N	1	
+Cursor	property	CLASS	C	Cursor	1743
+Cursor	property	CLASSLIBRARY	C		1743
+Cursor	property	COMMENT	C		
+Cursor	property	CURSORSOURCE	C		
+Cursor	property	DATABASE	C		
+Cursor	property	EXCLUSIVE	L	.F.	
+Cursor	property	FILTER	C		
+Cursor	property	NAME	C	Cursor	
+Cursor	property	NODATAONLOAD	L	.F.	
+Cursor	property	ORDER	C		
+Cursor	property	ORDERDIRECTION	N	0	
+Cursor	property	PARENT	error		1924
+Cursor	property	PARENTCLASS	C		1743
+Cursor	property	READONLY	L	.F.	
+Cursor	property	TAG	C		
+Cursor	event	DESTROY			
+Cursor	event	ERROR			
+Cursor	event	INIT			
+Cursor	method	ADDPROPERTY			
+Cursor	method	READEXPRESSION			
+Cursor	method	READMETHOD			
+Cursor	method	RESETTODEFAULT			
+Cursor	method	SAVEASCLASS			
+Cursor	method	WRITEEXPRESSION			
+Cursor	method	WRITEMETHOD			
+DataEnvironment	class				
+DataEnvironment	property	Application	O	object	
+DataEnvironment	property	AUTOCLOSETABLES	L	.T.	1743
+DataEnvironment	property	AUTOOPENTABLES	L	.T.	1743
+DataEnvironment	property	BASECLASS	C	Dataenvironment	1743
+DataEnvironment	property	CLASS	C	Dataenvironment	1743
+DataEnvironment	property	CLASSLIBRARY	C		1743
+DataEnvironment	property	COMMENT	C		
+DataEnvironment	property	DATASOURCE	X	.NULL.	
+DataEnvironment	property	DATASOURCETYPE	C		
+DataEnvironment	property	INITIALSELECTEDALIAS	C		
+DataEnvironment	property	NAME	C	Dataenvironment	
+DataEnvironment	property	OBJECTS	error		1924
+DataEnvironment	property	OPENVIEWS	N	0	
+DataEnvironment	property	PARENT	error		1924
+DataEnvironment	property	PARENTCLASS	C		1743
+DataEnvironment	property	TAG	C		
+DataEnvironment	event	AFTERCLOSETABLES			
+DataEnvironment	event	BEFOREOPENTABLES			
+DataEnvironment	event	DESTROY			
+DataEnvironment	event	ERROR			
+DataEnvironment	event	INIT			
+DataEnvironment	method	ADDOBJECT			
+DataEnvironment	method	ADDPROPERTY			
+DataEnvironment	method	CLOSETABLES			
+DataEnvironment	method	NEWOBJECT			
+DataEnvironment	method	OPENTABLES			
+DataEnvironment	method	READEXPRESSION			
+DataEnvironment	method	READMETHOD			
+DataEnvironment	method	REMOVEOBJECT			
+DataEnvironment	method	RESETTODEFAULT			
+DataEnvironment	method	SAVEASCLASS			
+DataEnvironment	method	WRITEEXPRESSION			
+DataEnvironment	method	WRITEMETHOD			
+Toolbar	class				
+Toolbar	property	ACTIVECONTROL	error		1924
+Toolbar	property	Application	O	object	
+Toolbar	property	BACKCOLOR	N	15790320	
+Toolbar	property	BASECLASS	C	Toolbar	1743
+Toolbar	property	CAPTION	C	Toolbar	
+Toolbar	property	CLASS	C	Toolbar	1743
+Toolbar	property	CLASSLIBRARY	C		1743
+Toolbar	property	COLORSOURCE	N	4	
+Toolbar	property	COMMENT	C		
+Toolbar	property	CONTROLBOX	L	.T.	
+Toolbar	property	CONTROLCOUNT	N	0	1743
+Toolbar	property	CONTROLS	error		1924
+Toolbar	property	DATASESSION	N	1	1743
+Toolbar	property	DATASESSIONID	N	1	
+Toolbar	property	DOCKED	L	.F.	1743
+Toolbar	property	DOCKPOSITION	N	-1	1743
+Toolbar	property	ENABLED	L	.T.	
+Toolbar	property	FORECOLOR	N	0	
+Toolbar	property	HEIGHT	N	15	
+Toolbar	property	HELPCONTEXTID	N	0	
+Toolbar	property	HWND	varies		1743
+Toolbar	property	KEYPREVIEW	L	.F.	
+Toolbar	property	LEFT	N	0	
+Toolbar	property	LOCKSCREEN	L	.F.	
+Toolbar	property	MOUSEICON	C		
+Toolbar	property	MOUSEPOINTER	N	0	
+Toolbar	property	MOVABLE	L	.T.	
+Toolbar	property	NAME	C	Toolbar	
+Toolbar	property	OBJECTS	error		1924
+Toolbar	property	OLEDRAGMODE	N	0	
+Toolbar	property	OLEDRAGPICTURE	C		
+Toolbar	property	OLEDROPEFFECTS	N	3	
+Toolbar	property	OLEDROPHASDATA	N	-1	
+Toolbar	property	OLEDROPMODE	N	0	
+Toolbar	property	PARENT	error		1924
+Toolbar	property	PARENTCLASS	C		1743
+Toolbar	property	SCALEMODE	N	3	
+Toolbar	property	SHOWTIPS	L	.T.	
+Toolbar	property	SHOWWINDOW	N	0	1743
+Toolbar	property	SIZABLE	L	.T.	
+Toolbar	property	TAG	C		
+Toolbar	property	THEMES	L	.T.	
+Toolbar	property	TOP	N	0	
+Toolbar	property	VISIBLE	L	.T.	
+Toolbar	property	WHATSTHISHELPID	N	-1	
+Toolbar	property	WIDTH	N	33	
+Toolbar	event	ACTIVATE			
+Toolbar	event	AFTERDOCK			
+Toolbar	event	BEFOREDOCK			
+Toolbar	event	CLICK			
+Toolbar	event	DBLCLICK			
+Toolbar	event	DEACTIVATE			
+Toolbar	event	DESTROY			
+Toolbar	event	DRAGDROP			
+Toolbar	event	DRAGOVER			
+Toolbar	event	ERROR			
+Toolbar	event	INIT			
+Toolbar	event	MIDDLECLICK			
+Toolbar	event	MOUSEDOWN			
+Toolbar	event	MOUSEMOVE			
+Toolbar	event	MOUSEUP			
+Toolbar	event	MOUSEWHEEL			
+Toolbar	event	MOVED			
+Toolbar	event	OLECOMPLETEDRAG			
+Toolbar	event	OLEDRAGDROP			
+Toolbar	event	OLEDRAGOVER			
+Toolbar	event	OLEGIVEFEEDBACK			
+Toolbar	event	OLESETDATA			
+Toolbar	event	OLESTARTDRAG			
+Toolbar	event	PAINT			
+Toolbar	event	RESIZE			
+Toolbar	event	RIGHTCLICK			
+Toolbar	event	UNDOCK			
+Toolbar	method	ADDOBJECT			
+Toolbar	method	ADDPROPERTY			
+Toolbar	method	DOCK			
+Toolbar	method	HIDE			
+Toolbar	method	MOVE			
+Toolbar	method	NEWOBJECT			
+Toolbar	method	OLEDRAG			
+Toolbar	method	READEXPRESSION			
+Toolbar	method	READMETHOD			
+Toolbar	method	REFRESH			
+Toolbar	method	RELEASE			
+Toolbar	method	REMOVEOBJECT			
+Toolbar	method	RESETTODEFAULT			
+Toolbar	method	SAVEASCLASS			
+Toolbar	method	SETALL			
+Toolbar	method	SHOW			
+Toolbar	method	SHOWWHATSTHIS			
+Toolbar	method	WRITEEXPRESSION			
+Toolbar	method	WRITEMETHOD			
+Toolbar	method	ZORDER			
+Separator	class				
+Separator	property	Application	O	object	
+Separator	property	BASECLASS	C	Separator	1743
+Separator	property	CLASS	C	Separator	1743
+Separator	property	CLASSLIBRARY	C		1743
+Separator	property	COMMENT	C		
+Separator	property	ENABLED	L	.T.	
+Separator	property	NAME	C	Separator	
+Separator	property	PARENT	error		1924
+Separator	property	PARENTCLASS	C		1743
+Separator	property	STYLE	N	0	
+Separator	property	TAG	C		
+Separator	property	VISIBLE	L	.T.	
+Separator	event	DESTROY			
+Separator	event	ERROR			
+Separator	event	INIT			
+Separator	method	ADDPROPERTY			
+Separator	method	READEXPRESSION			
+Separator	method	READMETHOD			
+Separator	method	RESETTODEFAULT			
+Separator	method	SAVEASCLASS			
+Separator	method	WRITEEXPRESSION			
+Separator	method	WRITEMETHOD			
+Separator	method	ZORDER			
+Hyperlink	class				
+Hyperlink	property	Application	O	object	
+Hyperlink	property	BASECLASS	C	Hyperlink	1743
+Hyperlink	property	CLASS	C	Hyperlink	1743
+Hyperlink	property	CLASSLIBRARY	C		1743
+Hyperlink	property	COMMENT	C		
+Hyperlink	property	NAME	C	Hyperlink	
+Hyperlink	property	PARENT	error		1924
+Hyperlink	property	PARENTCLASS	C		1743
+Hyperlink	property	TAG	C		
+Hyperlink	event	DESTROY			
+Hyperlink	event	ERROR			
+Hyperlink	event	INIT			
+Hyperlink	method	ADDPROPERTY			
+Hyperlink	method	GOBACK			
+Hyperlink	method	GOFORWARD			
+Hyperlink	method	NAVIGATETO			
+Hyperlink	method	READEXPRESSION			
+Hyperlink	method	READMETHOD			
+Hyperlink	method	RESETTODEFAULT			
+Hyperlink	method	SAVEASCLASS			
+Hyperlink	method	WRITEEXPRESSION			
+Hyperlink	method	WRITEMETHOD			
+CursorAdapter	class				
+CursorAdapter	property	ADOCODEPAGE	N	0	
+CursorAdapter	property	ALIAS	C		
+CursorAdapter	property	ALLOWDELETE	L	.T.	
+CursorAdapter	property	ALLOWINSERT	L	.T.	
+CursorAdapter	property	ALLOWSIMULTANEOUSFETCH	L	.F.	
+CursorAdapter	property	ALLOWUPDATE	L	.T.	
+CursorAdapter	property	Application	O	object	
+CursorAdapter	property	BASECLASS	C	Cursoradapter	1743
+CursorAdapter	property	BATCHUPDATECOUNT	N	1	
+CursorAdapter	property	BREAKONERROR	L	.F.	
+CursorAdapter	property	BUFFERMODEOVERRIDE	N	3	
+CursorAdapter	property	CLASS	C	Cursoradapter	1743
+CursorAdapter	property	CLASSLIBRARY	C		1743
+CursorAdapter	property	COMMENT	C		
+CursorAdapter	property	COMPAREMEMO	L	.T.	
+CursorAdapter	property	CONFLICTCHECKCMD	C		
+CursorAdapter	property	CONFLICTCHECKTYPE	N	0	
+CursorAdapter	property	CONVERSIONFUNC	C		
+CursorAdapter	property	CURSORSCHEMA	C		
+CursorAdapter	property	CURSORSTATUS	N	0	1743
+CursorAdapter	property	DATASOURCE	X	.NULL.	
+CursorAdapter	property	DATASOURCETYPE	C		
+CursorAdapter	property	DELETECMD	C		
+CursorAdapter	property	DELETECMDDATASOURCE	X	.NULL.	
+CursorAdapter	property	DELETECMDDATASOURCETYPE	C		
+CursorAdapter	property	FETCHASNEEDED	L	.F.	
+CursorAdapter	property	FETCHMEMO	L	.T.	
+CursorAdapter	property	FETCHMEMOCMDLIST	C		
+CursorAdapter	property	FETCHMEMODATASOURCE	X	.NULL.	
+CursorAdapter	property	FETCHMEMODATASOURCETYPE	C		
+CursorAdapter	property	FETCHSIZE	N	100	
+CursorAdapter	property	FLAGS	N	0	1743
+CursorAdapter	property	INSERTCMD	C		
+CursorAdapter	property	INSERTCMDDATASOURCE	X	.NULL.	
+CursorAdapter	property	INSERTCMDDATASOURCETYPE	C		
+CursorAdapter	property	INSERTCMDREFRESHCMD	C		
+CursorAdapter	property	INSERTCMDREFRESHFIELDLIST	C		
+CursorAdapter	property	INSERTCMDREFRESHKEYFIELDLIST	C		
+CursorAdapter	property	KEYFIELDLIST	C		
+CursorAdapter	property	MAPBINARY	L	.F.	
+CursorAdapter	property	MAPVARCHAR	L	.F.	
+CursorAdapter	property	MAXRECORDS	N	-1	
+CursorAdapter	property	NAME	C	Cursoradapter	
+CursorAdapter	property	NODATA	L	.F.	
+CursorAdapter	property	PARENT	error		1924
+CursorAdapter	property	PARENTCLASS	C		1743
+CursorAdapter	property	PREPARED	L	.F.	
+CursorAdapter	property	REFRESHALIAS	C		1743
+CursorAdapter	property	REFRESHCMD	C		
+CursorAdapter	property	REFRESHCMDDATASOURCE	X	.NULL.	
+CursorAdapter	property	REFRESHCMDDATASOURCETYPE	C		
+CursorAdapter	property	REFRESHIGNOREFIELDLIST	C		
+CursorAdapter	property	REFRESHTIMESTAMP	L	.F.	
+CursorAdapter	property	SELECTCMD	C		
+CursorAdapter	property	SENDUPDATES	L	.T.	
+CursorAdapter	property	TABLES	C		
+CursorAdapter	property	TAG	C		
+CursorAdapter	property	TIMESTAMPFIELDLIST	C		
+CursorAdapter	property	UPDATABLEFIELDLIST	C		
+CursorAdapter	property	UPDATECMD	C		
+CursorAdapter	property	UPDATECMDDATASOURCE	X	.NULL.	
+CursorAdapter	property	UPDATECMDDATASOURCETYPE	C		
+CursorAdapter	property	UPDATECMDREFRESHCMD	C		
+CursorAdapter	property	UPDATECMDREFRESHFIELDLIST	C		
+CursorAdapter	property	UPDATECMDREFRESHKEYFIELDLIST	C		
+CursorAdapter	property	UPDATEGRAM	C		1743
+CursorAdapter	property	UPDATEGRAMSCHEMALOCATION	C		
+CursorAdapter	property	UPDATENAMELIST	C		
+CursorAdapter	property	UPDATETYPE	N	1	
+CursorAdapter	property	USECURSORSCHEMA	L	.F.	
+CursorAdapter	property	USEDEDATASOURCE	L	.F.	
+CursorAdapter	property	USEMEMOSIZE	N	255	
+CursorAdapter	property	USETRANSACTIONS	L	.T.	
+CursorAdapter	property	WHERETYPE	N	3	
+CursorAdapter	event	AFTERCURSORATTACH			
+CursorAdapter	event	AFTERCURSORCLOSE			
+CursorAdapter	event	AFTERCURSORDETACH			
+CursorAdapter	event	AFTERCURSORFILL			
+CursorAdapter	event	AFTERCURSORREFRESH			
+CursorAdapter	event	AFTERCURSORUPDATE			
+CursorAdapter	event	AFTERDELETE			
+CursorAdapter	event	AFTERINSERT			
+CursorAdapter	event	AFTERRECORDREFRESH			
+CursorAdapter	event	AFTERUPDATE			
+CursorAdapter	event	BEFORECURSORATTACH			
+CursorAdapter	event	BEFORECURSORCLOSE			
+CursorAdapter	event	BEFORECURSORDETACH			
+CursorAdapter	event	BEFORECURSORFILL			
+CursorAdapter	event	BEFORECURSORREFRESH			
+CursorAdapter	event	BEFORECURSORUPDATE			
+CursorAdapter	event	BEFOREDELETE			
+CursorAdapter	event	BEFOREINSERT			
+CursorAdapter	event	BEFORERECORDREFRESH			
+CursorAdapter	event	BEFOREUPDATE			
+CursorAdapter	event	DESTROY			
+CursorAdapter	event	ERROR			
+CursorAdapter	event	INIT			
+CursorAdapter	method	ADDPROPERTY			
+CursorAdapter	method	AUTOOPEN			
+CursorAdapter	method	CURSORATTACH			
+CursorAdapter	method	CURSORDETACH			
+CursorAdapter	method	CURSORFILL			
+CursorAdapter	method	CURSORREFRESH			
+CursorAdapter	method	READEXPRESSION			
+CursorAdapter	method	READMETHOD			
+CursorAdapter	method	RECORDREFRESH			
+CursorAdapter	method	RESETTODEFAULT			
+CursorAdapter	method	SAVEASCLASS			
+CursorAdapter	method	WRITEEXPRESSION			
+CursorAdapter	method	WRITEMETHOD			
+Control	class				
+Control	property	ACTIVECONTROL	error		1924
+Control	property	ANCHOR	N	0	
+Control	property	Application	O	object	
+Control	property	BACKCOLOR	N	15790320	
+Control	property	BACKSTYLE	N	1	
+Control	property	BASECLASS	C	Control	1743
+Control	property	BORDERCOLOR	N	6579300	
+Control	property	BORDERWIDTH	N	1	
+Control	property	CLASS	C	Control	1743
+Control	property	CLASSLIBRARY	C		1743
+Control	property	COLORSOURCE	N	4	
+Control	property	COMMENT	C		
+Control	property	CONTROLCOUNT	N	0	1743
+Control	property	CONTROLS	error		1924
+Control	property	DRAGICON	C		
+Control	property	DRAGMODE	N	0	
+Control	property	ENABLED	L	.T.	
+Control	property	FORECOLOR	N	0	
+Control	property	HEIGHT	N	75	
+Control	property	HELPCONTEXTID	N	0	
+Control	property	LEFT	N	0	
+Control	property	MOUSEICON	C		
+Control	property	MOUSEPOINTER	N	0	
+Control	property	NAME	C	Control	
+Control	property	OBJECTS	error		1924
+Control	property	OLEDRAGMODE	N	0	
+Control	property	OLEDRAGPICTURE	C		
+Control	property	OLEDROPEFFECTS	N	3	
+Control	property	OLEDROPHASDATA	N	-1	
+Control	property	OLEDROPMODE	N	0	
+Control	property	PARENT	error		1924
+Control	property	PARENTCLASS	C		1743
+Control	property	PICTURE	C		
+Control	property	SPECIALEFFECT	N	2	
+Control	property	STATUSBARTEXT	C		
+Control	property	STYLE	N	0	
+Control	property	TABINDEX	N	0	
+Control	property	TABSTOP	L	.T.	
+Control	property	TAG	C		
+Control	property	TOOLTIPTEXT	C		
+Control	property	TOP	N	0	
+Control	property	VISIBLE	L	.T.	
+Control	property	WHATSTHISHELPID	N	-1	
+Control	property	WIDTH	N	75	
+Control	event	CLICK			
+Control	event	DBLCLICK			
+Control	event	DESTROY			
+Control	event	DRAGDROP			
+Control	event	DRAGOVER			
+Control	event	ERROR			
+Control	event	GOTFOCUS			
+Control	event	INIT			
+Control	event	LOSTFOCUS			
+Control	event	MIDDLECLICK			
+Control	event	MOUSEDOWN			
+Control	event	MOUSEENTER			
+Control	event	MOUSELEAVE			
+Control	event	MOUSEMOVE			
+Control	event	MOUSEUP			
+Control	event	MOUSEWHEEL			
+Control	event	MOVED			
+Control	event	OLECOMPLETEDRAG			
+Control	event	OLEDRAGDROP			
+Control	event	OLEDRAGOVER			
+Control	event	OLEGIVEFEEDBACK			
+Control	event	OLESETDATA			
+Control	event	OLESTARTDRAG			
+Control	event	RESIZE			
+Control	event	RIGHTCLICK			
+Control	event	UIENABLE			
+Control	method	ADDPROPERTY			
+Control	method	DRAG			
+Control	method	DRAW			
+Control	method	MOVE			
+Control	method	OLEDRAG			
+Control	method	READEXPRESSION			
+Control	method	READMETHOD			
+Control	method	REFRESH			
+Control	method	RESETTODEFAULT			
+Control	method	SAVEASCLASS			
+Control	method	SETFOCUS			
+Control	method	SHOWWHATSTHIS			
+Control	method	WRITEEXPRESSION			
+Control	method	WRITEMETHOD			
+Control	method	ZORDER			
+ProjectHook	class				
+ProjectHook	property	Application	O	object	
+ProjectHook	property	BASECLASS	C	Projecthook	1743
+ProjectHook	property	CLASS	C	Projecthook	1743
+ProjectHook	property	CLASSLIBRARY	C		1743
+ProjectHook	property	COMMENT	C		
+ProjectHook	property	NAME	C	Projecthook	
+ProjectHook	property	OLEDROPEFFECTS	N	3	
+ProjectHook	property	OLEDROPHASDATA	N	-1	
+ProjectHook	property	OLEDROPMODE	N	1	
+ProjectHook	property	PARENT	error		1924
+ProjectHook	property	PARENTCLASS	C		1743
+ProjectHook	property	TAG	C		
+ProjectHook	event	ACTIVATE			
+ProjectHook	event	AFTERBUILD			
+ProjectHook	event	BEFOREBUILD			
+ProjectHook	event	DEACTIVATE			
+ProjectHook	event	DESTROY			
+ProjectHook	event	ERROR			
+ProjectHook	event	INIT			
+ProjectHook	event	OLEDRAGDROP			
+ProjectHook	event	OLEDRAGOVER			
+ProjectHook	event	OLEGIVEFEEDBACK			
+ProjectHook	event	QUERYADDFILE			
+ProjectHook	event	QUERYMODIFYFILE			
+ProjectHook	event	QUERYNEWFILE			
+ProjectHook	event	QUERYREMOVEFILE			
+ProjectHook	event	QUERYRUNFILE			
+ProjectHook	event	SCCDESTROY			
+ProjectHook	event	SCCINIT			
+ProjectHook	method	ADDPROPERTY			
+ProjectHook	method	READEXPRESSION			
+ProjectHook	method	READMETHOD			
+ProjectHook	method	RESETTODEFAULT			
+ProjectHook	method	SAVEASCLASS			
+ProjectHook	method	WRITEEXPRESSION			
+ProjectHook	method	WRITEMETHOD			
+XMLAdapter	class				
+XMLAdapter	property	Application	O	object	
+XMLAdapter	property	BASECLASS	C	Xmladapter	1743
+XMLAdapter	property	CLASS	C	Xmladapter	1743
+XMLAdapter	property	CLASSLIBRARY	C		1743
+XMLAdapter	property	CODEPAGE	N	0	
+XMLAdapter	property	COMMENT	C		
+XMLAdapter	property	DECLAREXMLPREFIX	L	.F.	
+XMLAdapter	property	DISABLEENCODE	L	.F.	
+XMLAdapter	property	FORCECLOSETAG	L	.F.	
+XMLAdapter	property	FORMATTEDOUTPUT	L	.T.	
+XMLAdapter	property	ISDIFFGRAM	L	.F.	
+XMLAdapter	property	ISLOADED	L	.F.	1743
+XMLAdapter	property	IXMLDOMELEMENT	X	.NULL.	
+XMLAdapter	property	MAPBINARY	L	.F.	
+XMLAdapter	property	MAPN19_4TOCURRENCY	L	.F.	
+XMLAdapter	property	MAPVARCHAR	L	.F.	
+XMLAdapter	property	NAME	C	Xmladapter	
+XMLAdapter	property	NOCPTRANS	L	.F.	
+XMLAdapter	property	PARENT	error		1924
+XMLAdapter	property	PARENTCLASS	C		1743
+XMLAdapter	property	PRESERVEWHITESPACE	L	.F.	
+XMLAdapter	property	RESPECTCURSORCP	L	.F.	
+XMLAdapter	property	RESPECTNESTING	L	.F.	
+XMLAdapter	property	SELECTIONNAMESPACES	C		
+XMLAdapter	property	SOM	X	.NULL.	
+XMLAdapter	property	TAG	C		
+XMLAdapter	property	UNICODE	L	.F.	
+XMLAdapter	property	USECODEPAGE	L	.F.	
+XMLAdapter	property	UTF8ENCODED	L	.F.	
+XMLAdapter	property	WRAPCHARINCDATA	L	.F.	
+XMLAdapter	property	WRAPMEMOINCDATA	L	.F.	
+XMLAdapter	property	XMLCONSTRAINTS	X	.NULL.	
+XMLAdapter	property	XMLNAME	C		
+XMLAdapter	property	XMLNAMEISXPATH	L	.F.	
+XMLAdapter	property	XMLNAMESPACE	C		
+XMLAdapter	property	XMLPREFIX	C		
+XMLAdapter	property	XMLSCHEMALOCATION	C	1	
+XMLAdapter	event	DESTROY			
+XMLAdapter	event	ERROR			
+XMLAdapter	event	INIT			
+XMLAdapter	method	ADDPROPERTY			
+XMLAdapter	method	ADDTABLESCHEMA			
+XMLAdapter	method	ATTACH			
+XMLAdapter	method	LOADXML			
+XMLAdapter	method	READEXPRESSION			
+XMLAdapter	method	READMETHOD			
+XMLAdapter	method	RELEASEXML			
+XMLAdapter	method	RESETTODEFAULT			
+XMLAdapter	method	SAVEASCLASS			
+XMLAdapter	method	TOXML			
+XMLAdapter	method	WRITEEXPRESSION			
+XMLAdapter	method	WRITEMETHOD			
+XMLAdapter	object	TABLES			
+XMLTable	class				
+XMLTable	property	ALIAS	C		
+XMLTable	property	Application	O	object	
+XMLTable	property	BASECLASS	C	Xmltable	1743
+XMLTable	property	CHILDTABLE	X	.NULL.	
+XMLTable	property	CLASS	C	Xmltable	1743
+XMLTable	property	CLASSLIBRARY	C		1743
+XMLTable	property	CODEPAGE	N	0	
+XMLTable	property	COMMENT	C		
+XMLTable	property	DECLAREXMLPREFIX	L	.F.	
+XMLTable	property	FIRSTNESTEDTABLE	X	.NULL.	
+XMLTable	property	NAME	C	Xmltable	
+XMLTable	property	NESTEDINTO	X	.NULL.	
+XMLTable	property	NEXTSIBLINGTABLE	X	.NULL.	
+XMLTable	property	PARENT	error		1924
+XMLTable	property	PARENTCLASS	C		1743
+XMLTable	property	PARENTTABLE	X	.NULL.	
+XMLTable	property	TAG	C		
+XMLTable	property	XMLADAPTER	X	.NULL.	
+XMLTable	property	XMLCONSTRAINTS	X	.NULL.	
+XMLTable	property	XMLNAME	C		
+XMLTable	property	XMLNAMEISXPATH	L	.F.	
+XMLTable	property	XMLNAMESPACE	C		
+XMLTable	property	XMLPREFIX	C		
+XMLTable	event	DESTROY			
+XMLTable	event	ERROR			
+XMLTable	event	INIT			
+XMLTable	method	ADDPROPERTY			
+XMLTable	method	APPLYDIFFGRAM			
+XMLTable	method	CHANGESTOCURSOR			
+XMLTable	method	NEST			
+XMLTable	method	READEXPRESSION			
+XMLTable	method	READMETHOD			
+XMLTable	method	RESETTODEFAULT			
+XMLTable	method	SAVEASCLASS			
+XMLTable	method	TOCURSOR			
+XMLTable	method	UNNEST			
+XMLTable	method	WRITEEXPRESSION			
+XMLTable	method	WRITEMETHOD			
+XMLTable	object	FIELDS			
+XMLField	class				
+XMLField	property	ALIAS	C		
+XMLField	property	Application	O	object	
+XMLField	property	BASECLASS	C	Xmlfield	1743
+XMLField	property	CLASS	C	Xmlfield	1743
+XMLField	property	CLASSLIBRARY	C		1743
+XMLField	property	CODEPAGE	N	0	
+XMLField	property	COMMENT	C		
+XMLField	property	DATATYPE	C		
+XMLField	property	DISABLEENCODE	L	.F.	
+XMLField	property	FRACTIONDIGITS	N	-1	
+XMLField	property	ISATTRIBUTE	L	.F.	
+XMLField	property	ISBASE64	L	.F.	
+XMLField	property	ISBINARY	L	.F.	
+XMLField	property	ISNULL	L	.F.	
+XMLField	property	KEYFIELD	L	.F.	
+XMLField	property	MAXLENGTH	N	-1	
+XMLField	property	NAME	C	Xmlfield	
+XMLField	property	NOCPTRANS	L	.F.	
+XMLField	property	PARENT	error		1924
+XMLField	property	PARENTCLASS	C		1743
+XMLField	property	TAG	C		
+XMLField	property	UNICODE	L	.F.	
+XMLField	property	WRAPINCDATA	L	.F.	
+XMLField	property	XMLNAME	C		
+XMLField	property	XMLNAMEISXPATH	L	.F.	
+XMLField	property	XMLTABLE	X	.NULL.	
+XMLField	property	XMLTYPE	X	.NULL.	
+XMLField	property	XSDFRACTIONDIGITS	C		
+XMLField	property	XSDMAXLENGTH	C		
+XMLField	property	XSDTOTALDIGITS	C		
+XMLField	property	XSDTYPE	C		
+XMLField	event	DESTROY			
+XMLField	event	ERROR			
+XMLField	event	INIT			
+XMLField	method	ADDPROPERTY			
+XMLField	method	READEXPRESSION			
+XMLField	method	READMETHOD			
+XMLField	method	RESETTODEFAULT			
+XMLField	method	SAVEASCLASS			
+XMLField	method	WRITEEXPRESSION			
+XMLField	method	WRITEMETHOD			
+ReportListener	class				
+ReportListener	property	ALLOWMODALMESSAGES	L	.F.	
+ReportListener	property	Application	O	object	
+ReportListener	property	BASECLASS	C	Reportlistener	1743
+ReportListener	property	CLASS	C	Reportlistener	1743
+ReportListener	property	CLASSLIBRARY	C		1743
+ReportListener	property	COMMANDCLAUSES	X	.NULL.	
+ReportListener	property	COMMENT	C		
+ReportListener	property	CURRENTDATASESSION	N	1	
+ReportListener	property	CURRENTPASS	N	0	
+ReportListener	property	DYNAMICLINEHEIGHT	L	.T.	
+ReportListener	property	FRXDATASESSION	N	-1	
+ReportListener	property	GDIPLUSGRAPHICS	N	0	1743
+ReportListener	property	LISTENERTYPE	N	-1	
+ReportListener	property	NAME	C	Reportlistener	
+ReportListener	property	OUTPUTPAGECOUNT	N	0	1743
+ReportListener	property	OUTPUTTYPE	N	-1	
+ReportListener	property	PAGENO	N	0	1743
+ReportListener	property	PAGETOTAL	N	0	1743
+ReportListener	property	PARENT	error		1924
+ReportListener	property	PARENTCLASS	C		1743
+ReportListener	property	PREVIEWCONTAINER	X	.NULL.	
+ReportListener	property	PRINTJOBNAME	C		
+ReportListener	property	QUIETMODE	L	.F.	
+ReportListener	property	SENDGDIPLUSIMAGE	N	0	
+ReportListener	property	TAG	C		
+ReportListener	property	TWOPASSPROCESS	L	.F.	
+ReportListener	event	ADJUSTOBJECTSIZE			
+ReportListener	event	AFTERBAND			
+ReportListener	event	AFTERREPORT			
+ReportListener	event	BEFOREBAND			
+ReportListener	event	BEFOREREPORT			
+ReportListener	event	DESTROY			
+ReportListener	event	ERROR			
+ReportListener	event	EVALUATECONTENTS			
+ReportListener	event	INIT			
+ReportListener	event	LOADREPORT			
+ReportListener	event	UNLOADREPORT			
+ReportListener	method	ADDPROPERTY			
+ReportListener	method	CANCELREPORT			
+ReportListener	method	CLEARSTATUS			
+ReportListener	method	DOMESSAGE			
+ReportListener	method	DOSTATUS			
+ReportListener	method	GETPAGEHEIGHT			
+ReportListener	method	GETPAGEWIDTH			
+ReportListener	method	INCLUDEPAGEINOUTPUT			
+ReportListener	method	ONPREVIEWCLOSE			
+ReportListener	method	OUTPUTPAGE			
+ReportListener	method	READEXPRESSION			
+ReportListener	method	READMETHOD			
+ReportListener	method	RENDER			
+ReportListener	method	RESETTODEFAULT			
+ReportListener	method	SAVEASCLASS			
+ReportListener	method	SUPPORTSLISTENERTYPE			
+ReportListener	method	UPDATESTATUS			
+ReportListener	method	WRITEEXPRESSION			
+ReportListener	method	WRITEMETHOD			
+FormSet	class				
+FormSet	property	ACTIVEFORM	error		1924
+FormSet	property	Application	O	object	
+FormSet	property	AUTORELEASE	L	.F.	
+FormSet	property	BASECLASS	C	Formset	1743
+FormSet	property	BUFFERMODE	N	0	
+FormSet	property	CLASS	C	Formset	1743
+FormSet	property	CLASSLIBRARY	C		1743
+FormSet	property	COMMENT	C		
+FormSet	property	DATASESSION	N	1	1743
+FormSet	property	DATASESSIONID	N	1	
+FormSet	property	FORMCOUNT	N	0	1743
+FormSet	property	FORMS	error		1924
+FormSet	property	NAME	C	Formset	
+FormSet	property	OBJECTS	error		1924
+FormSet	property	PARENT	error		1924
+FormSet	property	PARENTCLASS	C		1743
+FormSet	property	READCYCLE	L	.T.	1743
+FormSet	property	READLOCK	L	.T.	1743
+FormSet	property	READMOUSE	L	.T.	1743
+FormSet	property	READSAVE	L	.F.	1743
+FormSet	property	READTIMEOUT	N	0	
+FormSet	property	TAG	C		
+FormSet	property	VISIBLE	L	.T.	
+FormSet	property	WINDOWLIST	C		
+FormSet	property	WINDOWTYPE	N	0	
+FormSet	event	ACTIVATE			
+FormSet	event	DEACTIVATE			
+FormSet	event	DESTROY			
+FormSet	event	ERROR			
+FormSet	event	INIT			
+FormSet	event	LOAD			
+FormSet	event	READACTIVATE			
+FormSet	event	READDEACTIVATE			
+FormSet	event	READSHOW			
+FormSet	event	READVALID			
+FormSet	event	READWHEN			
+FormSet	event	UNLOAD			
+FormSet	method	ADDOBJECT			
+FormSet	method	ADDPROPERTY			
+FormSet	method	HIDE			
+FormSet	method	NEWOBJECT			
+FormSet	method	READEXPRESSION			
+FormSet	method	READMETHOD			
+FormSet	method	REFRESH			
+FormSet	method	RELEASE			
+FormSet	method	REMOVEOBJECT			
+FormSet	method	RESETTODEFAULT			
+FormSet	method	SAVEAS			
+FormSet	method	SAVEASCLASS			
+FormSet	method	SETALL			
+FormSet	method	SHOW			
+FormSet	method	WRITEEXPRESSION			
+FormSet	method	WRITEMETHOD			
+Application	class				
+Application	property	ActiveForm	error		1429
+Application	property	ActiveProject	error		1429
+Application	property	Application	O	object	
+Application	property	AutoYield	L	.T.	
+Application	property	Caption	C	Microsoft Visual FoxPro	
+Application	property	DefaultFilePath	varies		
+Application	property	EditorOptions	C	LQKT	
+Application	property	Forms	O	object	
+Application	property	FullName	C	C:\Program Files (x86)\Microsoft Visual FoxPro 9\vfp9.exe	1429
+Application	property	Height	N	825	
+Application	property	hWnd	varies		1426
+Application	property	LanguageOptions	N	0	
+Application	property	Left	N	0	
+Application	property	Name	C	Microsoft Visual FoxPro	1429
+Application	property	Objects	O	object	
+Application	property	OLERequestPendingTimeout	N	5000	
+Application	property	OLEServerBusyRaiseError	L	.F.	
+Application	property	OLEServerBusyTimeout	N	10000	
+Application	property	Parent	O	object	
+Application	property	ProcessId	varies		1426
+Application	property	Projects	O	object	
+Application	property	ServerName	C	C:\Program Files (x86)\Microsoft Visual FoxPro 9\vfp9.exe	1429
+Application	property	StartMode	N	0	1429
+Application	property	StatusBar	C		
+Application	property	ThreadId	varies		1426
+Application	property	Top	N	0	
+Application	property	Version	C	9.0	1429
+Application	property	VFPXMLProgId	C		
+Application	property	Visible	L	.T.	
+Application	property	Width	N	1536	
+Application	method	DataToClip			
+Application	method	DoCmd			
+Application	method	Eval			
+Application	method	Help			
+Application	method	Quit			
+Application	method	RequestData			
+Application	method	SetVar			
+Project	class				
+Project	property	Application	O	object	
+Project	property	AutoIncrement	L	.F.	
+Project	property	BaseClass	C	Project	1429
+Project	property	BuildDateTime	T	  /  /     :  :   AM	1429
+Project	property	Debug	L	.T.	
+Project	property	Encrypted	L	.F.	
+Project	property	Files	O	object	
+Project	property	HomeDir	varies		
+Project	property	Icon	C		
+Project	property	MainClass	C		1429
+Project	property	MainFile	C		1429
+Project	property	Name	varies		1429
+Project	property	Parent	O	object	
+Project	property	ProjectHook	X	.NULL.	
+Project	property	ProjectHookClass	C		
+Project	property	ProjectHookLibrary	C		
+Project	property	SCCProvider	C		1429
+Project	property	ServerHelpFile	C		1426
+Project	property	ServerProject	C		1426
+Project	property	Servers	O	object	
+Project	property	TypeLibCLSID	C		1426
+Project	property	TypeLibDesc	C		1426
+Project	property	TypeLibName	C		1429
+Project	property	VersionComments	C		
+Project	property	VersionCompany	C		
+Project	property	VersionCopyright	C		
+Project	property	VersionDescription	C		
+Project	property	VersionLanguage	C		
+Project	property	VersionNumber	C	..	
+Project	property	VersionProduct	C		
+Project	property	VersionTrademarks	C		
+Project	property	Visible	L	.F.	
+Project	method	Build			
+Project	method	Cleanup			
+Project	method	Close			
+Project	method	Refresh			
+Project	method	SetMain			
+File	class				
+File	property	Application	O	object	
+File	property	CodePage	N	1252	1429
+File	property	Description	C		
+File	property	Exclude	L	.F.	
+File	property	FileClass	C		1429
+File	property	FileClassLibrary	C		1429
+File	property	LastModified	varies		1429
+File	property	Name	varies		1429
+File	property	Parent	O	object	
+File	property	ReadOnly	L	.F.	1429
+File	property	SCCStatus	N	0	1426
+File	property	Type	C	P	
+File	method	AddToSCC			
+File	method	CheckIn			
+File	method	CheckOut			
+File	method	GetLatestVersion			
+File	method	Modify			
+File	method	Remove			
+File	method	RemoveFromSCC			
+File	method	Run			
+File	method	UndoCheckOut			
+OleControl	class				
+OleControl	property	ANCHOR	N	0	
+OleControl	property	Application	O	object	
+OleControl	property	AUTOACTIVATE	N	2	
+OleControl	property	AUTOSIZE	L	.F.	
+OleControl	property	AUTOVERBMENU	L	.F.	
+OleControl	property	BASECLASS	C	Olecontrol	1743
+OleControl	property	CLASS	C	Olecontrol	1743
+OleControl	property	CLASSLIBRARY	C		1743
+OleControl	property	COMMENT	C		
+OleControl	property	DOCUMENTFILE	C		1743
+OleControl	property	DRAGICON	C		
+OleControl	property	DRAGMODE	N	0	
+OleControl	property	ENABLED	L	.T.	
+OleControl	property	HEIGHT	N	17	
+OleControl	property	HELPCONTEXTID	N	0	
+OleControl	property	HOSTNAME	C		
+OleControl	property	LEFT	N	0	
+OleControl	property	MOUSEICON	C		
+OleControl	property	MOUSEPOINTER	N	0	
+OleControl	property	NAME	varies		
+OleControl	property	OLECLASS	varies		1743
+OleControl	property	OLELCID	N	1033	1743
+OleControl	property	OLETYPEALLOWED	N	1	1743
+OleControl	property	PARENT	O	object	
+OleControl	property	PARENTCLASS	C		1743
+OleControl	property	SIZABLE	L	.T.	
+OleControl	property	STRETCH	N	0	
+OleControl	property	TABINDEX	varies		
+OleControl	property	TABSTOP	L	.T.	
+OleControl	property	TAG	C		
+OleControl	property	TOP	N	0	
+OleControl	property	VISIBLE	varies		
+OleControl	property	WHATSTHISHELPID	N	0	
+OleControl	property	WIDTH	N	100	
+OleControl	event	DESTROY			
+OleControl	event	DRAGDROP			
+OleControl	event	DRAGOVER			
+OleControl	event	ERROR			
+OleControl	event	GOTFOCUS			
+OleControl	event	INIT			
+OleControl	event	LOSTFOCUS			
+OleControl	event	MOVED			
+OleControl	event	RESIZE			
+OleControl	event	UIENABLE			
+OleControl	method	ADDPROPERTY			
+OleControl	method	DOVERB			
+OleControl	method	DRAG			
+OleControl	method	MOVE			
+OleControl	method	READEXPRESSION			
+OleControl	method	READMETHOD			
+OleControl	method	REFRESH			
+OleControl	method	RESETTODEFAULT			
+OleControl	method	SAVEASCLASS			
+OleControl	method	SETFOCUS			
+OleControl	method	SHOWWHATSTHIS			
+OleControl	method	WRITEEXPRESSION			
+OleControl	method	WRITEMETHOD			
+OleControl	method	ZORDER			
+OleBoundControl	class				
+OleBoundControl	property	ANCHOR	N	0	
+OleBoundControl	property	Application	O	object	
+OleBoundControl	property	AUTOACTIVATE	N	2	
+OleBoundControl	property	AUTOSIZE	L	.F.	
+OleBoundControl	property	AUTOVERBMENU	L	.T.	
+OleBoundControl	property	BASECLASS	C	Oleboundcontrol	1743
+OleBoundControl	property	CLASS	C	Oleboundcontrol	1743
+OleBoundControl	property	CLASSLIBRARY	C		1743
+OleBoundControl	property	COMMENT	C		
+OleBoundControl	property	CONTROLSOURCE	C		
+OleBoundControl	property	DOCUMENTFILE	C		1743
+OleBoundControl	property	DRAGICON	C		
+OleBoundControl	property	DRAGMODE	N	0	
+OleBoundControl	property	ENABLED	L	.T.	
+OleBoundControl	property	HEIGHT	N	17	
+OleBoundControl	property	HELPCONTEXTID	N	0	
+OleBoundControl	property	HOSTNAME	C		
+OleBoundControl	property	LEFT	N	0	
+OleBoundControl	property	MOUSEICON	C		
+OleBoundControl	property	MOUSEPOINTER	N	0	
+OleBoundControl	property	NAME	varies		
+OleBoundControl	property	OLECLASS	C		1743
+OleBoundControl	property	OLELCID	N	1033	1743
+OleBoundControl	property	OLETYPEALLOWED	N	-1	1743
+OleBoundControl	property	PARENT	O	object	
+OleBoundControl	property	PARENTCLASS	C		1743
+OleBoundControl	property	SIZABLE	L	.T.	
+OleBoundControl	property	STATUSBARTEXT	C		
+OleBoundControl	property	STRETCH	N	0	
+OleBoundControl	property	TABINDEX	varies		
+OleBoundControl	property	TABSTOP	L	.T.	
+OleBoundControl	property	TAG	C		
+OleBoundControl	property	TOOLTIPTEXT	C		
+OleBoundControl	property	TOP	N	0	
+OleBoundControl	property	VISIBLE	varies		
+OleBoundControl	property	WHATSTHISHELPID	N	-1	
+OleBoundControl	property	WIDTH	N	100	
+OleBoundControl	event	DESTROY			
+OleBoundControl	event	DRAGDROP			
+OleBoundControl	event	DRAGOVER			
+OleBoundControl	event	ERROR			
+OleBoundControl	event	GOTFOCUS			
+OleBoundControl	event	INIT			
+OleBoundControl	event	LOSTFOCUS			
+OleBoundControl	event	MOVED			
+OleBoundControl	event	RESIZE			
+OleBoundControl	event	UIENABLE			
+OleBoundControl	method	ADDPROPERTY			
+OleBoundControl	method	DOVERB			
+OleBoundControl	method	DRAG			
+OleBoundControl	method	MOVE			
+OleBoundControl	method	READEXPRESSION			
+OleBoundControl	method	READMETHOD			
+OleBoundControl	method	REFRESH			
+OleBoundControl	method	RESETTODEFAULT			
+OleBoundControl	method	SAVEASCLASS			
+OleBoundControl	method	SETFOCUS			
+OleBoundControl	method	SHOWWHATSTHIS			
+OleBoundControl	method	WRITEEXPRESSION			
+OleBoundControl	method	WRITEMETHOD			
+OleBoundControl	method	ZORDER			

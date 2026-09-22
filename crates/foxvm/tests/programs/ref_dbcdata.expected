@@ -1,0 +1,31 @@
+set
+setting crates.comment to boxes
+set
+
+getting crates.comment of a table
+gotboxes
+copying copied.prg 1252 .F.
+copied
+appending copied.prg 1252 .T.
+appended
+closing depot.dbc .F.
+deactivated depot.dbc
+opened depot.dbc .T..F..F.
+activated depot.dbc
+validating .F..T..F..F. -
+Validate Database DEPOT:
+Rebuilding structural index....  Index rebuilt.
+Database container is valid.
+
+validated
+validating .T..T..F..T. checked.txt
+Validate Database DEPOT:
+Rebuilding structural index....  Index rebuilt.
+Database container is valid.
+
+validated
+packing
+deactivated depot.dbc
+activated depot.dbc
+closing depot.dbc .T.
+deactivated depot.dbc

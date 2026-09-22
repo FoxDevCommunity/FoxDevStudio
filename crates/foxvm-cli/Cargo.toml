@@ -1,0 +1,13 @@
+[package]
+name = "foxvm-cli"
+version = "0.1.0"
+edition = "2024"
+publish = false
+description = "Command-line runner, checker and disassembler for FoxVM programs"
+
+[[bin]]
+name = "foxvm"
+path = "src/main.rs"
+
+[dependencies]
+foxvm = { path = "../foxvm" }

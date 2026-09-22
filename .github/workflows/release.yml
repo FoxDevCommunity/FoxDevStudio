@@ -1,0 +1,74 @@
+# A tag `v<version>` is a release. The tag must agree with package.json (the build's
+# version:check step refuses otherwise), so cutting one is: bump package.json, commit, tag,
+# push the tag. All three platforms are packaged.
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+    steps:
+      - id: v
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: version
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ needs.version.outputs.version }}
+      platforms: '["windows-latest", "ubuntu-latest", "macos-latest"]'
+
+  publish:
+    needs: [version, build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          merge-multiple: true
+          path: dist
+
+      - name: Write the asset list
+        run: |
+          {
+            echo "| Asset | What it is |"
+            echo "| --- | --- |"
+            for f in dist/*; do
+              n=$(basename "$f")
+              case "$n" in
+                FoxDevStudio-*-win-*.exe) what="the IDE installer for Windows" ;;
+                FoxDevStudio-*-win-*.zip) what="the Windows runtime: what Build Executable copies, unpacked" ;;
+                FoxDevStudio-*.AppImage) what="the IDE for Linux, as an AppImage" ;;
+                FoxDevStudio-*.deb) what="the IDE for Debian and Ubuntu" ;;
+                FoxDevStudio-*.dmg) what="the IDE for macOS, unsigned" ;;
+                foxvm-wasm-*.zip) what="the compiled VM: the wasm module, its glue and its types" ;;
+                foxvm-*) what="the command-line runner: foxvm run, check, disasm, audit" ;;
+                *) what="" ;;
+              esac
+              echo "| \`$n\` | $what |"
+            done
+            echo
+            echo "The assets are unsigned."
+          } > assets.md
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: FoxDev Studio ${{ needs.version.outputs.version }}
+          body_path: assets.md
+          generate_release_notes: true
+          prerelease: false
+          files: dist/*
+          fail_on_unmatched_files: true

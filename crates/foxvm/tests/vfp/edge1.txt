@@ -1,0 +1,26 @@
+
+ansi cent on empty [    .  .  ][    .  .     :  :   AM]
+taiwan cent on empty [    /  /  ][1900/05/04][1911/05/04]
+italian cent on [07-09-2026]
+short [12/25/2026][12/25/2026 9:03:00 AM][12/25/2026]
+long [Friday, December 25, 2026][Friday, December 25, 2026, 9:03:00 AM] 
+--- bad arguments
+date bad [ERR   10 AMERICAN]   
+decimals 19 [ERR   10 2]
+hours 13 [ERR   10 12]
+fdow 8 [ERR   46 1]
+fweek 4 [ERR   46 1]
+--- multi character marks and points
+mark ab [09a07a26][a] 
+point ab [1234a5][a]
+sep ab [1a234.50][a]
+currency 10 [012345678] 
+currency 9 [012345678][81,234.50] 
+--- empty arguments ERR   46 
+point empty [1234.5][.]ERR 1903  
+null [.NULL.]
+--- question mark of dates
+[09/07/26]
+09/07/26
+09/07/26 01:05:09 PM 
+09/07/26 13:05:09

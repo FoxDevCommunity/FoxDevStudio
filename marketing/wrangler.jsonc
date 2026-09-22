@@ -1,0 +1,18 @@
+// The site on Cloudflare: a Worker that serves the static files Astro builds into dist/.
+// Cloudflare Pages now lives inside Workers, and wrangler 4 sends Pages commands here, so
+// this is the honest shape rather than the older `pages deploy`.
+//
+// `npm run deploy` builds and deploys by hand; .github/workflows/site.yml does the same on
+// every push to master that touches the site.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "foxdevstudio",
+  "compatibility_date": "2026-09-21",
+  "assets": {
+    "directory": "./dist",
+    // Astro writes docs/bytecode.html, and the links say /docs/bytecode; this serves one for
+    // the other, and a missing page gets a 404 rather than the home page
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

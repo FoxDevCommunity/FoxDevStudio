@@ -1,0 +1,12 @@
+FoxDev
+debug
+no such constant
+on
+off again
+.T. .F. .F. .F.
+        80         63          0.5          0.5
+         1          0         -1          0          0          0
+genmenu.prg beautify.app coverage.app
+copied
+         7
+boot.prg

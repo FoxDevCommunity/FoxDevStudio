@@ -1,0 +1,38 @@
+import type { ControlDescriptor } from '../types';
+import * as c from '../common';
+
+export const checkbox: ControlDescriptor = {
+  type: 'CheckBox',
+  baseClass: 'checkbox',
+  displayName: 'Check Box',
+  toolboxGroup: 'Standard',
+  icon: 'CheckboxChecked',
+  namePrefix: 'Check',
+  defaultSize: { Width: 100, Height: 17 },
+  defaultEvent: 'Click',
+  properties: c.props(
+    c.layoutProps(100, 17),
+    c.prop('Caption', 'text', 'Appearance', 'Check1'),
+    c.prop('ControlSource', 'expression', 'Data', ''),
+    c.prop('Value', 'boolean', 'Data', false),
+    c.alignmentProp(0),
+    c.prop('AutoSize', 'boolean', 'Layout', false),
+    c.enumProp('Style', 'Appearance', 0, c.enumValues(['Standard', 'Graphical'])),
+    c.prop('Picture', 'picture', 'Appearance', ''),
+    c.prop('DownPicture', 'picture', 'Appearance', ''),
+    c.prop('DisabledPicture', 'picture', 'Appearance', ''),
+    c.picturePositionProp,
+    c.prop('Centered', 'boolean', 'Appearance', false, { description: 'Centres the check box in its control area, e.g. inside a grid column' }),
+    c.themesProp,
+    c.backStyleProp,
+    c.enumProp('BorderStyle', 'Appearance', 0, c.enumValues(['None', 'Fixed Single'])),
+    c.fontProps,
+    c.colorProps(c.COLOR_BUTTONFACE),
+    c.prop('PictureMargin', 'number', 'Appearance', 0, { min: 0 }),
+    c.prop('PictureSpacing', 'number', 'Appearance', 0, { min: 0 }),
+    c.prop('PictureVal', 'text', 'Appearance', '', { hidden: true }),
+    c.behaviorProps,
+    c.tabProps,
+  ),
+  events: c.events(c.baseEvents, c.mouseEvents, c.focusEvents, c.changeEvents, c.dragEvents),
+};

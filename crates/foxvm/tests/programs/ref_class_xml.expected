@@ -1,0 +1,25 @@
+Xmladapter Xmladapter Xmladapter []
+[] [] [] .F.
+0 .F. .F. .F. .F.
+.F. .F. .T. .F.
+.F. .F. .F. .F.
+.F. .F. .F. .F. .F.
+.F. 1 []
+X X X
+.F. .T.
+.T. .T. .T.
+.T. .T. .T.
+.F. .F. .F.
+Xmltable Xmltable Xmltable []
+[] X []
+X X X
+X X 0
+.T. .T. .T.
+.T. .T. .T.
+.F. .F.
+Xmlfield Xmlfield Xmlfield [] []
+.F. .F. .F. .F. .F.
+-1 -1 .F. .F.
+X [] []
+[] [] X
+.F. .F. .F. []

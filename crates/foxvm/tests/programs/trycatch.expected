@@ -1,0 +1,14 @@
+in try
+caught User Thrown Error .
+finally
+inner finally
+outer User Thrown Error .
+
+cleanupreturned
+         1
+fin one
+fin two
+right
+outer got User Thrown Error .
+2071 thrown
+done

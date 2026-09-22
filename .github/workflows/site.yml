@@ -1,0 +1,52 @@
+# The website, deployed to Cloudflare whenever a push to main touches it. The instruction
+# reference is generated from crates/foxvm/src/bytecode.rs, so a change there (regenerated
+# and committed, or the site's build refuses) redeploys as well.
+#
+# The site is a Worker serving static assets - what Cloudflare Pages has become - configured
+# by marketing/wrangler.jsonc. Needs two repository secrets: CLOUDFLARE_API_TOKEN (a token
+# with Account > Workers Scripts > Edit) and CLOUDFLARE_ACCOUNT_ID.
+name: Site
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - 'marketing/**'
+      - 'crates/foxvm/src/bytecode.rs'
+      - '.github/workflows/site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
+# a deploy runs to the end; the next one waits
+concurrency:
+  group: site
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: marketing
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: marketing/package-lock.json
+
+      - run: npm ci
+
+      # prebuild checks the generated instruction data against the VM source
+      - run: npm run build
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: marketing
+          command: deploy

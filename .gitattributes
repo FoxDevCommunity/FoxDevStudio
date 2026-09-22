@@ -1,0 +1,49 @@
+# Line endings are part of the contract here, not a preference.
+#
+# Tests read source files and compare them: `tests/reference/coverage.test.ts` finds the SET
+# options this runtime handles by matching the text of `vm.rs`, and the samples test compares
+# imported documents. A checkout with CRLF endings makes those regexes miss - quietly, so the
+# coverage map came out *wrong* rather than failing - and it has happened twice, both times in a
+# fresh worktree, because `core.autocrlf=true` on Windows converts on checkout.
+#
+# So: source is LF everywhere, whatever the machine is set to. Anything a test compares as bytes
+# is binary and git must not touch it at all - the Visual FoxPro fixtures especially, which are
+# DBF tables full of text and would be mangled by a wrong guess.
+
+* -text
+
+*.rs        text eol=lf
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.json      text eol=lf
+*.jsonc     text eol=lf
+*.md        text eol=lf
+*.html      text eol=lf
+*.css       text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+*.txt       text eol=lf
+*.lock      text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+
+# FoxPro source and the documents the designers write
+*.prg       text eol=lf
+*.expected  text eol=lf
+*.qpr       text eol=lf
+*.h         text eol=lf
+*.fxf       text eol=lf
+*.fxm       text eol=lf
+*.fxp       text eol=lf
+*.fxc       text eol=lf
+*.fxr       text eol=lf
+*.fxl       text eol=lf
+
+# What the tests read as bytes: Visual FoxPro's own files, written by Visual FoxPro
+crates/foxvm/tests/fixtures/** binary
+resources/ffc/** binary
+resources/native/win32/*.dll binary

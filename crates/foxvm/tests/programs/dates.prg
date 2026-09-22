@@ -1,0 +1,15 @@
+d1 = {^2024-01-31}
+d2 = {^2024-02-01}
+? d1 < d2
+? d2 - d1
+? d1 + 1 = d2
+? d1
+SET CENTURY ON
+? d1
+SET DATE TO YMD
+? d1
+SET DATE TO BRITISH
+? d2
+? {}
+? {^2024-03-01 10:30:00} > {^2024-03-01}
+* COVERS: SET CENTURY, SET DATE

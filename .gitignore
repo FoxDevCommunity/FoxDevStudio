@@ -1,0 +1,29 @@
+node_modules/
+out/
+dist/
+release/
+coverage/
+*.log
+.DS_Store
+target/
+src/wasm/foxvm/generated/
+resources/native/*
+# ...but the note saying what the redistributed Visual C++ runtimes are is documentation
+!resources/native/win32/
+resources/native/win32/*
+!resources/native/win32/README.md
+# the Visual C++ 7.1 runtimes are tracked: a CI runner has no Visual FoxPro to take them from
+!resources/native/win32/msvcr71.dll
+!resources/native/win32/msvcp71.dll
+
+# the sample .fll libraries the tests build from Visual FoxPro's own API samples
+tests/fll/build/
+
+# worktrees an agent works in: checkouts of this repo, not part of it
+.claude/worktrees/
+
+# tsc -b writes these on every build, so they conflict on every branch
+tsconfig.*.tsbuildinfo
+
+# a copy of the encryption library the tests in tests/fll can use; not ours to ship
+/vfpencryption71.fll

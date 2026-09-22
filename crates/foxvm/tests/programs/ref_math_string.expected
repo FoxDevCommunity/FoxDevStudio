@@ -1,0 +1,30 @@
+              3.1416
+              0.0000               1.0000               0.0000
+               1.0000               -1.0000
+               1.5708                0.0000                0.7854
+               0.7854                3.1416
+.T. .T.
+         1          8          7
+         6          1
+.T. .F. .T.
+               1.2346                2.0000               1.2345
+         3 ab ef bcd
+         3          3 aXcdef
+aBc
+R163 R163 S530 S530
+         4          4          1
+.T. .T. .F. .T.
+.F.
+         3
+the quick brown fox
+jumps over the lazy
+         2          2          0
+         2
+         1
+mixed case MIXED CASE
+YWJj
+abc
+616263
+abc
+         4
+round trip

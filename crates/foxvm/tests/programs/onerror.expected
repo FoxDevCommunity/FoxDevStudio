@@ -1,0 +1,7 @@
+before
+
+handled
+after
+end
+
+try wins: Variable 'NOTHERE' is not found.

@@ -1,0 +1,83 @@
+# Argument forms no golden measures yet, one per line: NAME(counts).
+#
+# `node scripts/arg-forms.mjs` writes this list; `--check` fails when a form appears that is not
+# on it, and when a form on it has since been measured. It is debt, and it only shrinks: see the
+# hard rule in docs/coverage-plan.md - an element is covered per documented argument form, not
+# per name, because `SET(cSetting)` having a golden while `SET(cSetting, nSecondSetting)` did not
+# is how `SET("HELP", 1)` came to answer the switch and a sample met "Variable 'ON' is not found".
+# AGETCLASS opens the Open Class dialog and waits for a person to choose a library and a
+# class; a probe that calls it hangs vfp9.exe and leaves the window standing.
+AGETCLASS(1,2,3,4,5,6,7)
+# AMOUSEOBJ answers about whatever the mouse is over, which needs a person with a hand on it.
+AMOUSEOBJ(1,2)
+# ANETRESOURCES lists what a network share holds, and there is no share to point it at.
+ANETRESOURCES(1,2,3)
+# COMARRAY, COMCLASSINFO and COMPROP all take a live COM object as their first argument, and all
+# four forms measure real against vfp9.exe with CREATEOBJECT("Scripting.FileSystemObject") -
+# COMCLASSINFO(oFS) answers "Scripting.FileSystemObject", COMCLASSINFO(oFS, 4) its CLSID,
+# COMARRAY(oFS) 1, COMPROP(oFS, "UTF8") 0. But this runtime reaches COM through the `foxole`
+# napi addon, which the VM's own golden tests do not have: CREATEOBJECT() here makes a plain
+# mock object with that class name and none of a real FileSystemObject's members, so a golden
+# built on it would not be asking the question its COVERS: line claims to answer.
+COMARRAY(1,2)
+COMCLASSINFO(1,2)
+COMPROP(2,3)
+# CREATEOBJECTEX(cCLSID|cPROGID, "") measures true against vfp9.exe with
+# "Scripting.FileSystemObject" the same way CREATEOBJECT() does - it is the same object, made a
+# different way - and the same foxole gap applies: nothing here can ask this runtime's own
+# CREATEOBJECTEX() to make a real one. The one-argument form is measured and covered:
+# ref_argforms_object.prg, error 1229.
+CREATEOBJECTEX(2,3)
+# The DDE family is a conversation between two Windows programs over the window messages they
+# send each other, which needs a second running application on the other end - nothing this
+# project controls can be a fair partner for one.
+DDEENABLED(0,1,2)
+DDEEXECUTE(2,3)
+DDEPOKE(3,4,5)
+DDEREQUEST(2,3,4)
+DDESETOPTION(1,2)
+DDESETSERVICE(2,3)
+DDESETTOPIC(2,3)
+# EVENTHANDLER(oCOMObject, oVFPObject [, lUnbind]) needs a live COM object to bind events from,
+# the same foxole gap as COMARRAY and friends above.
+EVENTHANDLER(2,3)
+# GETCOLOR opens the colour picker and waits for a person, as the other pickers do.
+GETCOLOR(0,1)
+# GETCP opens the Code Page dialog and does not let go: probed once under the harness that
+# answers a stuck dialog with Escape, Visual FoxPro never got past it and had to be killed.
+GETCP(2,3)
+# GETDIR and GETFILE open a folder or file picker and wait for a person to answer it; a probe
+# that calls one hangs vfp9.exe and leaves a window open, so these are never called.
+GETDIR(0,1,2,3,4)
+GETFILE(0,1,2,3,4,5)
+# GETFONT opens the font dialog and waits for a person.
+GETFONT(0,1,2,3,4)
+# GETINTERFACE(oObject, cIID|cInterface [, cTypelib|cProgID]) asks a live COM object for another
+# of its interfaces - the same foxole gap.
+GETINTERFACE(2,3)
+# GETOBJECT(cFileName|Moniker [, cClassName]) activates a real Automation object through
+# Windows' own moniker resolution - COM again, and the same gap.
+GETOBJECT(1,2)
+# GETPICT opens a picture-file dialog and waits for a person the same way GETFILE does.
+GETPICT(0,1,2,3)
+# INPUTBOX opens a modal dialog and waits for a person to answer it or cancel; never called.
+INPUTBOX(1,2,3,4,5)
+# MESSAGEBOX opens a modal dialog and waits for a person to click a button; never called.
+MESSAGEBOX(1,2,3,4)
+# MSGBOX is MESSAGEBOX under an older name and opens the same modal dialog; never called.
+MSGBOX(1,2,3,4)
+# PARSFONT is not a function at all: asked for one, Visual FoxPro goes looking for
+# parsfont.prg and answers "File 'parsfont.prg' does not exist" - measured. There is no form
+# of a function that is not there to measure, and the reference listing it is simply wrong.
+PARSFONT(0,1,2,3,4)
+# PUTFILE opens a Save As dialog and waits for a person the same way GETFILE does.
+PUTFILE(0,1,2,3)
+# The SQL pass-through family needs a live ODBC data source to connect to, which nothing in
+# this project's test environment provides.
+SQLCOLUMNS(3,4)
+SQLDISCONNECT(0)
+SQLMORERESULTS(2)
+SQLPREPARE(3)
+SQLSETPROP(2)
+SQLSTRINGCONNECT(2)
+SQLTABLES(2,3)

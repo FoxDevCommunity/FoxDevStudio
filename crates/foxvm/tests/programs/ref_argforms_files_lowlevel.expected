@@ -1,0 +1,42 @@
+ADIR(1) count          2
+A.TXT          5 .A...
+B.DAT          6 .A...
+ADIR(3) count          5
+.          0 ....D
+..          0 ....D
+A.TXT          5 .A...
+B.DAT          6 .A...
+CHILDDIR          0 ....D
+ADIR(4) count          2
+a.txt
+b.dat
+DIRECTORY(2) flag0 .T.
+DIRECTORY(2) flag1 .T.
+DIRECTORY(2) missing .F.
+DISKSPACE(1) drive alone .T.
+DISKSPACE(2) total .T.
+DISKSPACE(2) free (default) .T.
+DISKSPACE(2) user free .T.
+DISPLAYPATH(1) error 1229 Too few arguments.
+FCREATE(2) handle valid .T.
+FPUTS still writes it .F.
+FDATE(1) type D
+FDATE(2) type T
+FDATE(2,0) same as FDATE(1) .T.
+FFLUSH(2) forced .T.
+FFLUSH(2) not forced .T.
+FGETS(2) short line
+FGETS(1) rest  one
+FGETS(1) next line line two
+FPUTS(3) short          5
+FPUTS(2) whole          5
+FPUTS(3) result abc
+xyz
+
+FWRITE(3) short          3
+FWRITE(2) whole          3
+FWRITE(3) result abcxyz
+FULLPATH(1) finds it .T.
+FULLPATH(1) upper case .T.
+LOCFILE(2) finds it .T.
+LOCFILE(3) finds it .T.

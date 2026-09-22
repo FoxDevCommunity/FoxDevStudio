@@ -1,0 +1,25 @@
+N .T. .T.
+C 8 11
+: :
+T .T.
+.T.
+N .T. .T.
+.T.
+.T.
+L L L
+.F. 0 0 0
+N
+.T. .T. .F.
+N .T. .T.
+SYSMETRIC(35): error 11
+SYSMETRIC(0): error 11
+N
+N .T.
+N .T.
+plain ascii
+.T.
+.F. .F.
+N .T.
+.T.
+400
+C N N

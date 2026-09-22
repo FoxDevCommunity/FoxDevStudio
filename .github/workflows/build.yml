@@ -1,0 +1,159 @@
+# The build every other workflow calls: check the code, then package the product.
+#
+# A clean checkout has no compiled VM and no native pieces, so every runner needs Rust with
+# the wasm32 target (rust-toolchain.toml names it) and npm's install scripts, which fetch
+# the wasm-pack binary that scripts/build-wasm.mjs runs. The COM addon and the .fll host are
+# built on Windows only, where Visual Studio's x86 and x64 C++ tools are; everywhere else the
+# ensure-* scripts say so and exit 0. The Visual C++ 7.1 runtimes the host ships beside it
+# are tracked in git, because no runner has a Visual FoxPro to take them from.
+#
+# Nothing is signed. The macOS disk image is unsigned and Gatekeeper says so; that is a
+# separate decision with certificates behind it.
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: The version to stamp into the packages (extraMetadata.version)
+        type: string
+        required: true
+      platforms:
+        description: JSON list of runners to package on
+        type: string
+        default: '["windows-latest"]'
+      package:
+        description: Package after the checks, or only check
+        type: boolean
+        default: true
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            marketing/package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+
+      - run: npm ci
+
+      # typecheck, lint, vitest, cargo test and the argument-form check. The suites that
+      # need Visual FoxPro, an .fll or COM skip themselves when those are not there.
+      - run: npm run check
+
+      # The instruction reference on the site is generated from the VM's source, and the
+      # site's build refuses to run when the generated file is stale. Checked here so a
+      # change to bytecode.rs without a regeneration fails the main pipeline, not only the
+      # site's deploy.
+      - name: Build the site
+        if: runner.os == 'Linux'
+        working-directory: marketing
+        run: |
+          npm ci
+          npm run build
+
+  package:
+    needs: check
+    if: inputs.package
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ${{ fromJSON(inputs.platforms) }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      # no certificate here, so do not go looking for one
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+
+      - uses: Swatinem/rust-cache@v2
+
+      # the Electron binary and electron-builder's own downloads, so a run does not fetch
+      # them again
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/electron
+            ~/.cache/electron-builder
+            ~/AppData/Local/electron/Cache
+            ~/AppData/Local/electron-builder/Cache
+          key: electron-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - run: npm ci
+
+      # on a tag, the tag and package.json must agree, or nothing is built
+      - run: npm run version:check
+
+      # runs ensure-native first: the wasm everywhere, the native pieces on Windows
+      - run: npm run build
+
+      - name: Package
+        run: npm run package:ci -- --config.extraMetadata.version=${{ inputs.version }}
+
+      - name: Build the command-line runner
+        run: cargo build --release -p foxvm-cli
+
+      - name: Stage the artifacts
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          case "$RUNNER_OS" in
+            Windows) os=win ;;
+            Linux) os=linux ;;
+            macOS) os=mac ;;
+          esac
+          case "$(uname -m)" in
+            x86_64) arch=x64 ;;
+            arm64 | aarch64) arch=arm64 ;;
+            *) arch="$(uname -m)" ;;
+          esac
+          mkdir -p dist
+          shopt -s nullglob
+          for f in release/*.exe release/*.zip release/*.AppImage release/*.deb release/*.dmg; do
+            cp "$f" dist/
+          done
+          if [ "$os" = win ]; then
+            7z a "dist/foxvm-$VERSION-win-$arch.zip" ./target/release/foxvm.exe > /dev/null
+            # the compiled VM on its own: the module, its glue and its types
+            (cd src/wasm/foxvm/generated && 7z a "../../../../dist/foxvm-wasm-$VERSION.zip" foxvm.js foxvm.d.ts foxvm_bg.wasm foxvm_bg.wasm.d.ts > /dev/null)
+          else
+            tar -C target/release -czf "dist/foxvm-$VERSION-$os-$arch.tar.gz" foxvm
+          fi
+          ls -l dist
+
+      # the release is the durable copy; artifacts only carry the files to the publish job
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 1

@@ -1,0 +1,4 @@
+before
+error 1930 Cannot redefine THISFORM.
+error 1930 Cannot redefine THIS.
+after

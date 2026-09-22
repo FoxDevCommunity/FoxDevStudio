@@ -1,0 +1,25 @@
+DATE an ordinary one 03/15/2024
+DATE the earliest year the range allows 01/01/0100
+DATE February 30th is the empty date   /  /
+DATE February 29th in a leap year 02/29/2024
+
+DATE month 13 is out of the structural range         11
+
+DATE year 99 is below the range         11
+DATE with only a year is too few arguments, not error 11       1229
+DATE with a year and a month is still too few       1229
+DATETIME with hours, minutes and seconds 03/15/2024 01:45:30 PM
+DATETIME with only an hour 03/15/2024 05:00:00 AM
+DATETIME with an hour and a minute 03/15/2024 05:30:00 AM
+DATETIME with none of hms is midnight 03/15/2024 12:00:00 AM
+
+DATETIME hour 24 is out of range         11
+DATETIME with only a year is too few arguments       1229
+DATETIME with a year and a month is still too few       1229
+DTOC formatted, no second argument 03/15/2024
+DTOC with a 1 20240315
+DTOC with a 0 is the same unformatted form 20240315
+QUARTER with no argument at all       1229
+CDOW of that January 1st Saturday
+WEEK rule 1 is the week holding January 1st  1
+WEEK rule 2 needs four days in the new year 52

@@ -1,0 +1,29 @@
+.T. .F.
+depot.dbc .T.
+.T. .F.
+         1 PARTS
+.T.
+the parts we stock
+.T.
+Database   depot
+Table      PARTS
+SELECT code, name, price FROM parts WHERE price > 2
+         1 DEAR
+DEAR          2
+Bolt
+Bearing
+Database   depot
+Table      COMPONENTS
+View       DEAR
+.F.
+Database   depot
+Validate Database DEPOT:
+Rebuilding structural index....  Index rebuilt.
+Database container is valid.
+
+.T.
+.T.
+.T. .F.
+.T.
+Database   depot
+.T. .F.

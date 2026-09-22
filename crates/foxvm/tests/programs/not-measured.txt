@@ -1,0 +1,27 @@
+# The goldens Visual FoxPro cannot be asked about, and why. Written by
+# `node scripts/vfp-expected.mjs --all`; read by crates/foxvm/tests/golden.rs.
+#
+# Their .expected files say what we believe the product does, not what it was seen to do.
+
+onerror.prg: Visual FoxPro never finished and had to be killed
+ref_asking.prg: Visual FoxPro stopped to ask a person, and answering did not move it on
+ref_build.prg: Visual FoxPro never finished and had to be killed
+ref_connections.prg: Visual FoxPro never finished and had to be killed
+ref_convert.prg: Visual FoxPro never finished and had to be killed
+ref_database.prg: what it printed names the directory it ran in, which is a different one every run
+ref_debugger.prg: Visual FoxPro never finished and had to be killed
+ref_designers.prg: Visual FoxPro never finished and had to be killed
+ref_files.prg: what it printed names the directory it ran in, which is a different one every run
+ref_idx.prg: what it printed names the directory it ran in, which is a different one every run
+ref_listing.prg: what it printed names the directory it ran in, which is a different one every run
+ref_memo.prg: Visual FoxPro stopped to ask a person, which the harness answered as a cancel
+ref_readclauses.prg: Visual FoxPro stopped to ask a person, and answering did not move it on
+ref_reports.prg: Visual FoxPro never finished and had to be killed
+
+# Language elements no golden can exercise, and why. They sit under the list because a sweep
+# rewrites the entries above and carries these lines over unchanged.
+#
+# dbc_AfterDropOffline: the product fires it only when a view really did come back online, and
+# DROPOFFLINE() answers .F. for a view over native data every time - measured, with both
+# offline procedures in the container and only dbc_BeforeDropOffline firing. Nothing here is
+# ever genuinely disconnected from a remote source, so the event cannot be reached at all.

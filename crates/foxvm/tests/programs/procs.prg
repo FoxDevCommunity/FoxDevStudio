@@ -1,0 +1,15 @@
+DO First
+? Second()
+? Third(2)
+? "end"
+
+PROCEDURE First
+  ? "first"
+PROCEDURE Second
+  RETURN "second"
+ENDPROC
+FUNCTION Third
+  PARAMETERS n
+  RETURN n * 3
+ENDFUNC
+* COVERS: DO, FUNCTION, PARAMETERS, PROCEDURE, RETURN

@@ -1,0 +1,50 @@
+empty: [abc]
+not empty: [xyabc]
+trailing blanks: [xy   abc]          8
+character: [abc   ]
+itself: [xyabcxyabc!]
+nothing: [xyabcxyabc!]
+second only: [Q] [R]
+first only: [QS] [T]
+all of them
+    1 [T|z]
+    2 [pq|z]
+    3 [pq|z]
+some of them
+    1 [T|z]
+    2 [pq|z|w]
+    3 [pq|z|w]
+by name: [xyabcxyabc!-named]
+qualified: [QS+far]
+a number:          9 Data type mismatch.
+after that: [xyabcxyabc!-named]
+next two from the second
+    1 [a]
+    2 [b+n]
+    3 [c+n]
+    4 [d]
+record three
+    1 [a]
+    2 [b+n]
+    3 [c+n+r]
+    4 [d]
+the rest from the third
+    1 [a]
+    2 [b+n]
+    3 [c+n+r+s]
+    4 [d+s]
+for the even ones
+    1 [a]
+    2 [b+n+f]
+    3 [c+n+r+s]
+    4 [d+s+f]
+while the id is under three
+    1 [a+w]
+    2 [b+n+f+w]
+    3 [c+n+r+s]
+    4 [d+s+f]
+this record and no other
+    1 [a+w]
+    2 [b+n+f+w+c]
+    3 [c+n+r+s]
+    4 [d+s+f]

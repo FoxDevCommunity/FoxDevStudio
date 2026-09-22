@@ -1,0 +1,84 @@
+# What each form Visual FoxPro ships with says while it opens, one line per complaint.
+#
+# `tests/vfp/samplesRun.test.ts` opens every .scx under the Samples\Solution folder with
+# DO FORM ... NOSHOW and fails on any line that is not here. Run it with RUN_REPORT=<file> to
+# write the list again. It only shrinks.
+#
+# It used to be 236 lines, 190 of them one complaint: a form's data environment could not find
+# its table, and then everything that needed that table failed after it. None of that was the
+# product's. Measured against the forms themselves: vfp9.exe opens Controls\Checkbox\checkbox
+# with the default directory anywhere you care to put it - the Solution folder, the form's own
+# folder, the Samples folder - and PRODUCTS is open every time on
+# c:\...\samples\data\products.dbf, because a data environment's Database is made absolute
+# against the form file as the form loads. The earlier probe that said the product opened no
+# table had been looking in the wrong data session: a form with DataSession 2 opens its tables
+# in its own, and the default one stays empty. So all 190 were ours, and nearly all of them came
+# of two things the harness did that the product does not:
+#
+#   - its in-memory file service matched a name letter for letter where Windows does not, so
+#     `..\..\..\data\testdata.dbc` missed the `Data` folder it names;
+#   - it seeded the Solution folder and the Data folder beside it and nothing else, and answered
+#     HOME() with the project folder, where a sample started from the launcher has the whole
+#     Samples folder around it and a HOME() that says where Visual FoxPro is installed.
+#
+# Several more used to be here for the same reason rather than because the runtime was at fault:
+# the harness knew only the form under test, so a form that opened another one or installed a
+# menu had nothing to open, and it gave the runtime neither the native library service nor COM.
+# It now seeds every .scx and .mnx the samples ship and hands the runtime the same two
+# main-process services the application hands the renderer, so what those forms say is the
+# product's answer rather than the harness's.
+#
+# What is left is what the list is for: a member that is not there, a class that will not build,
+# an Init that refuses. Measured as well - vfp9.exe opens every one of these forms and says
+# nothing at all while it does.
+#
+# Every line below that is not a table says why it is here.
+#
+#   COM - an ActiveX control, or a class out of a type library. The bridge is real and a test
+#   run gets it too, so a class this machine can make is made: Scripting.FileSystemObject
+#   answers, and so does WMPlayer.OCX, whose cdromCollection counts the drives on this machine
+#   and finds none. What the forms below want cannot be made here at all, and the reason is not
+#   in this runtime: mscomctl.ocx, richtx32.ocx, mci32.ocx, shdocvw.dll and MSChart each
+#   register their InProcServer32 only under Wow6432Node, so a 64-bit process gets
+#   REGDB_E_CLASSNOTREG while 32-bit vfp9.exe opens every one of these forms without a word.
+#   `docs/not-supported.md` says what would fix it. An OLE control the form names by its file
+#   rather than by a ProgID - `(mci32.ocx)` - has no name to ask COM for either.
+#
+#   A flattened class - the importer builds a control from a class library by folding the class
+#   into the base class underneath it. What is lost is the lineage: the object answers the base
+#   class for `Class`, nothing for `ClassLibrary`, and `DODEFAULT()` finds no method above its
+#   own. Class code that builds another object of its own kind, or that leans on its parent's
+#   Init, has nothing to work with.
+#
+#   Refused on purpose - three of the lines below are not a gap at all. Microsoft Agent, the
+#   Windows Messenger automation class and the Multimedia MCI control are named in
+#   `docs/not-supported.md` and refused by name with their reason, so that the Output window
+#   tells a developer "this will never work, and here is why" rather than "class not found".
+#   Those three lines are not going to come off; the score is the lines that are not listed
+#   there.
+Solution/Controls/Lists/multdat1.scx: Error 1733 in FRMROWSOURCES.INIT line 17: Class definition EMPTY is not found.
+Solution/Coverage/CovPerfAddInfs.scx: Error 1734 in FRMSCOVPERF.SETSETS line 1: Property OLDESCAPE is not found.
+Solution/Europa/MenuHit.scx: Error 1 in FRMSOLUTION1.CHECKSCRIPTS line 7: File 'foxcode.dbf' does not exist. (handled by the program)
+Solution/Europa/WindowsEvents.scx: Error 1429 in OLECONTROL1.INIT line 1: Olecontrol1 is an ActiveX control; this runtime cannot call into COM
+Solution/Ffc/agent.scx: Error 1733 in _AGENT.INIT line 2: Agent.Control.2 is not supported: Microsoft Agent was withdrawn from Windows after Vista and cannot be installed.
+Solution/Ffc/dataedit2.scx: Error 11 in PICFORMBTNS1.INITVARS line 26: Function argument value, type, or count is invalid.
+Solution/Ffc/datasort.scx: Error 1925 in _NAVTOOLBARCLASS1.INIT line 5: Unknown member FORMS.
+Solution/Ffc/error.scx: Error 1733 in FRMERROR.INIT line 11: Class definition _ERROR is not found.
+Solution/Ffc/newmenu.scx: Error 1925 in OMENU.SETMENU line 5: Unknown member ADDMENUBAR.
+Solution/Forms/Graphics/fdmain.scx: Error 1733 in FORMSET1.INIT line 6: Class definition FDTOOLBAR is not found.
+Solution/Forms/Graphics/graph.scx: Error 31 in FRMCONTROL.INIT line 15: Subscript is outside defined range
+Solution/Forms/makesql.scx: Error 107 in CREATESQL.INIT line 14: Operator/operand type mismatch.
+Solution/Ole/mmsample.scx: Error 1733 in FORM1.INIT line 16: mci32.ocx is not supported: the Multimedia MCI control ships only as a 32-bit server, which this process cannot load.
+Solution/Ole/olegraph.scx: Error 1734 in FORM1.INIT line 28: Property HASLEGEND is not found.
+Solution/Ole/rtf.scx: Error 1925 in OLERTF.INIT line 1: Unknown member OBJECT.
+Solution/Ole/sysinfo.scx: Error 1925 in MAIN.CHECKSTATUS line 3: Unknown member ACSTATUS.
+Solution/Sedona/dvds.scx: Error 107 in FRMHOTTRACK.REFRESHDATA line 17: Operator/operand type mismatch.
+Solution/Tahoe/querydd.scx: Error 1925 in PGFDRAGSOURCES.PAGTHREE.OLECONTROL3.INIT line 3: Unknown member LISTITEMS.
+Solution/Toledo/caxml.scx: Error 107 in FORM1.INIT line 12: Operator/operand type mismatch. (handled by the program)
+Solution/Toledo/messenger.scx: Error 1733 in FRMSOLUTION1.INIT line 18: Messenger.UIAutomation.1 is not supported: Windows Messenger was shut down in 2013 and there is no service behind it. (handled by the program)
+Solution/Toledo/scattername.scx: Error 107 in FRMSOLUTION1.INIT line 4: Operator/operand type mismatch.
+Solution/Toledo/xmladapter.scx: Error 1429 in OWEBBROWSER.INIT line 1: oWebBrowser is an ActiveX control; this runtime cannot call into COM
+Solution/Toolbars/format.scx: Error 1925 in FORMSET1.INIT line 1: Unknown member TBREDITING.
+Solution/WinAPI/regfile.scx: Error 1733 in CMDCHECK.CLICK line 17: Class definition FILEREG is not found.
+Solution/WinAPI/regfox.scx: Error 1733 in CMDREFRESH.CLICK line 20: Class definition FOXREG is not found.
+Solution/WinAPI/regodbc.scx: Error 1733 in FORM1.GETODBCINFO line 21: Class definition ODBCREG is not found.

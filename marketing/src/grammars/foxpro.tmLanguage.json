@@ -1,0 +1,148 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "foxpro",
+  "scopeName": "source.foxpro",
+  "fileTypes": [
+    "prg",
+    "mpr",
+    "spr"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#dates"
+    },
+    {
+      "include": "#logicals"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#foxscript"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#sql"
+    },
+    {
+      "include": "#names"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#operators"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-ampersand.foxpro",
+          "match": "&&.*$"
+        },
+        {
+          "name": "comment.line.asterisk.foxpro",
+          "match": "^\\s*\\*.*$"
+        },
+        {
+          "name": "comment.line.note.foxpro",
+          "match": "(?i)^\\s*NOTE\\b.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.foxpro",
+          "match": "\"[^\"]*\""
+        },
+        {
+          "name": "string.quoted.single.foxpro",
+          "match": "'[^']*'"
+        },
+        {
+          "name": "string.quoted.other.foxpro",
+          "match": "\\[[^\\]\\n]*\\]"
+        }
+      ]
+    },
+    "dates": {
+      "name": "constant.other.date.foxpro",
+      "match": "\\{\\^?[^}]*\\}"
+    },
+    "logicals": {
+      "name": "constant.language.foxpro",
+      "match": "(?i)\\.(T|F|NULL|AND|OR|NOT)\\."
+    },
+    "numbers": {
+      "name": "constant.numeric.foxpro",
+      "match": "\\b\\d+(\\.\\d+)?\\b|\\$\\d+(\\.\\d+)?"
+    },
+    "foxscript": {
+      "patterns": [
+        {
+          "name": "keyword.control.lambda.foxpro",
+          "match": "(?i)\\b(LAMBDA|ENDLAMBDA)\\b"
+        },
+        {
+          "name": "support.class.foxscript.foxpro",
+          "match": "(?i)\\bFoxScript\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.foxpro",
+          "match": "(?i)\\b(IF|ELSE|ENDIF|DO|CASE|OTHERWISE|ENDCASE|WHILE|ENDDO|FOR|EACH|ENDFOR|NEXT|STEP|SCAN|ENDSCAN|LOOP|EXIT|RETURN|TRY|CATCH|FINALLY|ENDTRY|THROW|WITH|ENDWITH|TEXT|ENDTEXT|PROCEDURE|ENDPROC|FUNCTION|ENDFUNC|DEFINE|CLASS|ENDDEFINE|READ|EVENTS|CLEAR|QUIT|CANCEL|RETRY|SUSPEND|RESUME|ON|ERROR|KEY|SHUTDOWN)\\b"
+        },
+        {
+          "name": "keyword.other.declaration.foxpro",
+          "match": "(?i)\\b(LOCAL|PRIVATE|PUBLIC|PARAMETERS|LPARAMETERS|DIMENSION|DECLARE|STORE|RELEASE|AS|ADD|OBJECT|NODEFAULT|DODEFAULT|THIS|THISFORM|THISFORMSET)\\b"
+        },
+        {
+          "name": "keyword.other.command.foxpro",
+          "match": "(?i)\\b(USE|IN|SELECT|GO|GOTO|TOP|BOTTOM|SKIP|LOCATE|CONTINUE|SEEK|REPLACE|APPEND|BLANK|DELETE|RECALL|PACK|ZAP|INDEX|TAG|SET|TO|OFF|ADDITIVE|LIBRARY|CLASSLIB|PROCEDURE|PATH|DEFAULT|DELETED|EXACT|FILTER|RELATION|ORDER|FORM|MENU|BROWSE|REPORT|COPY|SORT|TOTAL|COUNT|SUM|AVERAGE|CALCULATE|SCATTER|GATHER|MEMVAR|NAME|ARRAY|FIELDS|WAIT|WINDOW|NOWAIT|TIMEOUT|MESSAGEBOX|ACTIVATE|DEACTIVATE|MODIFY|CREATE|TABLE|CURSOR|DATABASE|VIEW|BUILD|COMPILE|RUN|KEYBOARD|PUSH|POP|EXCLUSIVE|SHARED|AGAIN|ALIAS|NOSHOW|LINKED|WITH|WITHOUT|ALL|REST|RECORD|EXTERNAL|ASSERT|DEBUGOUT|ERASE|RENAME|MD|RD|CD|TYPE|DIR)\\b"
+        }
+      ]
+    },
+    "sql": {
+      "name": "keyword.other.sql.foxpro",
+      "match": "(?i)\\b(FROM|WHERE|GROUP|BY|HAVING|ORDER|DISTINCT|INTO|INNER|LEFT|RIGHT|OUTER|JOIN|UNION|INSERT|VALUES|UPDATE|ASC|DESC|EXISTS|ANY|SOME|BETWEEN|LIKE|NULL|NOT|AND|OR)\\b"
+    },
+    "names": {
+      "patterns": [
+        {
+          "name": "variable.other.member.foxpro",
+          "match": "(?<=\\.)[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+        },
+        {
+          "name": "variable.other.hungarian.foxpro",
+          "match": "\\b(l|t|g|p|c|n|d|o|a)[A-Z][A-Za-z0-9_]*\\b"
+        }
+      ]
+    },
+    "functions": {
+      "name": "support.function.foxpro",
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+    },
+    "operators": {
+      "name": "keyword.operator.foxpro",
+      "match": "==|=|<>|!=|<=|>=|<|>|\\+|-|\\*|/|\\^|%|\\$|#|@|&|\\bAND\\b|\\bOR\\b|\\bNOT\\b"
+    }
+  },
+  "displayName": "FoxPro",
+  "aliases": [
+    "prg",
+    "vfp"
+  ]
+}

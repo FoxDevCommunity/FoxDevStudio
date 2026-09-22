@@ -1,0 +1,10 @@
+[workspace]
+members = ["crates/foxvm", "crates/foxvm-cli", "crates/foxole"]
+resolver = "2"
+
+# release is only used for the wasm build; native tests run under dev/test
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"

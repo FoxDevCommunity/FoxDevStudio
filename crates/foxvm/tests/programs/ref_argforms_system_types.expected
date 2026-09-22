@@ -1,0 +1,9 @@
+TYPE(array, 1) is A A
+TYPE(number, 1) is U, not N U
+TYPE(object, 1) is U, not O U
+TYPE(undefined, 1) is U U
+TYPE(expression, 1) is U U
+VARTYPE(NULL) X
+VARTYPE(NULL, .T.) is L L
+VARTYPE(NULL, .F.) is still X X
+VARTYPE(number, .T.) is unaffected N

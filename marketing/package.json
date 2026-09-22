@@ -1,0 +1,25 @@
+{
+  "name": "foxdevstudio-marketing",
+  "version": "0.1.0",
+  "description": "The FoxDev Studio marketing site and documentation",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "gen": "node scripts/instructions.mjs",
+    "gen:check": "node scripts/instructions.mjs --check",
+    "prebuild": "node scripts/instructions.mjs --check",
+    "deploy": "astro build && wrangler deploy"
+  },
+  "dependencies": {
+    "@astrojs/markdown-satteri": "^0.4.1",
+    "astro": "^7.3.3"
+  },
+  "devDependencies": {
+    "wrangler": "^4.136.3"
+  }
+}

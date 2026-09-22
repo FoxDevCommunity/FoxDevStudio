@@ -1,0 +1,126 @@
+counted, rows:          2
+  [A][2]
+  [C][3]
+max over five, rows:          2
+  [C][15]
+  [D][7]
+min over three, rows:          2
+  [C][15]
+  [D][7]
+average over four, rows:          2
+  [C][15]
+  [D][7]
+counted by column, rows:          2
+  [A][3]
+  [C][15]
+summed over five, rows:          2
+  [C][3]
+  [D][1]
+sum over five, rows:          2
+  [C][15]
+  [D][7]
+named C, rows:          1
+  [C][3]
+renamed plain column, rows:          1
+  [C][3]
+usa, counted, rows:          1
+  [A][2]
+after A, rows:          3
+  [B][1]
+  [C][3]
+  [D][1]
+after A, qualified, rows:          3
+  [B][1]
+  [C][3]
+  [D][1]
+upper of a grouped column, rows:          1
+  [C][3]
+a grouped column in arithmetic, rows:          1
+  [C][3]
+two or three, rows:          2
+  [A][2]
+  [C][3]
+doubled, rows:          1
+  [C][3]
+an aggregate of a grouped column, rows:          1
+  [C][3]
+counted and summed, rows:          1
+  [C][3]
+none of them, rows:          0
+a constant, rows:          4
+  [A][2]
+  [B][1]
+  [C][3]
+  [D][1]
+a function of no columns, rows:          4
+  [A][2]
+  [B][1]
+  [C][3]
+  [D][1]
+at least the variable, rows:          2
+  [A][2]
+  [C][3]
+through a function, rows:          1
+  [C][3]
+grouped by number, by its AS name, rows:          1
+  [C][3]
+grouped by number, written out again:       1803 SQL: HAVING clause is invalid.
+no groups, rows:          2
+  [C]
+  [D]
+where and having, rows:          1
+  [C]
+whole table, kept, rows:          1
+  [7][28]
+whole table, dropped, rows:          0
+kept, then ordered, rows:          3
+  [D][7]
+  [A][3]
+  [B][3]
+kept, ordered, topped, rows:          2
+  [D][7]
+  [A][3]
+distinct and kept, rows:          2
+  [MEX][3]
+  [USA][3]
+ungrouped:       1803 SQL: HAVING clause is invalid.
+ungrouped, in a function:       1803 SQL: HAVING clause is invalid.
+ungrouped, in arithmetic:       1803 SQL: HAVING clause is invalid.
+shadowed alias:       1803 SQL: HAVING clause is invalid.
+ungrouped, whole table folded:       1803 SQL: HAVING clause is invalid.
+no group by:       1807 SQL: GROUP BY clause is missing or invalid.
+a subquery:       1810 SQL: Invalid use of subquery.
+not a logical:       1803 SQL: HAVING clause is invalid.
+70: ungrouped, rows:          1
+  [C][3]
+70: counted, rows:          2
+  [A][2]
+  [C][3]
+70: a grouped column, rows:          2
+  [C][3]
+  [D][1]
+70: an AS name, rows:          2
+  [C][15]
+  [D][7]
+70: a variable, rows:          2
+  [A][2]
+  [C][3]
+70: which record the group answers with, rows:          1
+  [B][1]
+70: ungrouped, in a function, rows:          1
+  [B][1]
+70: ungrouped, in arithmetic, rows:          1
+  [B][1]
+70: ungrouped, qualified, rows:          1
+  [B][1]
+70: ungrouped and an aggregate, rows:          0
+70: an ungrouped number, rows:          2
+  [C][3]
+  [D][1]
+70: shadowed alias:        107 Operator/operand type mismatch.
+70: ungrouped, whole table folded, rows:          0
+70: no group by, rows:          1
+  [D]
+70: a subquery:       1810 SQL: Invalid use of subquery.
+70: not a logical:       1803 SQL: HAVING clause is invalid.
+90 again: ungrouped:       1803 SQL: HAVING clause is invalid.

@@ -1,0 +1,200 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import data from '../../data/instructions.json';
+
+/**
+ * The instruction reference, rendered from src/data/instructions.json. That file is generated
+ * from the VM's own `Instr` enum by scripts/instructions.mjs, and the build refuses to run
+ * when it is stale, so what this page says is what the runtime runs.
+ */
+const frontmatter = {
+  title: 'Instruction reference',
+  kicker: 'The runtime',
+  description: `All ${data.count} instructions of bytecode format ${data.FORMAT_VERSION}, with their operands and stack effect, in the order and groups the VM source lists them.`,
+};
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const headings = data.groups.map((g) => ({ depth: 2, slug: slug(g.name), text: g.name }));
+
+/** Rust's `u32` and friends, said the way the rest of the page says them. */
+function typeName(t: string): string {
+  return t
+    .replace(/Option<(.*)>/, '$1 or none')
+    .replace(/Vec<(.*)>/, 'list of $1')
+    .replace(/\bu8\b/, 'byte')
+    .replace(/\bu16\b/, 'u16')
+    .replace(/\bu32\b/, 'u32')
+    .replace(/\bbool\b/, 'flag');
+}
+
+/** Backticks in a doc comment become code, nothing else is interpreted. */
+function inline(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+---
+
+<DocsLayout frontmatter={frontmatter} headings={headings}>
+  <p>
+    The bytecode is a stack machine. Every entry below gives the instruction as it is spelled in
+    a disassembly, its operands (the values carried in the instruction itself), and its <strong>stack effect</strong> as <code>[before] -&gt; [after]</code> with the top of the
+    stack on the right, where the source states one. Jump targets are absolute program
+    counters. The magic is <code>{data.MAGIC}</code> and the format version is <code>{data.FORMAT_VERSION}</code>.
+  </p>
+  <p>
+    The prose is the doc comment from <code>crates/foxvm/src/bytecode.rs</code>, verbatim. The <a href="/docs/bytecode">bytecode page</a> explains the module around these and shows what
+    real programs compile to.
+  </p>
+
+  <div class="summary">
+    {
+      data.groups.map((g) => (
+        <a href={`#${slug(g.name)}`}>
+          <b>{g.instructions.length}</b>
+          <span>{g.name}</span>
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    data.groups.map((g) => (
+      <section class="group">
+        <h2 id={slug(g.name)}>{g.name}</h2>
+        {g.note && <p class="note" set:html={inline(g.note)} />}
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Instruction</th>
+                <th>Operands</th>
+                <th>Stack</th>
+                <th>What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              {g.instructions.map((ins) => (
+                <tr id={`i-${ins.name}`}>
+                  <td>
+                    <code class="ins">{ins.name}</code>
+                  </td>
+                  <td class="ops">
+                    {ins.operands.length === 0 && <span class="none">none</span>}
+                    {ins.operands.map((op) => (
+                      <div class="op">
+                        <code>{op.name ? `${op.name}: ${typeName(op.type)}` : typeName(op.type)}</code>
+                        {op.doc && <span set:html={inline(op.doc)} />}
+                      </div>
+                    ))}
+                  </td>
+                  <td class="effect">{ins.effect && <code>{ins.effect}</code>}</td>
+                  <td class="doc" set:html={inline(ins.doc)} />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    ))
+  }
+</DocsLayout>
+
+<style is:global>
+  .prose .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+    margin: 1.2em 0 0.4em;
+  }
+  .prose .summary a {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    align-items: baseline;
+    text-decoration: none;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    font-size: 13.5px;
+    color: var(--text);
+  }
+  .prose .summary a:hover {
+    border-color: var(--brand);
+  }
+  .prose .summary b {
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    color: var(--brand-deep);
+    font-weight: 600;
+  }
+  .prose .group h2 {
+    text-transform: capitalize;
+  }
+  .prose .group .note {
+    color: var(--muted);
+    font-size: 14.5px;
+  }
+  .prose .table-scroll {
+    overflow-x: auto;
+  }
+  .prose .group table {
+    display: table;
+    min-width: 720px;
+    font-size: 13.5px;
+  }
+  .prose .group td {
+    vertical-align: top;
+  }
+  .prose .group th:nth-child(1),
+  .prose .group td:nth-child(1) {
+    white-space: nowrap;
+  }
+  .prose .group .ins {
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--brand-soft);
+  }
+  .prose .group .ops {
+    min-width: 150px;
+    max-width: 260px;
+  }
+  .prose .group .op {
+    display: grid;
+    gap: 2px;
+    margin-bottom: 6px;
+  }
+  .prose .group .op:last-child {
+    margin-bottom: 0;
+  }
+  .prose .group .op code {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .prose .group .op span {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .prose .group .none {
+    color: var(--muted);
+    font-size: 12.5px;
+  }
+  .prose .group .effect code {
+    white-space: normal;
+  }
+  .prose .group .effect {
+    min-width: 130px;
+    max-width: 200px;
+  }
+  .prose .group .doc {
+    min-width: 260px;
+  }
+  .prose .group td code {
+    white-space: normal;
+  }
+  .prose tr:target td {
+    background: var(--brand-soft);
+  }
+</style>

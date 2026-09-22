@@ -1,0 +1,6 @@
+src/wasm/foxvm/generated/
+out/
+release/
+coverage/
+target/
+marketing/

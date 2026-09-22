@@ -1,0 +1,16 @@
+2
+Ames/Admin
+Nolan/Sales
+3
+Ames/[Admin]
+Nolan/[Sales]
+.NULL.
+3
+[Ames]/Admin
+.NULL.
+[Nolan]/Sales
+4
+.NULL.
+[Ames]/[Admin]
+[Nolan]/[Sales]
+.NULL.

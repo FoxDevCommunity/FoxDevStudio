@@ -1,0 +1,17 @@
+Container Container Container []
+75 75 15790320 1
+6579300 1 2 0
+.T. .T. .T. [] 0
+1 Label LBLINSIDE
+0
+.T. .T. .T.
+.T. .T. .T.
+.F. .F. .F.
+Pageframe Pageframe 0 1
+375 250 224 371
+.T. 1 0 0
+1 [] .T.
+.T. .T. .T.
+Page Page Page 0 0
+15790320 1 Arial 9
+.T. .T. .F.

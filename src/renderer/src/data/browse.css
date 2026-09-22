@@ -1,0 +1,149 @@
+/* The table browser: a dense, monospaced grid, closer to VFP's BROWSE than to a web table. */
+
+.fx-browse {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  /* the grid scrolls inside this pane; without a zero basis it grows the document area instead */
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--colorNeutralBackground1);
+}
+
+.fx-browse__bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--colorNeutralStroke2);
+  flex: 0 0 auto;
+}
+
+.fx-browse__error {
+  color: var(--colorPaletteRedForeground1);
+}
+
+.fx-browse__scroll {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fx-browse__grid {
+  border-collapse: collapse;
+  /* the last column is empty and takes the slack, so the header rules reach the right edge */
+  width: 100%;
+  font-family: var(--fontFamilyMonospace);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.fx-browse__grid th,
+.fx-browse__grid td {
+  border-right: 1px solid var(--colorNeutralStroke2);
+  border-bottom: 1px solid var(--colorNeutralStroke3);
+  padding: 2px 8px;
+  text-align: left;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fx-browse__grid th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--colorNeutralBackground3);
+  font-weight: 600;
+  user-select: none;
+}
+
+.fx-browse__num {
+  text-align: right;
+}
+
+/* Takes the width left over, so the columns stay as narrow as their contents. */
+.fx-browse__filler {
+  width: 100%;
+  border-right: none;
+}
+
+/* The record number column stays put while the fields scroll past it. */
+.fx-browse__recno {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 1%;
+  background: var(--colorNeutralBackground3);
+  color: var(--colorNeutralForeground3);
+  text-align: right;
+  padding: 0;
+}
+
+.fx-browse__grid th.fx-browse__recno {
+  z-index: 2;
+  padding: 2px 8px;
+}
+
+.fx-browse__recno-button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 2px 8px;
+  font: inherit;
+  color: inherit;
+  text-align: right;
+  cursor: pointer;
+}
+
+.fx-browse__recno-button:hover {
+  background: var(--colorNeutralBackground3Hover);
+}
+
+/* A deleted record is still there until the table is packed, and BROWSE shows it struck out. */
+.fx-browse__deleted td {
+  text-decoration: line-through;
+  color: var(--colorNeutralForeground3);
+}
+
+.fx-browse__link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--colorBrandForegroundLink);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fx-browse__input {
+  width: 100%;
+  min-width: 60px;
+  box-sizing: border-box;
+  border: 1px solid var(--colorCompoundBrandStroke);
+  border-radius: 2px;
+  padding: 1px 4px;
+  font: inherit;
+  color: var(--colorNeutralForeground1);
+  background: var(--colorNeutralBackground1);
+}
+
+.fx-browse__memo {
+  flex: 0 0 30%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--colorNeutralStroke2);
+}
+
+.fx-browse__memo pre {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 8px;
+  font-family: var(--fontFamilyMonospace);
+  font-size: 12px;
+  white-space: pre-wrap;
+}
