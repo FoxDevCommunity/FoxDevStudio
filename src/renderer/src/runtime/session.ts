@@ -1339,7 +1339,13 @@ export const useSessionStore = create<SessionState>((set, get) => {
         case 'LoadProgram':
           return (async () => {
             const compiled = await source.getProgram(baseName(request.name));
-            if (!compiled) throw new HostError(1, `File '${request.name}' does not exist.`);
+            if (!compiled) {
+              // the product's words: the name in lower case, with a program's extension when it
+              // came without one - `File 'hello.prg' does not exist.`
+              const file = request.name.split(/[\\/]/).pop() ?? request.name;
+              const shown = file === file.toUpperCase() ? file.toLowerCase() : file;
+              throw new HostError(1, `File '${shown.includes('.') ? shown : `${shown}.prg`}' does not exist.`);
+            }
             const cached = modules.get(compiled.name.toLowerCase());
             if (cached !== undefined) return cached;
             const id = vm.loadModule(compiled.bytes);

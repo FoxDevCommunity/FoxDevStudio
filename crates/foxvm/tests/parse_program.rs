@@ -343,7 +343,7 @@ fn set_statements() {
     assert_eq!(ok("SET PATH TO \"a;b\", \"c\""), "(set PATH (to \"a;b\"))");
     assert_eq!(ok("SET PATH TO (lcPath)"), "(set PATH (to LCPATH))");
     assert_eq!(ok("SET PATH TO"), "(set PATH (word \"\"))");
-    assert_eq!(ok("SET PROCEDURE TO"), "(set PROCEDURE (word \"\"))");
+    assert_eq!(ok("SET PROCEDURE TO"), "(set PROCEDURE (to .F.))");
     assert_eq!(ok("SET STATUS BAR ON"), "(set STATUS BAR on)");
     assert_eq!(ok("SET SYSMENU TO DEFAULT"), "(menu SetSysMenu)");
     assert_eq!(ok("SET STEP"), "(set STEP (word \"\"))");

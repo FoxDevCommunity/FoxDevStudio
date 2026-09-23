@@ -2418,6 +2418,17 @@ impl Parser {
             let (args, in_prog) = self.do_clauses()?;
             return Ok(Some(StmtKind::DoExpr { name, args, in_prog }));
         }
+        // `DO p_cod+"vx_prios.prg"`: measured, a name with a `+` right against it is an
+        // expression that builds the program's name, and the same line written with spaces
+        // round the `+` is a syntax error in the product - so only the unspaced form is read so
+        if let TokKind::Ident(_) = self.peek_kind()
+            && matches!(self.peek_at(1).kind, TokKind::Plus)
+            && self.peek_at(1).span.start == self.peek().span.end
+        {
+            let name = self.expr()?;
+            let (args, in_prog) = self.do_clauses()?;
+            return Ok(Some(StmtKind::DoExpr { name, args, in_prog }));
+        }
         let name = self.file_name("program name")?;
         let (args, in_prog) = self.do_clauses()?;
         Ok(Some(StmtKind::Do { name, args, in_prog }))
@@ -6437,6 +6448,21 @@ impl Parser {
                 flags: 0,
             }));
         }
+        // `RELEASE PROCEDURE a, b` takes those files off the SET PROCEDURE list. It is carried
+        // as a setting of its own name, which is where the list is kept.
+        if self.is_kw("PROCEDURE") && !self.peek_at(1).is_newline() && !matches!(self.peek_at(1).kind, TokKind::Eof) {
+            let tok = self.advance();
+            let mut files = Vec::new();
+            while !self.at_eol() {
+                files.push(self.file_name_word(tok.span, &[])?);
+                if !self.eat(&TokKind::Comma) {
+                    break;
+                }
+            }
+            self.skip_line_keep_newline();
+            let setting = Name::new("RELEASE PROCEDURE", first.span.to(tok.span));
+            return Ok(Some(StmtKind::Set { setting, value: SetValue::To(files) }));
+        }
         const FORMS: &[&str] = &["LIBRARY", "PROCEDURE", "CLASSLIB"];
         if let Some(word) = self.peek().ident().map(|s| s.to_string()) {
             let next_is_more = !self.peek_at(1).is_newline();
@@ -6611,6 +6637,24 @@ impl Parser {
             let additive = self.eat_kw("ADDITIVE");
             self.skip_line_keep_newline();
             let args = vec![Expr::new(ExprKind::Bool(additive), span), named];
+            return Ok(StmtKind::Set { setting, value: SetValue::To(args) });
+        }
+        // `SET PROCEDURE TO a, b [ADDITIVE]`: the files are names, as a class library's are, and
+        // `SET PROCEDURE TO` with nothing after it empties the list
+        if kw_text(&setting.text, "PROCEDURE") && self.is_kw("TO") {
+            let span = setting.span;
+            self.advance();
+            let mut files: Vec<Expr> = Vec::new();
+            while !self.at_eol() && !self.is_kw("ADDITIVE") {
+                files.push(self.file_name_word(span, &["ADDITIVE"])?);
+                if !self.eat(&TokKind::Comma) {
+                    break;
+                }
+            }
+            let additive = self.eat_kw("ADDITIVE");
+            self.skip_line_keep_newline();
+            let mut args = vec![Expr::new(ExprKind::Bool(additive), span)];
+            args.append(&mut files);
             return Ok(StmtKind::Set { setting, value: SetValue::To(args) });
         }
         if kw_text(&setting.text, "CLASSLIB") {

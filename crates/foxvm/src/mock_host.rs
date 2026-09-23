@@ -50,6 +50,10 @@ pub struct MockHost {
     rng: crate::host::SeededRandom,
     /// Upper-cased program name -> module id, for `resolve_program`.
     pub programs: HashMap<String, u32>,
+    /// Upper-cased program name -> source, for programs that are not loaded until something
+    /// asks: `run_with_requests` compiles one when the VM's `LoadProgram` names it, which is
+    /// what the IDE's host does with a `.prg` in the project.
+    pub program_sources: HashMap<String, String>,
     /// Every request answered by `run_with_requests`, in order.
     pub requests: Vec<HostRequest>,
     /// Handles released through `ReleaseObject`.
@@ -118,6 +122,7 @@ impl MockHost {
             now: (crate::value::days_from_civil(2026, 9, 7), 12.0 * 3600.0 + 30.0 * 60.0),
             rng: crate::host::SeededRandom::default(),
             programs: HashMap::new(),
+            program_sources: HashMap::new(),
             requests: Vec::new(),
             released: Vec::new(),
             files: HashMap::new(),
@@ -1230,6 +1235,20 @@ pub fn run_with_requests(
             Step::Done { value, .. } => return Ok(value),
             Step::Error(e) => return Err(e),
             Step::Suspend(req) => {
+                // a program the host holds the source of is compiled and loaded on request
+                if let HostRequest::LoadProgram { name } = &req
+                    && let Some(src) = host.program_sources.get(&name.to_ascii_uppercase()).cloned()
+                {
+                    let upper = name.to_ascii_uppercase();
+                    let module = compiler::compile_program(&src, &upper.to_ascii_lowercase())
+                        .module
+                        .ok_or_else(|| RtError::syntax(format!("{upper} does not compile")))?;
+                    let id = vm.load_module(module);
+                    host.programs.insert(upper, id);
+                    host.requests.push(req);
+                    vm.resume(fiber, Value::number(id as f64));
+                    continue;
+                }
                 let answer = match answers.pop_front() {
                     Some(v) => {
                         // Scripted answers still apply property writes so later reads see them.
