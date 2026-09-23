@@ -334,6 +334,17 @@ missing feature; both are something already built getting it wrong.
   baseline only ever complained that *relations* were not imported. So this is the opening of the
   cursor when the form loads, not the import of it.
 
+Two more, found while measuring the SQL forms a CodeMine application writes (the `sql_forms`
+golden). Both belong to system 3, the resolver, and neither is fixed:
+
+- **A LOCAL shadows a field of the same name.** Measured: with `parts` open and `LOCAL code`
+  declared, the product reads `code` as the field, in a plain `? code` and in a SELECT-SQL
+  WHERE alike; `m.code` is how the variable is asked for. This runtime reads the local. The
+  golden avoids the case by not naming a variable after a field, and says so.
+- **`_TALLY` is never set.** The product sets it after every SQL statement and after REPLACE,
+  DELETE, APPEND FROM and the other record-scoped commands; here it stays at zero. Nothing
+  writes it anywhere in the VM.
+
 ## Milestones
 
 ### Where the product has been

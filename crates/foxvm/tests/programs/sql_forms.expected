@@ -1,0 +1,17 @@
+used before .T.
+used after .F.
+still here
+param variable 1 2 Q1
+param m. 1 2
+insert select 2 PARTS
+  row BBB 2
+  row CCC 3
+insert select whole 1 AAA 1 PARTS
+union all 3 Q2
+  row 1 top  CCC
+  row 2 rest AAA
+  row 2 rest BBB
+union 3
+union all again 5
+into array 2 AAA CCC PARTS
+helper ran x

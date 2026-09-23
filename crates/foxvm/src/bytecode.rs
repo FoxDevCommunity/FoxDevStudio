@@ -667,6 +667,10 @@ pub enum Instr {
     /// by where it is in the FROM clause rather than by what it is called, because a source
     /// named by an expression is only called something once it has been opened.
     SelectSource(u16),
+    /// [] -> []   Selects the nth source and reads its current record into the buffer. A `*`
+    /// in the select list takes the record straight from there, and nothing else in a query
+    /// with only a `*` would have asked the host for the page.
+    SqlTouch(u16),
     /// [] -> []   The nth FROM source has no record matching the row being built, so it is
     /// parked past its last record and every field of it reads as .NULL. until it is moved
     /// again. That is what an outer join puts on the side that missed.

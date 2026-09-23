@@ -110,6 +110,26 @@ pub fn args(a: &[Arg]) -> String {
         .join(", ")
 }
 
+pub fn query(q: &Query) -> String {
+    format!(
+        "(select{}{} ({}) (from {}){}{}{}{}{})",
+        if q.distinct { " distinct" } else { "" },
+        q.top.as_ref().map(|t| format!(" top {}", expr(t))).unwrap_or_default(),
+        q.columns.iter().map(query_column).collect::<Vec<_>>().join(" "),
+        q.from.iter().map(|f| format!("{}:{}", f.table, f.alias.upper)).collect::<Vec<_>>().join(" "),
+        q.where_.as_ref().map(|w| format!(" (where {})", expr(w))).unwrap_or_default(),
+        if q.group_by.is_empty() { String::new() } else { format!(" (group {})", q.group_by.iter().map(expr).collect::<Vec<_>>().join(" ")) },
+        q.union.as_ref().map(|u| format!(" (union{} {})", if u.all { "-all" } else { "" }, query(&u.query))).unwrap_or_default(),
+        if q.order_by.is_empty() { String::new() } else { format!(" (order {})", q.order_by.iter().map(|o| format!("{}{}", expr(&o.expr), if o.descending { " desc" } else { "" })).collect::<Vec<_>>().join(" ")) },
+        match &q.into {
+            QueryInto::Browse => String::new(),
+            QueryInto::Cursor(n) => format!(" (into-cursor {})", name_ref(n)),
+            QueryInto::Table(e) => format!(" (into-table {})", expr(e)),
+            QueryInto::Array(e) => format!(" (into-array {})", expr(e)),
+        },
+    )
+}
+
 pub fn stmt(s: &Stmt) -> String {
     match &s.kind {
         StmtKind::Assign { target, value } => format!("(= {} {})", expr(target), expr(value)),
@@ -407,6 +427,7 @@ pub fn stmt(s: &Stmt) -> String {
                 InsertSource::From(ScatterWhere::Memvar) => "from-memvar".into(),
                 InsertSource::From(ScatterWhere::Array(e)) => format!("from-array {}", expr(e)),
                 InsertSource::From(ScatterWhere::Name(e)) => format!("from-name {}", expr(e)),
+                InsertSource::Query(q) => query(q),
             }
         ),
         StmtKind::ClearAll { tables } => format!("(clear {})", if *tables { "all" } else { "memory" }),
@@ -446,22 +467,7 @@ pub fn stmt(s: &Stmt) -> String {
             "(zap{})",
             area.as_ref().map(|a| format!(" in {}", name_ref(a))).unwrap_or_default()
         ),
-        StmtKind::Query(q) => format!(
-            "(select{}{} ({}) (from {}){}{}{}{})",
-            if q.distinct { " distinct" } else { "" },
-            q.top.as_ref().map(|t| format!(" top {}", expr(t))).unwrap_or_default(),
-            q.columns.iter().map(query_column).collect::<Vec<_>>().join(" "),
-            q.from.iter().map(|f| format!("{}:{}", f.table, f.alias.upper)).collect::<Vec<_>>().join(" "),
-            q.where_.as_ref().map(|w| format!(" (where {})", expr(w))).unwrap_or_default(),
-            if q.group_by.is_empty() { String::new() } else { format!(" (group {})", q.group_by.iter().map(expr).collect::<Vec<_>>().join(" ")) },
-            if q.order_by.is_empty() { String::new() } else { format!(" (order {})", q.order_by.iter().map(|o| format!("{}{}", expr(&o.expr), if o.descending { " desc" } else { "" })).collect::<Vec<_>>().join(" ")) },
-            match &q.into {
-                QueryInto::Browse => String::new(),
-                QueryInto::Cursor(n) => format!(" (into-cursor {})", name_ref(n)),
-                QueryInto::Table(e) => format!(" (into-table {})", expr(e)),
-                QueryInto::Array(e) => format!(" (into-array {})", expr(e)),
-            },
-        ),
+        StmtKind::Query(q) => query(q),
         StmtKind::Throw(None) => "(throw)".into(),
         StmtKind::Throw(Some(e)) => format!("(throw {})", expr(e)),
         StmtKind::NoDefault => "(nodefault)".into(),

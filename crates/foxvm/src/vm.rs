@@ -176,6 +176,11 @@ struct Fiber {
     query_unwind: Option<QueryRun>,
     /// Sources opened for a query that has not begun gathering yet.
     pending_sources: Vec<QuerySourceState>,
+    /// The work area that was selected when the query's first source was opened, which is the
+    /// one the statement was written in. Opening a source selects it, so by the time the run
+    /// begins the current area is a source's, and INTO ARRAY has to put the program back where
+    /// it stood rather than there.
+    pending_area: Option<usize>,
     /// The routine a `RETURN TO` is on its way to, while the frames between here and it are
     /// being unwound. Empty text is `RETURN TO MASTER`: the program the run started in.
     return_to: Option<String>,
@@ -5525,6 +5530,20 @@ impl Vm {
                 }
                 self.sql_named = None;
             }
+            Instr::SqlTouch(which) => {
+                let area = fb
+                    .query
+                    .as_ref()
+                    .and_then(|run| run.sources.get(*which as usize))
+                    .map(|source| source.area)
+                    .ok_or_else(RtError::no_table_open)?;
+                self.data.select(&AreaRef::Number(area))?;
+                // a page that has to be fetched comes back to this same instruction, which
+                // selects the same source again and so hands the page to the cursor that asked
+                if let Some(req) = self.ensure_record(fb)? {
+                    return Ok(self.ask(fb, req));
+                }
+            }
             Instr::SelectSource(which) | Instr::JoinMiss(which) => {
                 let area = fb
                     .query
@@ -8511,6 +8530,11 @@ impl Vm {
     /// Visual FoxPro does, and what keeps two cursors from answering to one alias - and its
     /// record pointer is put back where it was when the query finishes.
     fn sql_open(&mut self, fb: &mut Fiber, named: &str, alias: &str) -> Result<Option<HostRequest>, RtError> {
+        // where the statement stands, noted before the first source moves the selection; an
+        // open that has to wait comes back through here and must not note it twice
+        if fb.query.is_none() && fb.pending_sources.is_empty() && fb.pending_area.is_none() {
+            fb.pending_area = Some(self.data.current_area());
+        }
         // a FROM that reaches into a container needs the container open first, as USE does
         if self.db_io.is_some() {
             let reply = fb.data_reply.take();
@@ -8600,6 +8624,9 @@ impl Vm {
             }
         }
 
+        // opening the sources selected the last of them; the program stood where the first
+        // open found it, and that is where INTO ARRAY leaves it again
+        let saved_area = fb.pending_area.take().unwrap_or_else(|| self.data.current_area());
         fb.query = Some(QueryRun {
             plan: std::rc::Rc::new(plan),
             columns,
@@ -8609,7 +8636,7 @@ impl Vm {
             having: None,
             top,
             sources,
-            saved_area: self.data.current_area(),
+            saved_area,
             frame: fb.frames.len().saturating_sub(1),
             into_alias: into,
         });
