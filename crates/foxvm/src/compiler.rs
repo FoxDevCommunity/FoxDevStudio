@@ -305,6 +305,14 @@ fn leading_params(body: &Block) -> ParamDecl {
 /// takes, so both branches cannot be evaluated first.
 const COMPILED_FUNCTIONS: &[&str] = &["IIF"];
 
+/// Where a row copied out of a cursor goes: a table named outright, or one whose name a
+/// temporary holds because the program worked it out.
+#[derive(Clone, Copy)]
+enum RowTarget {
+    Named(u32),
+    Worked(u32),
+}
+
 struct LoopCtx {
     breaks: Vec<usize>,
     continues: Vec<usize>,
@@ -1973,6 +1981,10 @@ impl ModuleCompiler {
                 fb.emit(Instr::FlushRecord);
             }
             StmtKind::Insert { alias, named, fields, source } => {
+                if let InsertSource::Query(q) = source {
+                    self.insert_select(fb, alias, named.as_ref(), fields, q);
+                    return;
+                }
                 // An INSERT is an APPEND BLANK and a REPLACE of each value. The values are worked
                 // out first, in the work area the statement was written in - `SCAN ... INSERT INTO
                 // other VALUES (custno) ... ENDSCAN` reads custno from the table being scanned -
@@ -2005,6 +2017,7 @@ impl ModuleCompiler {
                         self.expr(fb, e);
                         source_from = Some(2);
                     }
+                    InsertSource::Query(_) => unreachable!("INSERT ... SELECT was compiled above"),
                 }
                 // the name is worked out after the values, so it is read in the work area the
                 // statement was written in, and then selects the one being written to
@@ -2046,6 +2059,7 @@ impl ModuleCompiler {
                         fb.emit(Instr::FlushRecord);
                     }
                     (InsertSource::From(_), None) => unreachable!("every FROM source has a number"),
+                    (InsertSource::Query(_), _) => unreachable!("INSERT ... SELECT was compiled above"),
                 }
                 fb.emit(Instr::LoadLocal(saved));
                 fb.emit(Instr::SelectArea(None));
@@ -2269,6 +2283,9 @@ impl ModuleCompiler {
     // what happens to the rows once they are gathered, and that is the plan in `query.rs`.
 
     fn query(&mut self, fb: &mut FuncBuilder, q: &Query) {
+        if q.union.is_some() {
+            return self.union_query(fb, q);
+        }
         // `ORDER BY 2` and `GROUP BY 2` name the second column of the result, not the number
         // two, so they are put back to the expression that column is before anything else runs
         let resolved = by_column_number(q);
@@ -2477,6 +2494,172 @@ impl ModuleCompiler {
         aliases
     }
 
+    /// `INSERT INTO t [(fields)] SELECT ...`.
+    ///
+    /// The query runs first, into a cursor of its own, and then each of its rows is a record
+    /// added to the table: the row taken whole as an array and put down with GATHER, which is
+    /// what makes the columns go by position - to the fields the statement names, in the order
+    /// it names them, or to the table's fields in order when it names none. That is what the
+    /// product does with it. The work area the statement was written in is selected again at
+    /// the end, as it is after every other INSERT.
+    fn insert_select(&mut self, fb: &mut FuncBuilder, alias: &Name, named: Option<&Expr>, fields: &[NameRef], q: &Query) {
+        let saved = fb.temp("AREA");
+        let (select, _) = builtins::lookup("SELECT").expect("SELECT is a builtin");
+        fb.emit(Instr::CallBuiltin { id: select, argc: 0 });
+        fb.emit(Instr::StoreLocal(saved));
+        // the table's name is worked out where the statement stands, before the query moves
+        let target = match named {
+            Some(e) => {
+                self.expr(fb, e);
+                let slot = fb.temp("INTO");
+                fb.emit(Instr::StoreLocal(slot));
+                RowTarget::Worked(slot)
+            }
+            None => RowTarget::Named(self.name(&alias.upper)),
+        };
+        let mut names = Vec::new();
+        for field in fields {
+            match field {
+                NameRef::Named(n) => names.push(n.clone()),
+                NameRef::Computed(e) => {
+                    self.error(e.span, "INSERT ... SELECT names its fields outright; a field worked out from an expression is not supported");
+                    return;
+                }
+            }
+        }
+        self.sub_counter += 1;
+        let rows = format!("__INS{}", self.sub_counter);
+        let mut inner = q.clone();
+        inner.into = QueryInto::Cursor(NameRef::Named(Name::new(rows.clone(), q.span)));
+        self.query(fb, &inner);
+        self.append_rows(fb, &rows, target, &names);
+        self.close_alias(fb, &rows);
+        fb.emit(Instr::LoadLocal(saved));
+        fb.emit(Instr::SelectArea(None));
+    }
+
+    /// `SELECT ... UNION [ALL] SELECT ... [ORDER BY] [INTO]`.
+    ///
+    /// Each SELECT of the chain runs into a cursor of its own, the rows of the later ones are
+    /// added under the first's, and the whole is then one more query over that cursor: `SELECT
+    /// [DISTINCT] * FROM it`, carrying the ORDER BY and the INTO the union was written with.
+    /// The columns are named by the first SELECT, which is where the product takes them from
+    /// too. Rows the same on both sides are folded unless every UNION said ALL.
+    fn union_query(&mut self, fb: &mut FuncBuilder, q: &Query) {
+        let saved = fb.temp("AREA");
+        let (select, _) = builtins::lookup("SELECT").expect("SELECT is a builtin");
+        fb.emit(Instr::CallBuiltin { id: select, argc: 0 });
+        fb.emit(Instr::StoreLocal(saved));
+
+        let mut parts: Vec<(&Query, bool)> = vec![(q, true)];
+        let mut next = q.union.as_deref();
+        while let Some(step) = next {
+            parts.push((&step.query, step.all));
+            next = step.query.union.as_deref();
+        }
+        self.sub_counter += 1;
+        let first = format!("__UNI{}", self.sub_counter);
+        let first_name = self.name(&first);
+        for (i, (part, _)) in parts.iter().enumerate() {
+            let alias = if i == 0 { first.clone() } else { format!("{first}_{i}") };
+            let mut inner = (*part).clone();
+            inner.union = None;
+            inner.order_by = Vec::new();
+            inner.top = None;
+            inner.top_percent = false;
+            inner.into = QueryInto::Cursor(NameRef::Named(Name::new(alias.clone(), part.span)));
+            self.query(fb, &inner);
+            if i > 0 {
+                self.append_rows(fb, &alias, RowTarget::Named(first_name), &[]);
+                self.close_alias(fb, &alias);
+            }
+        }
+        // the statement's own work area is where the whole is asked from, so that what the
+        // query leaves selected afterwards is what any query leaves selected
+        fb.emit(Instr::LoadLocal(saved));
+        fb.emit(Instr::SelectArea(None));
+        let whole = Query {
+            distinct: parts.iter().any(|(_, all)| !all),
+            top: q.top.clone(),
+            top_percent: q.top_percent,
+            columns: vec![QueryColumn::All(None)],
+            from: vec![QuerySource {
+                table: first.clone(),
+                table_expr: None,
+                alias: Name::new(first.clone(), q.span),
+                join: JoinKind::Inner,
+                joined: false,
+                on: None,
+                span: q.span,
+            }],
+            where_: None,
+            group_by: Vec::new(),
+            having: None,
+            order_by: q.order_by.clone(),
+            into: q.into.clone(),
+            union: None,
+            span: q.span,
+        };
+        self.query(fb, &whole);
+        self.close_alias(fb, &first);
+    }
+
+    /// A record added to `target` for every record of the cursor `from`, each taken whole as an
+    /// array and put down by position. `fields` are the fields the row goes to, or none for the
+    /// table's own in order. The cursor `from` is selected afterwards, on EOF.
+    fn append_rows(&mut self, fb: &mut FuncBuilder, from: &str, target: RowTarget, fields: &[Name]) {
+        let row = fb.temp("ROW");
+        let source = self.name(from);
+        fb.emit(Instr::SelectArea(Some(source)));
+        fb.emit(Instr::Go(GoTarget::Top));
+        let top = fb.pc();
+        self.emit_eof(fb);
+        let end = fb.emit(Instr::JumpIfTrue(0));
+        fb.emit(Instr::Scatter { to: 0, except: false, count: 0, blank: false });
+        fb.emit(Instr::StoreLocal(row));
+        match target {
+            RowTarget::Named(n) => fb.emit(Instr::SelectArea(Some(n))),
+            RowTarget::Worked(slot) => {
+                fb.emit(Instr::LoadLocal(slot));
+                fb.emit(Instr::SelectArea(None))
+            }
+        };
+        fb.emit(Instr::AppendBlank);
+        if fields.is_empty() {
+            // the table's fields in order, which is what GATHER FROM ARRAY does with a row
+            fb.emit(Instr::LoadLocal(row));
+            fb.emit(Instr::Gather { to: 0, except: false, count: 0 });
+        } else {
+            // the fields the statement names, in the order it names them - GATHER FIELDS would
+            // take the table's order, which is not the same thing when they differ
+            let array = Name::new(fb.locals[row as usize].clone(), fields[0].span);
+            for (i, field) in fields.iter().enumerate() {
+                let at = Expr::new(ExprKind::Num((i + 1) as f64, 1, 0), field.span);
+                let element = Expr::new(
+                    ExprKind::Index { base: Box::new(Expr::new(ExprKind::Var(array.clone()), field.span)), args: vec![at] },
+                    field.span,
+                );
+                self.expr(fb, &element);
+                let m = self.member(field);
+                fb.emit(Instr::ReplaceField { field: m, additive: false });
+            }
+        }
+        fb.emit(Instr::FlushRecord);
+        fb.emit(Instr::SelectArea(Some(source)));
+        self.emit_skip_one(fb);
+        fb.emit(Instr::Jump(top));
+        fb.patch_here(end);
+    }
+
+    /// `USE IN alias`: the cursor is closed and the work area that was selected stays selected.
+    fn close_alias(&mut self, fb: &mut FuncBuilder, alias: &str) {
+        let area = self.constant(Constant::Str(alias.to_string()));
+        fb.emit(Instr::Const(area));
+        let none = self.constant(Constant::Str(String::new()));
+        fb.emit(Instr::Const(none));
+        fb.emit(Instr::Use { alias: None, named_alias: false, exclusive: false, online: false, in_area: true });
+    }
+
     /// Code that raises one of Visual FoxPro's own errors where it stands. It is what a statement
     /// the compiler can see is wrong compiles to when the product only complains about it as it
     /// runs, which is most of them.
@@ -2654,6 +2837,20 @@ impl ModuleCompiler {
 
     /// The innermost body: test the WHERE clause, then push one row.
     fn query_row(&mut self, fb: &mut FuncBuilder, q: &Query, pushed: &[Pushed<'_>]) {
+        // a `*` reads each source's record out of its buffer when the row is made, and only a
+        // field read fills the buffer; a select list of nothing but `*` reads no field, so the
+        // sources it stands for are read here first. The innermost source is selected again
+        // afterwards, which is where the WHERE clause and the select list expect to stand.
+        let stars: Vec<&Option<Name>> = q.columns.iter().filter_map(|c| if let QueryColumn::All(a) = c { Some(a) } else { None }).collect();
+        if !stars.is_empty() {
+            for (i, source) in q.from.iter().enumerate() {
+                let wanted = stars.iter().any(|a| a.as_ref().is_none_or(|a| a.upper.eq_ignore_ascii_case(&source.alias.upper)));
+                if wanted {
+                    fb.emit(Instr::SqlTouch(i as u16));
+                }
+            }
+            fb.emit(Instr::SelectSource((q.from.len() - 1) as u16));
+        }
         let skip = q.where_.as_ref().map(|w| {
             self.expr(fb, w);
             fb.emit(Instr::JumpIfFalse(0))

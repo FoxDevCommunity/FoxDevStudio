@@ -651,6 +651,11 @@ impl Parser {
         if matches!(self.peek_kind(), TokKind::Num(..)) {
             return Ok(NameRef::Computed(self.expr()?));
         }
+        // `IN SELECT('orders')`: a name with a bracket after it is a call that answers with
+        // the work area, not an alias called SELECT
+        if matches!(self.peek_kind(), TokKind::Ident(_)) && matches!(self.peek_at(1).kind, TokKind::LParen) {
+            return Ok(NameRef::Computed(self.expr()?));
+        }
         self.name_ref("alias")
     }
 
@@ -2418,6 +2423,14 @@ impl Parser {
             let (args, in_prog) = self.do_clauses()?;
             return Ok(Some(StmtKind::DoExpr { name, args, in_prog }));
         }
+        // `DO "C:\tools\run.prg"`: a path with spaces or a drive in it is written in quotes,
+        // and a quoted name is the same thing as one worked out
+        if let TokKind::Str(text) = self.peek_kind() {
+            let tok = self.advance();
+            let name = Expr::new(ExprKind::Str(text), tok.span);
+            let (args, in_prog) = self.do_clauses()?;
+            return Ok(Some(StmtKind::DoExpr { name, args, in_prog }));
+        }
         let name = self.file_name("program name")?;
         let (args, in_prog) = self.do_clauses()?;
         Ok(Some(StmtKind::Do { name, args, in_prog }))
@@ -2800,6 +2813,11 @@ impl Parser {
                 let e = self.expr()?;
                 self.expect(&TokKind::RParen, "')'")?;
                 e
+            } else if let TokKind::Str(text) = self.peek_kind() {
+                // `CREATE TABLE 'APPREG01.DBF' NAME 'APPREG01' (...)` is what a generated
+                // data-definition program writes: the file in quotes, then the long name
+                let tok = self.advance();
+                Expr::new(ExprKind::Str(text), tok.span)
             } else {
                 // a bare name, with the extension VFP lets it carry: CREATE TABLE people.dbf
                 let mut name = self.expect_ident("table name")?.text;
@@ -2809,6 +2827,12 @@ impl Parser {
                 }
                 Expr::new(ExprKind::Str(name), first.span)
             };
+            // `NAME LongTableName` is what the database lists the table as. The container here
+            // lists a table by its file stem, which is what every program that writes this
+            // clause names it anyway, so the long name is read and not kept.
+            if self.eat_kw("NAME") {
+                let _ = self.name_ref("long table name")?;
+            }
             let free = self.eat_kw("FREE");
             if let Some(from_array) = self.from_array_clause()? {
                 self.skip_line_keep_newline();
@@ -3050,10 +3074,15 @@ impl Parser {
             }
             self.expect(&TokKind::RParen, "')'")?;
         }
+        // `INSERT INTO t (fields) SELECT ...`: the rows come from a query of the program's own
+        if self.is_kw("SELECT") {
+            let query = self.query(first.span)?;
+            return Ok(StmtKind::Insert { alias, named, fields, source: InsertSource::Query(Box::new(query)) });
+        }
         if !self.eat_kw("VALUES") {
             let what = self.peek().ident().map(|s| s.to_ascii_uppercase()).unwrap_or_default();
             self.skip_line_keep_newline();
-            return Err(self.error(first.span, format!("INSERT ... {what} is not supported; only VALUES and FROM are")));
+            return Err(self.error(first.span, format!("INSERT ... {what} is not supported; only VALUES, FROM and SELECT are")));
         }
         self.expect(&TokKind::LParen, "'('")?;
         let mut values = Vec::new();
@@ -3612,6 +3641,7 @@ impl Parser {
             having: None,
             order_by: Vec::new(),
             into: QueryInto::Table(into),
+            union: None,
             span: first.span,
         }))))
     }
@@ -5566,6 +5596,37 @@ impl Parser {
         }
         let having = if self.eat_kw("HAVING") { Some(self.expr()?) } else { None };
 
+        // `UNION [ALL] SELECT ...`: the next query is read whole, and its ORDER BY and INTO -
+        // which the syntax puts after the last SELECT - belong to the union, so they come up
+        // here and the query that carried them is left with none
+        if self.eat_kw("UNION") {
+            let all = self.eat_kw("ALL");
+            if !self.is_kw("SELECT") {
+                return Err(self.expected("SELECT"));
+            }
+            self.advance();
+            let mut rest = self.query_body(start)?;
+            let order_by = std::mem::take(&mut rest.order_by);
+            let into = std::mem::replace(&mut rest.into, QueryInto::Browse);
+            if from.is_empty() {
+                return Err(self.error(start, "SELECT needs a FROM clause"));
+            }
+            return Ok(Query {
+                distinct,
+                top,
+                top_percent,
+                columns,
+                from,
+                where_,
+                group_by,
+                having,
+                order_by,
+                into,
+                union: Some(Box::new(QueryUnion { all, query: rest })),
+                span: start.to(self.prev_span()),
+            });
+        }
+
         let mut order_by = Vec::new();
         if self.eat_kw("ORDER") {
             self.eat_kw("BY");
@@ -5622,6 +5683,7 @@ impl Parser {
             having,
             order_by,
             into,
+            union: None,
             span: start.to(self.prev_span()),
         })
     }
@@ -6045,6 +6107,9 @@ impl Parser {
         }
         match self.peek_kind() {
             TokKind::Num(..) => self.expr_or_recover(),
+            // `USE IN SELECT('orders')` is how a program closes a table it may or may not have
+            // open: a name with a bracket after it is a call, whose answer is the work area
+            TokKind::Ident(_) if matches!(self.peek_at(1).kind, TokKind::LParen) => self.expr_or_recover(),
             TokKind::Ident(name) => {
                 self.advance();
                 Expr::new(ExprKind::Str(name), span)
@@ -7600,6 +7665,18 @@ impl Parser {
         let tok = self.peek().clone();
         let kind = match tok.kind.clone() {
             TokKind::Num(n, chars, decimals) => ExprKind::Num(n, chars, decimals),
+            // `WHERE clogon = ?lcUser` inside a SELECT-SQL: the mark is how a parameter is
+            // written for SQL pass-through, and a local query takes it too. Measured in Visual
+            // FoxPro 9: what follows it is an ordinary expression, and a name that is both a
+            // field of a source and a variable is the field, as it is without the mark -
+            // `?m.name` is how the variable is asked for. INSERT, UPDATE and DELETE - SQL do
+            // not take it: each is a syntax error in the product.
+            TokKind::Question if self.in_query > 0 => {
+                self.advance();
+                let e = self.postfix_expr()?;
+                let span = tok.span.to(e.span);
+                return Ok(Expr::new(e.kind, span));
+            }
             // `$` in front of a number is money written down; between two values it is the
             // substring operator, and that is the other place this token turns up
             TokKind::Dollar if matches!(self.peek_at(1).kind, TokKind::Num(..) | TokKind::Minus) => {

@@ -1042,6 +1042,9 @@ pub enum InsertSource {
     /// `FROM ARRAY a`, `FROM MEMVAR` and `FROM NAME oRec` read the record from the same three
     /// places GATHER does, which is what they are: an APPEND BLANK and a GATHER.
     From(ScatterWhere),
+    /// `INSERT INTO t [(fields)] SELECT ...`: a record per row of the query, the columns going
+    /// to the fields named, or to the table's fields in order when none are.
+    Query(Box<Query>),
 }
 
 /// What a copy makes.
@@ -1210,7 +1213,19 @@ pub struct Query {
     pub having: Option<Expr>,
     pub order_by: Vec<OrderTerm>,
     pub into: QueryInto,
+    /// `UNION [ALL] SELECT ...`: the next query whose rows go under this one's. The ORDER BY and
+    /// the INTO belong to the union as a whole and are kept on the first query, however many
+    /// SELECTs down the chain they were written after.
+    pub union: Option<Box<QueryUnion>>,
     pub span: Span,
+}
+
+/// One `UNION` step of a query.
+#[derive(Debug, Clone, PartialEq)]
+pub struct QueryUnion {
+    /// `UNION ALL`: rows that appear in both sides are kept twice. Without it they are folded.
+    pub all: bool,
+    pub query: Query,
 }
 
 /// One item of the select list.
