@@ -242,6 +242,7 @@ pub fn stmt(s: &Stmt) -> String {
             let v = match value {
                 SetValue::On => "on".to_string(),
                 SetValue::Off => "off".to_string(),
+                SetValue::Switch { on, words } => format!("{} {words}", if *on { "on" } else { "off" }),
                 SetValue::To(e) => format!("(to {})", exprs(e)),
                 SetValue::Word(w) => format!("(word \"{w}\")"),
             };

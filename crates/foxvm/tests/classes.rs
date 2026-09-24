@@ -240,26 +240,29 @@ fn property_values_are_constant_folded() {
 // ----- diagnostics ---------------------------------------------------------------------------
 
 #[test]
-fn a_non_constant_property_value_is_an_error() {
-    let r =
-        compile_program("RETURN\nDEFINE CLASS c AS Custom\n  Caption = MyFunc()\n  Left = nStart\nENDDEFINE\n", "main");
-    assert!(r.module.is_none());
+fn a_property_value_that_is_an_expression_is_kept_as_its_source() {
+    // Measured: Visual FoxPro works these out when an object is made, so the host is handed the
+    // text to evaluate then rather than a value folded now.
+    let r = compile_program(
+        "RETURN\nDEFINE CLASS c AS Custom\n  Caption = TRANSFORM(DTOS(DATE()), \"@R xxxx-xx-xx\")\n  Left = nStart + 1\n  Top = 5\nENDDEFINE\n",
+        "main",
+    );
+    let m = r.module.expect("compiles");
     assert_eq!(
-        r.diagnostics.iter().filter(|d| d.is_error()).map(|d| d.message.clone()).collect::<Vec<_>>(),
+        m.classes[0].expressions,
         vec![
-            "Property 'Caption' of 'c' must be set to a constant value",
-            "Property 'Left' of 'c' must be set to a constant value"
+            ("Caption".to_string(), "TRANSFORM(DTOS(DATE()), \"@R xxxx-xx-xx\")".to_string()),
+            ("Left".to_string(), "nStart + 1".to_string())
         ]
     );
+    assert_eq!(m.classes[0].properties.len(), 1);
 
     let r = compile_program(
         "RETURN\nDEFINE CLASS c AS Custom\n  ADD OBJECT img AS Image WITH Picture = GetPic()\nENDDEFINE\n",
         "main",
     );
-    assert_eq!(
-        r.diagnostics.iter().filter(|d| d.is_error()).map(|d| d.message.clone()).collect::<Vec<_>>(),
-        vec!["Property 'Picture' of 'c.img' must be set to a constant value"]
-    );
+    let m = r.module.expect("compiles");
+    assert_eq!(m.classes[0].members[0].expressions, vec![("Picture".to_string(), "GetPic()".to_string())]);
 }
 
 #[test]
