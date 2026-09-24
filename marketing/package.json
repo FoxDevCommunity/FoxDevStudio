@@ -11,9 +11,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "gen": "node scripts/instructions.mjs",
-    "gen:check": "node scripts/instructions.mjs --check",
-    "prebuild": "node scripts/instructions.mjs --check",
-    "deploy": "astro build && wrangler deploy"
+    "prebuild": "node scripts/instructions.mjs",
+    "deploy": "astro build && wrangler deploy",
+    "predev": "node scripts/instructions.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-satteri": "^0.4.1",
