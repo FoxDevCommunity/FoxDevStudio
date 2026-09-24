@@ -57,10 +57,8 @@ jobs:
       # need Visual FoxPro, an .fll or COM skip themselves when those are not there.
       - run: npm run check
 
-      # The instruction reference on the site is generated from the VM's source, and the
-      # site's build refuses to run when the generated file is stale. Checked here so a
-      # change to bytecode.rs without a regeneration fails the main pipeline, not only the
-      # site's deploy.
+      # The instruction reference on the site is generated from the VM's source at build
+      # time; building the site here proves a change to bytecode.rs still generates cleanly.
       - name: Build the site
         if: runner.os == 'Linux'
         working-directory: marketing
