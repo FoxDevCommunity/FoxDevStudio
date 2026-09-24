@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { setApi } from '@renderer/api/foxdev';
 import { createMemoryApi } from '@renderer/api/memoryApi';
 import { useSessionStore } from '@renderer/runtime/session';
@@ -434,6 +434,42 @@ describe('DEFINE CLASS', () => {
     );
     const printed = useSessionStore.getState().output.filter((o) => o.kind === 'output').map((o) => o.text.replace(/\s+/g, ' ').trim());
     expect(printed).toEqual(['in Error 1', 'after ERROR 1', 'count 1', 'child Error', 'in Error 1', 'after ERROR 1', 'count 1']);
+  });
+
+  it('stops at the error dialog for an error inside an Error method the runtime called', async () => {
+    // Measured in Visual FoxPro 9: when the runtime runs Error because a method of the object
+    // failed, an error inside Error is not skipped. It goes to the default handler - the dialog,
+    // where vfp9.exe waits - and ON ERROR is not asked.
+    const finished = useSessionStore.getState().execute(
+      source,
+      [
+        'ON ERROR ? "ON ERROR got", ERROR()',
+        'o = CREATEOBJECT("c2")',
+        'o.Boom()',
+        '? "back"',
+        'RETURN',
+        '',
+        'DEFINE CLASS c2 AS Custom',
+        '  PROCEDURE Boom',
+        '    ? "boom", nosuchvar',
+        '  ENDPROC',
+        '  PROCEDURE Error(nError, cMethod, nLine)',
+        '    ? "in Error", nError',
+        '    ERROR "raised inside Error"',
+        '    ? "after ERROR"',
+        '  ENDPROC',
+        'ENDDEFINE',
+      ].join('\n'),
+    );
+    await vi.waitFor(() => expect(useSessionStore.getState().errorReport).not.toBeNull());
+
+    const report = useSessionStore.getState().errorReport;
+    expect(report?.error.code).toBe(1098);
+    expect(report?.error.program).toBe('C2.ERROR');
+    const printed = useSessionStore.getState().output.filter((o) => o.kind === 'output').map((o) => o.text.replace(/\s+/g, ' ').trim());
+    expect(printed.filter((t) => t !== '')).toEqual(['in Error 12']);
+    report?.resolve('cancel');
+    await finished;
   });
 
   it('does not hand an error inside the Error method back to itself', async () => {

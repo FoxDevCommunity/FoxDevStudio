@@ -4017,11 +4017,6 @@ impl ModuleCompiler {
             fb.emit(Instr::CallBuiltin { id, argc });
             return;
         }
-        if name.upper == "DODEFAULT" {
-            let argc = self.args(fb, args, false, false);
-            fb.emit(Instr::DoDefault(argc));
-            return;
-        }
         let argc = self.args(fb, args, true, false);
         let n = self.name(&name.upper);
         fb.emit(Instr::IndexOrCall { name: n, argc });

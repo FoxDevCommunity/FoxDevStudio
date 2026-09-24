@@ -2520,23 +2520,32 @@ impl Vm {
                 fb.query_unwind = fb.query.take();
             }
         }
-        // Measured in Visual FoxPro 9: an error raised inside an object's Error method - whether
-        // the runtime called it, the program called it, or DODEFAULT() reached an ancestor's - is
-        // not handed to Error again, nor to ON ERROR. The method carries on at its next statement.
-        // A TRY inside it still catches, and is nearer.
-        if let Some(ix) = self.running_error_method(fb, floor)
+        // Measured in Visual FoxPro 9, an error raised inside an object's Error method goes one of
+        // two ways, and a TRY inside the method is nearer than either:
+        // - the program called the method (or DODEFAULT() reached an ancestor's from there): the
+        //   error goes neither to Error again nor to ON ERROR, and the method carries on at its
+        //   next statement;
+        // - the runtime called it, because a method of the object raised an error: the error is
+        //   not skipped and goes to the default handler, the dialog, without ON ERROR being asked.
+        // `in_class_error` holds the object while the runtime is running its Error method.
+        let mut in_runtime_error_method = false;
+        if let Some((ix, obj)) = self.running_error_method(fb, floor)
             && !fb.handlers.last().is_some_and(|h| h.frame >= ix)
         {
-            let at = fb.frames.len() - 1;
-            let (resume_pc, stmt_sp) = {
-                let fr = &fb.frames[at];
-                let code = &self.proto(fr.module, fr.func).code;
-                let next = (fr.pc..code.len()).find(|&i| matches!(code[i], Instr::Stmt(_))).unwrap_or(code.len().saturating_sub(2));
-                (next, fr.stmt_sp)
-            };
-            fb.stack.truncate(stmt_sp);
-            fb.frames[at].pc = resume_pc;
-            return None;
+            if self.in_class_error.contains(&obj) {
+                in_runtime_error_method = true;
+            } else {
+                let at = fb.frames.len() - 1;
+                let (resume_pc, stmt_sp) = {
+                    let fr = &fb.frames[at];
+                    let code = &self.proto(fr.module, fr.func).code;
+                    let next = (fr.pc..code.len()).find(|&i| matches!(code[i], Instr::Stmt(_))).unwrap_or(code.len().saturating_sub(2));
+                    (next, fr.stmt_sp)
+                };
+                fb.stack.truncate(stmt_sp);
+                fb.frames[at].pc = resume_pc;
+                return None;
+            }
         }
         if let Some(step) = self.class_error_method(host, fb, &err, floor) {
             return Some(step);
@@ -2573,6 +2582,7 @@ impl Vm {
         }
         if floor == 0
             && !fb.in_error_handler
+            && !in_runtime_error_method
             && !fb.frames.is_empty()
             && let Some(text) = self.on_error.clone()
         {
@@ -2582,18 +2592,19 @@ impl Vm {
     }
 
     /// The innermost frame, at or above `floor`, that is running some object's Error method -
-    /// its own, or an ancestor's copy `ERROR#n` - when the error was raised in that very frame.
-    fn running_error_method(&self, fb: &Fiber, floor: usize) -> Option<usize> {
+    /// its own, or an ancestor's copy `ERROR#n` - when the error was raised in that very frame,
+    /// with the object whose method it is.
+    fn running_error_method(&self, fb: &Fiber, floor: usize) -> Option<(usize, u32)> {
         let at = fb.frames.len().checked_sub(1)?;
         if at < floor {
             return None;
         }
         let fr = &fb.frames[at];
-        fr.this?;
+        let this = fr.this?;
         let name = &self.proto(fr.module, fr.func).display_name;
         let event = name.rsplit('.').next().unwrap_or(name).to_ascii_uppercase();
         let base = event.split('#').next().unwrap_or(&event);
-        (base == "ERROR").then_some(at)
+        (base == "ERROR").then_some((at, this.0))
     }
 
     /// VFP hands an error raised inside a method to the object's own `Error` method, unless a
@@ -4103,10 +4114,6 @@ impl Vm {
             Instr::NoDefault => {
                 fb.frames.last_mut().expect("frame").nodefault = true;
                 fb.nodefault = true;
-            }
-            Instr::DoDefault(argc) => {
-                pop_n(fb, *argc as usize)?;
-                fb.stack.push(Value::Logical(true));
             }
             Instr::TryPush { catch, finally } => {
                 let frame = fb.frames.len() - 1;
