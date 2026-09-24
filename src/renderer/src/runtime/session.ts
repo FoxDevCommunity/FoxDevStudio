@@ -496,6 +496,12 @@ export const useSessionStore = create<SessionState>((set, get) => {
 
     // `oContainer.NewObject(name, class, file)`: a member of a class out of a class library
     desktop.libraryObject = (className, module, into) => libraryObject(className, module, into);
+    // _SCREEN.AddObject makes its object the way CREATEOBJECT does, a program's own classes
+    // included, so it goes the same way a CREATEOBJECT from the VM goes
+    desktop.createNamedObject = (className) =>
+      Promise.resolve(
+        perform({ kind: 'CreateObject', class: className, args: [], definition: programClass(className) }, { fiber: 0, generation: 0 }),
+      );
 
     // an ActiveX control this runtime does not draw is still reachable through COM
     desktop.createOleObject = (progId) => {
@@ -615,6 +621,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
         noshow,
         args,
         cursors: compiled.doc.data,
+        dataEnvironment: true,
         // ^oWindows[1,0] among the form's own members: an array property, dimensioned before
         // anything can read it
         arrays: compiled.doc.meta?.vfp?.arrays,
@@ -1467,6 +1474,16 @@ export const useSessionStore = create<SessionState>((set, get) => {
       if (module < 0) return [fallback];
       const known = definedClasses(module);
       return known.length > 0 ? known : [fallback];
+    }
+
+    /** A `DEFINE CLASS` of that name in any program loaded so far, with the module holding it. */
+    function programClass(className: string): VfpClassDef | null {
+      const wanted = className.toLowerCase();
+      for (const id of new Set(modules.values())) {
+        const found = definedClasses(id).find((c) => c.name.toLowerCase() === wanted);
+        if (found) return { ...found, module: found.module ?? id };
+      }
+      return null;
     }
 
     /** The `DEFINE CLASS` definitions a module holds, read once and kept. */

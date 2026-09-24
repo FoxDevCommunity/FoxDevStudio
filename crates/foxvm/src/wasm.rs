@@ -355,6 +355,35 @@ impl Host for JsHost {
         })
     }
 
+    /// Optional as well: `hasCodeMethod(obj, name)`, which is how Access and Assign methods are found.
+    fn has_code_method(&mut self, obj: Handle, name: &str) -> bool {
+        optional_method(&self.reads, "hasCodeMethod")
+            .and_then(|f| f.call2(self.reads.as_ref(), &JsValue::from(obj.0), &JsValue::from_str(name)).ok())
+            .and_then(|answer| answer.as_bool())
+            .unwrap_or(false)
+    }
+
+    /// Optional as well: `released(obj)` is true for a form that has gone.
+    fn released(&mut self, obj: Handle) -> bool {
+        optional_method(&self.reads, "released")
+            .and_then(|f| f.call1(self.reads.as_ref(), &JsValue::from(obj.0)).ok())
+            .and_then(|answer| answer.as_bool())
+            .unwrap_or(false)
+    }
+
+    /// Optional too: `enumerate(obj, member)` answers the collection as an array, or nothing.
+    fn enumerate(&mut self, obj: Handle, member: &str) -> Option<Value> {
+        let f = optional_method(&self.reads, "enumerate")?;
+        let answer = f.call2(self.reads.as_ref(), &JsValue::from(obj.0), &JsValue::from_str(member)).ok()?;
+        if answer.is_undefined() || answer.is_null() {
+            return None;
+        }
+        match from_js(answer) {
+            items @ Value::Array(_) => Some(items),
+            _ => None,
+        }
+    }
+
     fn object_class(&mut self, obj: Handle) -> Option<String> {
         self.reads.object_class(obj.0).as_string()
     }

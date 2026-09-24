@@ -237,6 +237,12 @@ export class RuntimeObject {
   alive = true;
   parent: RuntimeObject | null = null;
   /**
+   * The Name a program gave it while it ran - `oForm.Name = "one"` - which is what Name reads
+   * from then on (measured). The node keeps the name the object was built with, because that is
+   * how its methods are found.
+   */
+  renamed: string | null = null;
+  /**
    * The compiled module holding this object's own method bodies, or -1 when whatever contains
    * it holds them. A form has one because it is a document; so does an object built from a
    * class library, because the class is a document of its own wherever the object ends up -
@@ -801,9 +807,12 @@ export class RuntimeObject {
    * methods of its own - `CenterForm`, `GetDirectory` - and those are called like any other.
    */
   hasOwnMethod(name: string): boolean {
-    const lower = name.toLowerCase();
-    return Object.keys(this.node.methods).some((m) => m.toLowerCase() === lower);
+    this.ownMethods ??= new Set(Object.keys(this.node.methods).map((m) => m.toLowerCase()));
+    return this.ownMethods.has(name.toLowerCase());
   }
+
+  /** The node's method names, lower-cased: asked on every property read, for Access methods. */
+  private ownMethods: Set<string> | undefined;
 
   /** True when the object's class defines this method in FoxPro source. */
   hasClassMethod(name: string): boolean {
@@ -840,6 +849,7 @@ export class RuntimeObject {
   setMethodSource(name: string, source: string): void {
     const key = Object.keys(this.node.methods).find((m) => m.toLowerCase() === name.toLowerCase()) ?? name;
     this.node.methods[key] = source;
+    this.ownMethods?.add(key.toLowerCase());
   }
 
   /** MoveItem: an item of a list control, moved to another place in the list. */
@@ -1100,6 +1110,13 @@ export interface CreateFormOptions {
   nonVisual?: boolean;
   /** The tables the form's data environment names, which become its Cursor objects. */
   cursors?: FormCursor[];
+  /**
+   * Whether the form has a DataEnvironment object. Only a form read from a form file does: a
+   * form made from a class - `CREATEOBJECT("Form")` or a `.vcx` form class - has none, and
+   * `PEMSTATUS(o, "DataEnvironment", 5)` answers .F. for it (measured). Defaults to whether
+   * cursors were given.
+   */
+  dataEnvironment?: boolean;
   /** Property values written as expressions, worked out as the form is built. */
   expressions?: Record<string, string>;
   /** Array properties the objects add for themselves, as `[rows, cols]`. */
@@ -1118,6 +1135,12 @@ export interface CreateFormOptions {
  */
 export class Desktop implements HostReads {
   readonly forms: FormInstance[] = [];
+  /**
+   * What a program has written to `_SCREEN` or given it with AddProperty, by upper-cased name.
+   * A CodeMine application's first lines set the caption and add a property to carry its
+   * start-up parameter across a CLEAR ALL, so the screen has to hold what it is told.
+   */
+  private readonly screenValues = new Map<string, VmValue>();
   /** The formsets running: containers of forms, which are not themselves windows on the screen. */
   readonly formSets: FormSetInstance[] = [];
   /** Handle -> object; index 0 is the desktop itself. */
@@ -1131,8 +1154,13 @@ export class Desktop implements HostReads {
    * application answers to falls through to what `_VFP` was measured holding, so a property this
    * switch has never heard of still answers rather than being missing.
    */
+  /** What a program wrote on `_VFP`: `_VFP.Height = 500` reads back as 500. */
+  private appValues = new Map<string, VmValue>();
+
   private appProp(name: string): VmValue | undefined {
     const measured = BASE_CLASS_MEMBERS['Application'];
+    const written = this.appValues.get(name.toUpperCase());
+    if (written !== undefined) return written;
     switch (name.toUpperCase()) {
       // `_VFP` in the product has no Class and no BaseClass at all - asking raises - but a great
       // deal of code asks any object what it is, and answering is kinder than raising
@@ -1159,7 +1187,7 @@ export class Desktop implements HostReads {
       case 'PROJECTCOUNT':
         return this.activeProject?.() ? 1 : 0;
       case 'FORMCOUNT':
-        return this.forms.length;
+        return this.visibleForms.length;
       // the window's title, which is this product's and not Visual FoxPro's. Name is left as the
       // measurement has it, because a program asking what it is running in is asking about the
       // language it was written for.
@@ -1335,6 +1363,12 @@ export class Desktop implements HostReads {
    * and `null` when it has one whose Init refused to be created - which are different answers,
    * because only the first of them means the program named something that does not exist.
    */
+  /**
+   * An object of the class of that name, made as `CREATEOBJECT()` would make it: a base class,
+   * a `DEFINE CLASS` of a program already loaded, or a class of a loaded class library. The
+   * session provides it; `_SCREEN.AddObject` is what asks.
+   */
+  createNamedObject: ((className: string) => Promise<VmValue>) | null = null;
   libraryObject:
     | ((
         className: string,
@@ -1368,7 +1402,7 @@ export class Desktop implements HostReads {
     instance.className = options.className ?? null;
     instance.nonVisual = options.nonVisual ?? false;
     instance.modal = options.modal ?? instance.get('WindowType') === 1;
-    instance.dataEnvironment = new DataEnvironment(options.cursors);
+    if (options.dataEnvironment ?? options.cursors !== undefined) instance.dataEnvironment = new DataEnvironment(options.cursors);
     this.handles[instance.handle] = instance;
 
     this.buildChildren(form.children, instance);
@@ -1586,6 +1620,7 @@ export class Desktop implements HostReads {
     for (const object of [instance, ...instance.descendants()]) {
       object.alive = false;
       this.handles[object.handle] = undefined;
+      this.gone.add(object.handle);
       this.unbindEvent(object.handle);
       this.unbindEvent(undefined, undefined, object.handle);
     }
@@ -1695,12 +1730,36 @@ export class Desktop implements HostReads {
     return this.forms.filter((f) => !f.nonVisual);
   }
 
+  /**
+   * `_SCREEN.Forms`, topmost first: the form made last is `Forms(1)`. Measured: a Custom object
+   * is not in it, a form nobody has shown is.
+   */
+  private screenForms(): FormInstance[] {
+    return this.visibleForms.reverse();
+  }
+
+  /** `_SCREEN.Forms(n)`; past either end is 1924, as the product says it. */
+  private screenForm(n: VmValue | undefined): VmValue {
+    const form = this.screenForms()[Number(n ?? 0) - 1];
+    if (!form) throw new HostError(1924, 'FORMS is not an object.');
+    return { $obj: form.handle };
+  }
+
   // ---- HostReads: called synchronously from inside wasm; no side effects here ----
 
 
   getProp(obj: number, name: string): VmValue | undefined {
+    const value = this.readProp(obj, name);
+    // a property holding a form that has been released holds .NULL. from then on, as a variable does
+    return value !== null && typeof value === 'object' && '$obj' in value && this.gone.has(value.$obj) ? null : value;
+  }
+
+  private readProp(obj: number, name: string): VmValue | undefined {
     if (obj === APP_HANDLE) return this.appProp(name);
-    if (obj === SCREEN_HANDLE) return this.screenProp(name);
+    if (obj === SCREEN_HANDLE) {
+      const own = this.screenValues.get(name.toUpperCase());
+      return own !== undefined ? own : this.screenProp(name);
+    }
     const host = this.hosted.get(obj);
     // a property read happens inside wasm, so it can only be something that is already known
     if (host) return settled(this.fromHost(host.get(name)));
@@ -1720,7 +1779,7 @@ export class Desktop implements HostReads {
     const upper = name.toUpperCase();
     switch (upper) {
       case 'NAME':
-        return target.name;
+        return target.renamed ?? target.name;
       // Parent is what contains the object, and a top-level form is contained by nothing: the
       // product answers TYPE("THISFORM.Parent") with "U" and raises 1924 on a read - measured -
       // where the screen would make it "O". A sample's Close button asks exactly that question
@@ -1751,6 +1810,15 @@ export class Desktop implements HostReads {
         return target.parentClass;
       case 'CONTROLCOUNT':
         return target.children.length;
+      // a page's place among its pageframe's pages, counting from 1, unless a program moved it;
+      // CodeMine's ActivePage_Assign turns a page number into its PageOrder this way
+      case 'PAGEORDER': {
+        if (target.baseClass !== 'Page') break;
+        const set = target.get('PageOrder');
+        if (typeof set === 'number' && set > 0) return set;
+        const pages = target.parent?.children.filter((c) => c.baseClass === 'Page') ?? [];
+        return pages.indexOf(target) + 1;
+      }
       case 'LISTCOUNT':
         return target.isListControl ? target.items.length : undefined;
       case 'LISTINDEX':
@@ -1788,13 +1856,19 @@ export class Desktop implements HostReads {
       case 'PARENT':
         throw new HostError(1924, 'PARENT is not an object.');
       case 'FORMCOUNT':
-        return this.forms.length;
+        return this.visibleForms.length;
       case 'ACTIVEFORM':
         return this.forms.length ? { $obj: this.forms[this.forms.length - 1]!.handle } : null;
       case 'CAPTION':
         return 'FoxDev Studio';
       case 'VISIBLE':
         return true;
+      // The main window's handle, which a program passes to the Windows API - CodeMine makes a
+      // hidden marker window with it as the parent, so a second copy of the application can
+      // find the first. The IDE's window handle cannot be had from here, and 0 is what Windows
+      // reads as no parent at all, so the call still does what it is for.
+      case 'HWND':
+        return 0;
       case 'APPLICATION':
         return { $obj: APP_HANDLE };
       // `_SCREEN` is a Form - it answers "Form" for its own BaseClass - so everything a form
@@ -1822,12 +1896,16 @@ export class Desktop implements HostReads {
       if (name.toUpperCase() === 'APPLICATION') return APP_HANDLE;
       const form = this.findForm(name);
       if (form) return form.handle;
+      if (name.toUpperCase() === 'FORMS') return 'method';
       return this.appProp(name) !== undefined ? 'prop' : METHOD_NAMES.has(name.toUpperCase()) ? 'method' : 'none';
     }
     if (obj === SCREEN_HANDLE) {
       if (name.toUpperCase() === 'APPLICATION') return APP_HANDLE;
       const form = this.findForm(name);
       if (form) return form.handle;
+      const own = this.screenValues.get(name.toUpperCase());
+      if (own !== undefined) return handleOf(own) ?? 'prop';
+      if (name.toUpperCase() === 'FORMS') return 'method';
       return this.screenProp(name) !== undefined ? 'prop' : METHOD_NAMES.has(name.toUpperCase()) ? 'method' : 'none';
     }
     const host = this.hosted.get(obj);
@@ -1847,7 +1925,8 @@ export class Desktop implements HostReads {
     // a property holding an object is reached through like a member, which is how
     // `THISFORM.oToolbar.Left` finds the toolbar the form keeps
     const held = target.objectValue(name);
-    if (held !== undefined) return held;
+    // one holding a form that has since been released holds .NULL., which only a read can give
+    if (held !== undefined) return this.gone.has(held) ? 'prop' : held;
     // what a formset answers beyond a form: how many forms it holds, which of them is active,
     // and `Forms(n)`, which reads like a method call because it takes a subscript
     if (target instanceof FormSetInstance) {
@@ -1922,6 +2001,26 @@ export class Desktop implements HostReads {
       });
     }
     return out;
+  }
+
+  /** Forms, and what was on them, that have been released; references to them read as .NULL. */
+  private gone = new Set<number>();
+
+  released(obj: number): boolean {
+    return this.gone.has(obj);
+  }
+
+  hasCodeMethod(obj: number, name: string): boolean {
+    const target = this.handles[obj];
+    return target !== undefined && (target.hasClassMethod(name) || target.hasOwnMethod(name));
+  }
+
+  /** What `FOR EACH` walks: the forms of the screen, or of a formset. */
+  enumerate(obj: number, name: string): VmValue | undefined {
+    if (name.toUpperCase() !== 'FORMS') return undefined;
+    const target = this.handles[obj];
+    const forms = obj === SCREEN_HANDLE || obj === APP_HANDLE ? this.screenForms() : target instanceof FormSetInstance ? target.forms : undefined;
+    return forms && { $arr: forms.map((f) => ({ $obj: f.handle })), $cols: 0 };
   }
 
   /** `DEFINE CLASS ... PROCEDURE Error`: what makes the VM route an error to the object. */
@@ -2044,6 +2143,25 @@ export class Desktop implements HostReads {
    * same error a read would when the property does not exist.
    */
   setProp(obj: number, name: string, value: VmValue): void {
+    // `_VFP` too - CodeMine puts the main window back where it was with `_VFP.Height = ...` -
+    // and a name it does not have is the automation error the product raises (measured)
+    if (obj === APP_HANDLE) {
+      const upper = name.toUpperCase();
+      if (!this.appValues.has(upper) && this.appProp(name) === undefined) {
+        throw new HostError(1426, 'OLE error code 0x80020006: Unknown name.');
+      }
+      this.appValues.set(upper, value);
+      return;
+    }
+    // the screen holds what it is told; a name it has never had is 1734, as on any form
+    if (obj === SCREEN_HANDLE) {
+      const upper = name.toUpperCase();
+      if (!this.screenValues.has(upper) && this.screenProp(name) === undefined) {
+        throw new HostError(1734, `Property ${upper} is not found.`);
+      }
+      this.screenValues.set(upper, value);
+      return;
+    }
     const host = this.hosted.get(obj);
     if (host) {
       if (host.member(name) === 'none' && host.get(name) === undefined) {
@@ -2067,6 +2185,7 @@ export class Desktop implements HostReads {
     const refused = target.refusesWrite(name);
     if (refused !== undefined) throw new HostError(refused, `${name.toUpperCase()} is a read-only property`);
     // a property may hold an object: a form keeps the toolbar it put up in one of its own
+    if (name.toUpperCase() === 'NAME' && typeof value === 'string') target.renamed = value;
     const object = handleOf(value);
     if (object !== undefined) target.setObjectValue(name, object);
     else if (isDate(value) || isDateTime(value)) target.setMomentValue(name, value);
@@ -2138,6 +2257,7 @@ export class Desktop implements HostReads {
       if (result === undefined) throw new HostError(1925, `Unknown member ${name.toUpperCase()}.`);
       return result;
     }
+    if ((obj === SCREEN_HANDLE || obj === APP_HANDLE) && name.toUpperCase() === 'FORMS') return this.screenForm(args[0]);
     const target = obj === SCREEN_HANDLE ? undefined : this.handles[obj];
     // a formset shows, hides and releases all of its forms at once, and hands them out by number
     if (target instanceof FormSetInstance) {
@@ -2183,7 +2303,8 @@ export class Desktop implements HostReads {
         return null;
       case 'RELEASE': {
         const form = target instanceof FormInstance ? target : target?.form();
-        return form ? this.releaseForm(form, { queryUnload: false }).then(() => null) : null;
+        // measured: Release() answers .T.
+        return form ? this.releaseForm(form, { queryUnload: false }).then(() => true) : null;
       }
       case 'SHOW':
         target?.set('Visible', true);
@@ -2347,7 +2468,9 @@ export class Desktop implements HostReads {
       }
       case 'ADDPROPERTY': {
         const [property, value] = args;
-        if (typeof property !== 'string' || !target) return false;
+        if (typeof property !== 'string') return false;
+        if (obj === SCREEN_HANDLE) return this.addProperty(SCREEN_HANDLE, property, value ?? null);
+        if (!target) return false;
         return this.addProperty(target.handle, property, value ?? null);
       }
       case 'RESETTODEFAULT': {
@@ -2527,6 +2650,7 @@ export class Desktop implements HostReads {
         // program runs can name one. `AddObject("ole1", "olecontrol", "WMPlayer.OCX")` is how
         // the samples reach the Media Player.
         const [name, klass, ole] = args;
+        if (obj === SCREEN_HANDLE) return this.screenAddObject(String(vmToProp(name ?? '') ?? ''), String(vmToProp(klass ?? '') ?? ''));
         if (!target) throw new HostError(1943, 'Member  does not evaluate to an object.');
         return this.addObject(
           target,
@@ -2571,6 +2695,9 @@ export class Desktop implements HostReads {
         if (target?.isOleControl) {
           throw new HostError(1429, `${target.name} is an ActiveX control; this runtime cannot call into COM`);
         }
+        // an event the object has, called with no code written for it, answers .T. - measured on
+        // Init, Click, Destroy, Valid and the rest, which CodeMine leans on to fire a page's Init
+        if (target && (target.hasEvent(name) || target.hasMethodName(name))) return true;
         return undefined;
       }
     }
@@ -2607,6 +2734,23 @@ export class Desktop implements HostReads {
    * `AddObject(cName, cClass)`: a control created while the form runs. VFP adds it hidden, so
    * the code that follows can position it before it appears.
    */
+  /**
+   * `_SCREEN.AddObject(cName, cClass)`: an object of the class, made as CREATEOBJECT makes one,
+   * held by the screen under that name. A CodeMine application keeps its global object manager
+   * there - `_SCREEN.AddObject('cmGlobalObjectManager', 'cmGlobalObjectManager')`, a class its
+   * procedure file defines - and reaches it as `_SCREEN.cmGlobalObjectManager` from then on.
+   */
+  private async screenAddObject(name: string, className: string): Promise<VmValue> {
+    if (!this.createNamedObject) throw new HostError(1733, `Class definition ${className.toUpperCase()} is not found.`);
+    const made = await this.createNamedObject(className);
+    // an Init that refused leaves the screen without the member, as it leaves a form without one
+    if (made === null || made === false) return false;
+    this.screenValues.set(name.toUpperCase(), made);
+    const handle = handleOf(made);
+    if (handle !== undefined) this.handles[handle]?.set('Name', name.toUpperCase(), 'program');
+    return true;
+  }
+
   private addObject(parent: RuntimeObject, name: string, className: string, oleClass = ''): Promise<VmValue> | VmValue {
     const type = baseClassToControlType(className);
     if (type === null || type === 'Form') throw new HostError(1733, `Class definition ${className.toUpperCase()} is not found.`);
@@ -2790,6 +2934,13 @@ export class Desktop implements HostReads {
    * 31, and the answer is .T. whether or not the object already had the property.
    */
   addProperty(obj: number, name: string, value: VmValue): boolean {
+    if (obj === SCREEN_HANDLE) {
+      // an array property on the screen is kept as its first value, which is all anything
+      // reads of one there
+      const bare = (arraySubscripts(name)?.name ?? name).toUpperCase();
+      this.screenValues.set(bare, value ?? false);
+      return true;
+    }
     const target = this.handles[obj];
     if (!target) return false;
     const sized = arraySubscripts(name);

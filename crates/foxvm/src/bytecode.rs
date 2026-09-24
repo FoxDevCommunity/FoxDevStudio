@@ -357,6 +357,9 @@ pub enum Instr {
     /// FOR EACH support: [array, index] -> [array, index+1, element]; at the end pops both and
     /// jumps to the exit.
     ForEachNext(u32),
+    /// `FOR EACH x IN obj.Member`: [obj] -> [items] and a jump past the member's ordinary read
+    /// when the host enumerates the member as a collection; otherwise [obj] -> [] and on.
+    ForEachItems { member: u32, target: u32 },
 
     // ---- calls
     /// `name(args)`: array element access when `name` resolves to an array, else a user function

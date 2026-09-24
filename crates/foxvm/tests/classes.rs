@@ -296,7 +296,7 @@ fn a_duplicate_class_name_is_an_error() {
 }
 
 #[test]
-fn of_classlib_and_access_methods_only_warn() {
+fn of_classlib_only_warns_and_access_methods_are_plain_methods() {
     let src = "RETURN\n\
         DEFINE CLASS c AS Custom OF mylib.vcx OLEPUBLIC\n\
         \tCaption = \"x\"\n\
@@ -307,14 +307,10 @@ fn of_classlib_and_access_methods_only_warn() {
     assert!(!foxvm::parser::has_errors(&out.diagnostics), "{:#?}", out.diagnostics);
     assert_eq!(
         messages(&out.diagnostics),
-        vec![
-            "OF mylib.vcx is ignored: the class is taken from this program",
-            "Caption_ACCESS: access and assign methods are not honoured yet",
-            "Caption_ASSIGN: access and assign methods are not honoured yet",
-        ]
+        vec!["OF mylib.vcx is ignored: the class is taken from this program"]
     );
     assert_eq!(out.program.classes[0].class_lib.as_deref(), Some("mylib.vcx"));
-    // The methods are still compiled as ordinary ones.
+    // They are compiled as ordinary methods; a property read or write is what calls them.
     let m = module(src);
     assert_eq!(m.classes[0].methods.len(), 2);
 }

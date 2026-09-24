@@ -376,7 +376,8 @@ impl FuncBuilder {
             | Instr::JumpIfFalseKeep(t)
             | Instr::JumpIfTrueKeep(t)
             | Instr::ForTest(t)
-            | Instr::ForEachNext(t) => *t = target,
+            | Instr::ForEachNext(t)
+            | Instr::ForEachItems { target: t, .. } => *t = target,
             _ => unreachable!("patching a non-jump"),
         }
     }
@@ -943,7 +944,21 @@ impl ModuleCompiler {
             }
             StmtKind::ForEach { var, collection, body } => {
                 let target = self.var_target(fb, var);
+                // `obj.Member` may be a collection the host walks rather than a value it reads -
+                // `_SCREEN.Forms` - so the host is asked first, and the member is read as any
+                // other expression only when it is not one
+                let items = match &collection.kind {
+                    ExprKind::Member { obj, name } if !matches!(&obj.kind, ExprKind::Var(base) if base.upper == "M") => {
+                        self.expr(fb, obj);
+                        let member = self.member(name);
+                        Some(fb.emit(Instr::ForEachItems { member, target: 0 }))
+                    }
+                    _ => None,
+                };
                 self.expr(fb, collection);
+                if let Some(at) = items {
+                    fb.patch_here(at);
+                }
                 let zero = self.constant(Constant::num(0.0));
                 fb.emit(Instr::Const(zero));
                 let top = fb.pc();

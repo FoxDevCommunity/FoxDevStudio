@@ -3189,6 +3189,39 @@ impl Vm {
         }
     }
 
+    /// The Access or Assign method that stands in for reading or writing `name` on `h` - `which`
+    /// is "ACCESS" or "ASSIGN" - when the object has one. Measured: inside either of the two,
+    /// `THIS.name` is the property itself, which is the only way they can reach what they guard.
+    fn accessor(&self, host: &mut dyn Host, fb: &Fiber, h: Handle, name: &str, which: &str) -> Option<String> {
+        if h.0 == 0 || crate::foxscript::in_range(h) {
+            return None;
+        }
+        let method = format!("{}_{which}", name.to_ascii_uppercase());
+        if !host.has_code_method(h, &method) {
+            return None;
+        }
+        let env = env_index(fb, fb.frames.len() - 1);
+        let frame = &fb.frames[env];
+        if frame.this == Some(h) {
+            let running = &self.proto(frame.module, frame.func).display_name;
+            let last = running.rsplit('.').next().unwrap_or(running);
+            let last = last.split('#').next().unwrap_or(last).to_ascii_uppercase();
+            let property = name.to_ascii_uppercase();
+            if last == format!("{property}_ACCESS") || last == format!("{property}_ASSIGN") {
+                return None;
+            }
+        }
+        Some(method)
+    }
+
+    /// A value as a variable reads it: a released form is .NULL. to everything still holding it.
+    fn live(host: &mut dyn Host, v: Value) -> Value {
+        match v.deref() {
+            Value::Object(h) if h.0 != 0 && !crate::foxscript::in_range(h) && host.released(h) => Value::Null,
+            _ => v,
+        }
+    }
+
     fn check_object(&self, host: &mut dyn Host, v: &Value, what: &str) -> Result<Handle, RtError> {
         let h = match v.deref() {
             Value::Object(h) => h,
@@ -3283,7 +3316,7 @@ impl Vm {
             }
             Instr::LoadLocal(s) => {
                 let v = self.load_local(fb, *s)?;
-                fb.stack.push(v);
+                fb.stack.push(Self::live(host, v));
             }
             Instr::StoreLocal(s) => {
                 let v = pop!();
@@ -3299,7 +3332,7 @@ impl Vm {
                         FieldRead::Suspend(req) => return Ok(self.ask(fb, req)),
                     }
                 } else if let Some(v) = self.load_name(fb, &name) {
-                    fb.stack.push(v);
+                    fb.stack.push(Self::live(host, v));
                 } else if let Some(alias) = self.query_field(fb, &name) {
                     // inside a query a name that is nothing else is a field of one of its
                     // sources, which is how a join names the columns it did not have to qualify
@@ -3386,7 +3419,7 @@ impl Vm {
                 let subs = pop_subscripts(fb, *n)?;
                 let arr = pop!();
                 let v = index_array(&arr, &subs)?;
-                fb.stack.push(v);
+                fb.stack.push(Self::live(host, v));
             }
             Instr::StoreIndex(n) => {
                 let subs = pop_subscripts(fb, *n)?;
@@ -3521,6 +3554,17 @@ impl Vm {
                 let var = pop!().as_number()?;
                 if (step >= 0.0 && var > end) || (step < 0.0 && var < end) {
                     fb.frames.last_mut().expect("frame").pc = *t as usize;
+                }
+            }
+            Instr::ForEachItems { member, target } => {
+                let obj = pop!();
+                let items = match obj.deref() {
+                    Value::Object(h) => host.enumerate(h, &module.members[*member as usize]),
+                    _ => None,
+                };
+                if let Some(items) = items {
+                    fb.stack.push(items);
+                    fb.frames.last_mut().expect("frame").pc = *target as usize;
                 }
             }
             Instr::ForEachNext(t) => {
@@ -3727,6 +3771,11 @@ impl Vm {
                     fb.stack.push(v?);
                     return Ok(Flow::Next);
                 }
+                // `Prop_Access` answers for the property when the object has one
+                if let Some(method) = self.accessor(host, fb, h, name, "ACCESS") {
+                    fb.pending = Some(Pending::Push);
+                    return Ok(Flow::Suspend(HostRequest::CallMethod { obj: h.0, name: method, args: Vec::new() }));
+                }
                 match host.get_member(h, name)? {
                     Member::Child(c) => fb.stack.push(Value::Object(c)),
                     Member::Property => {
@@ -3745,6 +3794,10 @@ impl Vm {
                     return Err(native_write_refused(&self.natives, h, name));
                 }
                 fb.pending = Some(Pending::Discard);
+                // `Prop_Assign` is handed the value instead of the property taking it
+                if let Some(method) = self.accessor(host, fb, h, name, "ASSIGN") {
+                    return Ok(Flow::Suspend(HostRequest::CallMethod { obj: h.0, name: method, args: vec![JsonValue::from_value(&v)] }));
+                }
                 return Ok(Flow::Suspend(HostRequest::SetProp {
                     obj: h.0,
                     name: name.clone(),
@@ -5765,10 +5818,11 @@ impl Vm {
                     if base == "M" {
                         let upper = field.to_ascii_uppercase();
                         let v = self.load_name(fb, &upper).ok_or_else(|| RtError::variable_not_found(&upper))?;
-                        fb.stack.push(v);
+                        fb.stack.push(Self::live(host, v));
                         return Ok(Flow::Next);
                     }
                     if let Some(obj) = self.load_name(fb, &base) {
+                        let obj = Self::live(host, obj);
                         if let Some(v) = json_member(&obj, &field) {
                         fb.stack.push(v?);
                         return Ok(Flow::Next);
@@ -5778,6 +5832,10 @@ impl Vm {
                         if let Some(v) = self.native_member(h, &field) {
                             fb.stack.push(v?);
                             return Ok(Flow::Next);
+                        }
+                        if let Some(method) = self.accessor(host, fb, h, &field, "ACCESS") {
+                            fb.pending = Some(Pending::Push);
+                            return Ok(Flow::Suspend(HostRequest::CallMethod { obj: h.0, name: method, args: Vec::new() }));
                         }
                         match host.get_member(h, &field)? {
                             Member::Child(c) => fb.stack.push(Value::Object(c)),

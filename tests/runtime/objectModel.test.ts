@@ -100,6 +100,22 @@ beforeAll(async () => {
 });
 
 describe('runtime object model', () => {
+  it('_SCREEN holds what a program writes to it and what AddProperty gives it', () => {
+    // a CodeMine application's first lines: the caption, and a property that carries the
+    // start-up parameter across CLEAR ALL
+    const desktop = new Desktop();
+    desktop.setProp(SCREEN_HANDLE, 'Caption', 'ShutterDesign II');
+    expect(desktop.getProp(SCREEN_HANDLE, 'CAPTION')).toBe('ShutterDesign II');
+
+    expect(desktop.getMember(SCREEN_HANDLE, 'uCodeMineAppParameter')).toBe('none');
+    expect(desktop.callMethod(SCREEN_HANDLE, 'AddProperty', ['uCodeMineAppParameter', 'x'])).toBe(true);
+    expect(desktop.getProp(SCREEN_HANDLE, 'ucodemineappparameter')).toBe('x');
+    expect(desktop.getMember(SCREEN_HANDLE, 'uCodeMineAppParameter')).toBe('prop');
+
+    // a name the screen has never had is refused, as it is on a form
+    expect(() => desktop.setProp(SCREEN_HANDLE, 'cNothing', 1)).toThrow(/CNOTHING is not found/);
+  });
+
   it('builds the live tree from a form document', () => {
     const { desktop } = makeSession();
     const form = desktop.instantiate(sampleDoc().form, -1);
