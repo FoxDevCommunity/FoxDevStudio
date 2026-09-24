@@ -200,13 +200,17 @@ const ENDPROC_LINE = /^\s*ENDPROC\s*$/i;
  * for events that only exist in the designer) are dropped.
  */
 export function parseVfpMethods(memo: string): Record<string, string> {
-  const out: Record<string, string> = {};
+  // Every definition, in the order written. A class chain's memos arrive joined, the class the
+  // chain starts from first, so one name written twice is an override: the last is the one the
+  // object runs, and the ones before it are what DODEFAULT() reaches. Those are kept as
+  // `Name#1` for the nearest ancestor, `Name#2` for the one above it, and so on.
+  const defined: { name: string; source: string }[] = [];
   let name: string | null = null;
   let body: string[] = [];
   const flush = () => {
     if (name === null) return;
     const source = trimBlankEdges(body).join('\n');
-    if (source.trim() !== '') out[name] = source;
+    if (source.trim() !== '') defined.push({ name, source });
     name = null;
     body = [];
   };
@@ -222,7 +226,29 @@ export function parseVfpMethods(memo: string): Record<string, string> {
     }
   }
   flush();
+
+  const levels = new Map<string, { name: string; source: string }[]>();
+  for (const d of defined) {
+    const key = d.name.toLowerCase();
+    const list = levels.get(key);
+    if (list) list.push(d);
+    else levels.set(key, [d]);
+  }
+  const out: Record<string, string> = {};
+  for (const list of levels.values()) {
+    const latest = list[list.length - 1]!;
+    out[latest.name] = latest.source;
+    for (let depth = 1; depth < list.length; depth++) out[`${latest.name}#${depth}`] = list[list.length - 1 - depth]!.source;
+  }
   return out;
+}
+
+/** An ancestor's copy of an overridden method, `Init#1`, as the event it is a copy of. */
+export function ancestorEvent(name: string): { event: string; depth: number } {
+  const hash = name.lastIndexOf('#');
+  if (hash < 0) return { event: name, depth: 0 };
+  const depth = Number(name.slice(hash + 1));
+  return Number.isInteger(depth) && depth > 0 ? { event: name.slice(0, hash), depth } : { event: name, depth: 0 };
 }
 
 /**
@@ -523,26 +549,44 @@ function applyClass(row: Row, resolved: ResolvedClass): [Row, Row[]] {
     return undefined;
   };
 
-  const own: string[] = [];
-  for (const entry of parseVfpProperties(row.properties)) {
-    const target = entry.name.includes('.') ? addressed(entry.name) : undefined;
-    if (target) target.member.properties = `${target.member.properties}\n${target.rest} = ${entry.raw}`;
-    else own.push(`${entry.name} = ${entry.raw}`);
-  }
+  // An ancestor between this class and the one that made a member writes its overrides the same
+  // way - `frmInstall` sets `pgfSteps.Page2.Name` on a pageframe `frmWizard` made - so every
+  // memo in the chain is routed, oldest first, for a later line to win as it does in one memo.
+  const routed = (properties: string): string => {
+    const kept: string[] = [];
+    for (const entry of parseVfpProperties(properties)) {
+      const target = entry.name.includes('.') ? addressed(entry.name) : undefined;
+      if (target) target.member.properties = `${target.member.properties}\n${target.rest} = ${entry.raw}`;
+      else kept.push(`${entry.name} = ${entry.raw}`);
+    }
+    return kept.join('\n');
+  };
+  const inherited = resolved.chain.map((r) => routed(withoutName(r.properties)));
+  const own = routed(row.properties);
 
   // The merged memo holds procedures out of several files, and each of them is compiled with the
   // header its own file named - so which file each one came from has to be written down before
   // the memos become one string.
-  const methodIncludes: Record<string, string> = {};
+  // An ancestor's copy of an overridden method - `INIT#1` - was written in its own class's
+  // file, so it carries that file's header rather than the one the override came with.
+  const writers = new Map<string, string[]>();
   for (const from of [...resolved.chain, row]) {
-    for (const name of Object.keys(parseVfpMethods(from.methods))) methodIncludes[name.toUpperCase()] = from.include;
+    for (const name of Object.keys(parseVfpMethods(from.methods))) {
+      const key = name.toUpperCase();
+      writers.set(key, [...(writers.get(key) ?? []), from.include]);
+    }
+  }
+  const methodIncludes: Record<string, string> = {};
+  for (const [name, includes] of writers) {
+    methodIncludes[name] = includes[includes.length - 1]!;
+    for (let depth = 1; depth < includes.length; depth++) methodIncludes[`${name}#${depth}`] = includes[includes.length - 1 - depth]!;
   }
 
   const instance: Row = {
     ...row,
     methodIncludes,
     // a class's own Name is the class's, never the instance's: that comes from OBJNAME
-    properties: [...resolved.chain.map((r) => withoutName(r.properties)), own.join('\n')].filter((p) => p.trim() !== '').join('\n'),
+    properties: [...inherited, own].filter((p) => p.trim() !== '').join('\n'),
     methods: [...resolved.chain.map((r) => r.methods), row.methods].filter((m) => m.trim() !== '').join('\n'),
     custom: [...resolved.chain.map((r) => r.custom), row.custom].filter((c) => c.trim() !== '').join('\n'),
   };
@@ -1383,6 +1427,11 @@ function applyProperties(
       // is one of the designer's own notes, which describe the file rather than the object
       if (!HOUSEKEEPING.has(entry.name.toLowerCase()) && !entry.name.startsWith('_')) {
         props[entry.name] = entry.value;
+        // A property of the class's own keeps its text unquoted - `cAppName = ShutterDesign` is a
+        // string - so only one written in parentheses is an expression, worked out when the object
+        // is made: CodeMine's `nHkeyMachineRoot = ((2^31) + 2)` is a number to the registry calls
+        // that are handed it, or they read nothing. The text stays until then.
+        if (isParenthesised(entry.raw)) expressions[`${objectPath}.${entry.name}`] = entry.raw.trim();
       }
       reserved[`${objectPath}.${entry.name}`] = entry.raw;
       continue;
@@ -1398,6 +1447,18 @@ function applyProperties(
  */
 const HOUSEKEEPING = new Set(['docreate']);
 
+/** `(expr)`, the whole of it inside one pair of parentheses. */
+function isParenthesised(raw: string): boolean {
+  const t = raw.trim();
+  if (!t.startsWith('(') || !t.endsWith(')')) return false;
+  let depth = 0;
+  for (let i = 0; i < t.length; i++) {
+    if (t[i] === '(') depth++;
+    else if (t[i] === ')' && --depth === 0 && i < t.length - 1) return false;
+  }
+  return depth === 0;
+}
+
 /** VFP writes property names in any case; the registry declares one exact spelling. */
 function declaredPropertyName(descriptor: ObjectDescriptor, name: string): string | undefined {
   const lower = name.toLowerCase();
@@ -1408,8 +1469,11 @@ function declaredPropertyName(descriptor: ObjectDescriptor, name: string): strin
 function normaliseMethods(methods: Record<string, string>, descriptor: ObjectDescriptor): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [name, source] of Object.entries(methods)) {
-    const lower = name.toLowerCase();
-    out[descriptor.events.find((e) => e.name.toLowerCase() === lower)?.name ?? name] = source;
+    // an ancestor's copy is spelled as the event it is a copy of, and keeps its depth
+    const { event, depth } = ancestorEvent(name);
+    const lower = event.toLowerCase();
+    const spelled = descriptor.events.find((e) => e.name.toLowerCase() === lower)?.name ?? event;
+    out[depth > 0 ? `${spelled}#${depth}` : spelled] = source;
   }
   return out;
 }

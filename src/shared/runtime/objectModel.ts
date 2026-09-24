@@ -2676,7 +2676,10 @@ export class Desktop implements HostReads {
     const type = baseClassToControlType(info.baseClass);
     const nonVisual = isNonVisualBaseClass(info.baseClass) || type === null;
 
-    if (type === 'Form' || nonVisual) {
+    // A non-visual class standing on its own is an object of its own; one added to a container -
+    // `THIS.NewObject('oContextMenu', 'cmContextMenuManager')`, a Custom - is a member like any
+    // control, when its base class is one a form can hold
+    if (type === 'Form' || (nonVisual && !(into && type !== null))) {
       // a form is a window: it is not a member of anything, which is what the product says too
       if (into) throw new HostError(1733, `Class definition ${info.className.toUpperCase()} is not found.`);
       const instance = this.instantiate(node, module, { className: spellClass(info.className), nonVisual, noshow: true, arrays: info.arrays });
