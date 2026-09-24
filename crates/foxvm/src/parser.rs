@@ -5586,15 +5586,39 @@ impl Parser {
         }
 
         let columns = self.query_columns()?;
-        let from = if self.eat_kw("FROM") { self.query_sources()? } else { Vec::new() };
-        let where_ = if self.eat_kw("WHERE") { Some(self.expr()?) } else { None };
 
+        // The clauses after the columns come in any order: measured, Visual FoxPro reads
+        // `INTO ARRAY a ORDER BY name GROUP BY name`, a WHERE after INTO CURSOR and an ORDER BY
+        // before WHERE as the same query written the usual way round.
+        let mut from = Vec::new();
+        let mut where_ = None;
         let mut group_by = Vec::new();
-        if self.eat_kw("GROUP") {
-            self.eat_kw("BY");
-            group_by = self.expr_list()?;
+        let mut having = None;
+        let mut order_by = Vec::new();
+        let mut into = QueryInto::Browse;
+        loop {
+            if self.eat_kw("FROM") {
+                from = self.query_sources()?;
+            } else if self.eat_kw("WHERE") {
+                where_ = Some(self.expr()?);
+            } else if self.eat_kw("GROUP") {
+                self.eat_kw("BY");
+                group_by = self.expr_list()?;
+            } else if self.eat_kw("HAVING") {
+                having = Some(self.expr()?);
+            } else if self.eat_kw("ORDER") {
+                self.eat_kw("BY");
+                order_by = self.order_terms()?;
+            } else if self.eat_kw("INTO") {
+                into = self.query_into(start)?;
+            } else if self.eat_kw("TO") {
+                let what = self.peek().ident().unwrap_or("").to_ascii_uppercase();
+                self.skip_line_keep_newline();
+                return Err(self.error(start, format!("SELECT ... TO {what} is not supported in the FoxDev runtime")));
+            } else {
+                break;
+            }
         }
-        let having = if self.eat_kw("HAVING") { Some(self.expr()?) } else { None };
 
         // `UNION [ALL] SELECT ...`: the next query is read whole, and its ORDER BY and INTO -
         // which the syntax puts after the last SELECT - belong to the union, so they come up
@@ -5607,7 +5631,7 @@ impl Parser {
             self.advance();
             let mut rest = self.query_body(start)?;
             let order_by = std::mem::take(&mut rest.order_by);
-            let into = std::mem::replace(&mut rest.into, QueryInto::Browse);
+            let into = std::mem::replace(&mut rest.into, into);
             if from.is_empty() {
                 return Err(self.error(start, "SELECT needs a FROM clause"));
             }
@@ -5627,48 +5651,6 @@ impl Parser {
             });
         }
 
-        let mut order_by = Vec::new();
-        if self.eat_kw("ORDER") {
-            self.eat_kw("BY");
-            loop {
-                let expr = self.expr()?;
-                let descending = if self.eat_kw("DESC") {
-                    true
-                } else {
-                    self.eat_kw("ASC");
-                    false
-                };
-                order_by.push(OrderTerm { expr, descending });
-                if !self.eat(&TokKind::Comma) {
-                    break;
-                }
-            }
-        }
-
-        let mut into = QueryInto::Browse;
-        if self.eat_kw("INTO") {
-            if self.eat_kw("CURSOR") {
-                into = QueryInto::Cursor(self.name_ref("cursor name")?);
-                // READWRITE, NOFILTER and the rest describe a cursor this runtime already is
-                self.skip_line_keep_newline();
-            } else if self.eat_kw("ARRAY") {
-                into = QueryInto::Array(self.expr()?);
-            } else if self.eat_kw("TABLE") || self.eat_kw("DBF") {
-                into = QueryInto::Table(self.table_name()?);
-                // DATABASE, NAME and the rest say where the table is listed, which this
-                // runtime answers from the file itself
-                self.skip_line_keep_newline();
-            } else {
-                let what = self.peek().ident().unwrap_or("").to_ascii_uppercase();
-                self.skip_line_keep_newline();
-                return Err(self.error(start, format!("SELECT ... INTO {what} is not supported in the FoxDev runtime")));
-            }
-        } else if self.eat_kw("TO") {
-            let what = self.peek().ident().unwrap_or("").to_ascii_uppercase();
-            self.skip_line_keep_newline();
-            return Err(self.error(start, format!("SELECT ... TO {what} is not supported in the FoxDev runtime")));
-        }
-
         if from.is_empty() {
             return Err(self.error(start, "SELECT needs a FROM clause"));
         }
@@ -5686,6 +5668,56 @@ impl Parser {
             union: None,
             span: start.to(self.prev_span()),
         })
+    }
+
+    /// `ORDER BY a [ASC | DESC], ...`, the ORDER BY already taken.
+    fn order_terms(&mut self) -> PResult<Vec<OrderTerm>> {
+        let mut out = Vec::new();
+        loop {
+            let expr = self.expr()?;
+            let descending = if self.eat_kw("DESC") {
+                true
+            } else {
+                self.eat_kw("ASC");
+                false
+            };
+            out.push(OrderTerm { expr, descending });
+            if !self.eat(&TokKind::Comma) {
+                break;
+            }
+        }
+        Ok(out)
+    }
+
+    /// Where a query's answer goes, the INTO already taken.
+    fn query_into(&mut self, start: Span) -> PResult<QueryInto> {
+        if self.eat_kw("CURSOR") {
+            let into = QueryInto::Cursor(self.name_ref("cursor name")?);
+            // READWRITE, NOFILTER and the rest describe a cursor this runtime already is
+            self.skip_to_query_clause();
+            Ok(into)
+        } else if self.eat_kw("ARRAY") {
+            Ok(QueryInto::Array(self.expr()?))
+        } else if self.eat_kw("TABLE") || self.eat_kw("DBF") {
+            let into = QueryInto::Table(self.table_name()?);
+            // DATABASE, NAME and the rest say where the table is listed, which this runtime
+            // answers from the file itself
+            self.skip_to_query_clause();
+            Ok(into)
+        } else {
+            let what = self.peek().ident().unwrap_or("").to_ascii_uppercase();
+            self.skip_line_keep_newline();
+            Err(self.error(start, format!("SELECT ... INTO {what} is not supported in the FoxDev runtime")))
+        }
+    }
+
+    /// Passes over the words of an INTO clause this runtime has no use for, up to the next
+    /// clause of the query or the end of it.
+    fn skip_to_query_clause(&mut self) {
+        const CLAUSES: [&str; 8] = ["FROM", "WHERE", "GROUP", "HAVING", "ORDER", "INTO", "UNION", "TO"];
+        while !self.at_eol() && !CLAUSES.iter().any(|w| self.is_kw(w)) {
+            self.advance();
+        }
     }
 
     fn query_columns(&mut self) -> PResult<Vec<QueryColumn>> {
