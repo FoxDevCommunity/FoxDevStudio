@@ -128,7 +128,9 @@ export function formMethodSources(doc: FormDocument): MethodSourceInput[] {
     const events = getObjectDescriptor(node).events;
     for (const [event, source] of Object.entries(node.methods)) {
       if (!source.trim()) continue;
-      const params = events.find((e) => e.name.toLowerCase() === event.toLowerCase())?.params ?? '';
+      // `Init#1` is an ancestor's copy of Init, which DODEFAULT() reaches, and takes Init's parameters
+      const copied = event.replace(/#\d+$/, '').toLowerCase();
+      const params = events.find((e) => e.name.toLowerCase() === copied)?.params ?? '';
       const key = (objectPath === '' ? event : `${objectPath}.${event}`).toLowerCase();
       const include = vfp?.includes?.[key] ?? vfp?.include ?? '';
       out.push({ objectPath, event, params, source, include: headerStem(include) });

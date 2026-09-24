@@ -396,6 +396,46 @@ describe('DEFINE CLASS', () => {
     expect(printed).toEqual(["caught here: Variable 'NOSUCHVARIABLE' is not found."]);
   });
 
+  it('carries on past an error raised inside an Error method, however it was reached', async () => {
+    // Measured in Visual FoxPro 9: an ERROR raised in an Error method - called directly, or
+    // reached as an ancestor's through DODEFAULT() - goes neither to Error again nor to ON
+    // ERROR; the method carries on at its next line. This was the loop in CodeMine's handler.
+    await useSessionStore.getState().execute(
+      source,
+      [
+        'ON ERROR ? "ON ERROR got", ERROR()',
+        'o = CREATEOBJECT("cerr")',
+        'o.Error(1098, "direct", 1)',
+        '? "count", o.nCount',
+        'o = CREATEOBJECT("cchild")',
+        'o.Error(1098, "direct", 1)',
+        '? "count", o.nCount',
+        'RETURN',
+        '',
+        'DEFINE CLASS cerr AS Custom',
+        '  nCount = 0',
+        '  PROCEDURE Error(nError, cMethod, nLine)',
+        '    THIS.nCount = THIS.nCount + 1',
+        '    ? "in Error", THIS.nCount',
+        '    IF THIS.nCount < 4',
+        '      ERROR "raised inside Error"',
+        '    ENDIF',
+        '    ? "after ERROR", THIS.nCount',
+        '  ENDPROC',
+        'ENDDEFINE',
+        '',
+        'DEFINE CLASS cchild AS cerr',
+        '  PROCEDURE Error(nError, cMethod, nLine)',
+        '    ? "child Error"',
+        '    DODEFAULT(nError, cMethod, nLine)',
+        '  ENDPROC',
+        'ENDDEFINE',
+      ].join('\n'),
+    );
+    const printed = useSessionStore.getState().output.filter((o) => o.kind === 'output').map((o) => o.text.replace(/\s+/g, ' ').trim());
+    expect(printed).toEqual(['in Error 1', 'after ERROR 1', 'count 1', 'child Error', 'in Error 1', 'after ERROR 1', 'count 1']);
+  });
+
   it('does not hand an error inside the Error method back to itself', async () => {
     await useSessionStore.getState().execute(
       source,
@@ -422,5 +462,118 @@ describe('DEFINE CLASS', () => {
 
     const printed = useSessionStore.getState().output.filter((o) => o.kind === 'output').map((o) => o.text);
     expect(printed).toEqual(["handled twice: Variable 'SECONDMISSING' is not found."]);
+  });
+
+  it('runs the next class up with DODEFAULT(), as Visual FoxPro 9 measured it', async () => {
+    // Every expected line was printed by vfp9.exe running this same program. The one thing left
+    // out is `ca::Greet()` called from a method of another name, which still runs the parent's
+    // version of the running method.
+    await useSessionStore.getState().execute(
+      source,
+      [
+        "o = CREATEOBJECT(\"cb\")",
+        "? \"1\", o.Greet(\"x\")",
+        "o = CREATEOBJECT(\"cc\")",
+        "? \"2\", o.Greet(\"y\")",
+        "o = CREATEOBJECT(\"cf\")",
+        "? \"3\", o.Greet(\"z\")",
+        "o = CREATEOBJECT(\"cd\")",
+        "? \"4\", o.Greet()",
+        "? \"5\", o.Who()",
+        "o = CREATEOBJECT(\"cb\")",
+        "? \"6\", o.Who()",
+        "? \"7\", o.nInits",
+        "o = CREATEOBJECT(\"cstmt\")",
+        "? \"8\", o.cLog",
+        "o = CREATEOBJECT(\"cscope\")",
+        "? \"9\", o.Greet(\"s\")",
+        "o = CREATEOBJECT(\"cnoret\")",
+        "? \"11\", o.Greet()",
+        "RETURN",
+        "",
+        "DEFINE CLASS ca AS Custom",
+        "  nInits = 0",
+        "  FUNCTION Init",
+        "    THIS.nInits = THIS.nInits + 1",
+        "  ENDFUNC",
+        "  FUNCTION Greet(p)",
+        "    RETURN \"a\" + p",
+        "  ENDFUNC",
+        "  FUNCTION Who",
+        "    RETURN \"who=\" + THIS.Class",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cb AS ca",
+        "  FUNCTION Init",
+        "    THIS.nInits = THIS.nInits + 10",
+        "    RETURN DODEFAULT()",
+        "  ENDFUNC",
+        "  FUNCTION Greet(p)",
+        "    RETURN \"b<\" + DODEFAULT(p + \"!\") + \">\"",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cc AS cb",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS ce AS ca",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cf AS ce",
+        "  FUNCTION Greet(p)",
+        "    RETURN \"f\" + DODEFAULT(p)",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cd AS Custom",
+        "  FUNCTION Greet",
+        "    RETURN DODEFAULT()",
+        "  ENDFUNC",
+        "  FUNCTION Who",
+        "    RETURN \"cd-\" + TRANSFORM(DODEFAULT())",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cstmt AS ca",
+        "  cLog = \"\"",
+        "  FUNCTION Greet(p)",
+        "    THIS.cLog = THIS.cLog + \"stmt;\"",
+        "    DODEFAULT(p)",
+        "    RETURN \"done\"",
+        "  ENDFUNC",
+        "  FUNCTION Init",
+        "    THIS.Greet(\"q\")",
+        "    THIS.cLog = THIS.cLog + TRANSFORM(THIS.nInits)",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cscope AS ca",
+        "  FUNCTION Greet(p)",
+        "    RETURN \"s\" + ca::Greet(p)",
+        "  ENDFUNC",
+        "ENDDEFINE",
+        "",
+        "DEFINE CLASS cnoret AS ca",
+        "  FUNCTION Greet(p)",
+        "    DODEFAULT(\"n\")",
+        "  ENDFUNC",
+        "ENDDEFINE",
+      ].join('\n'),
+    );
+    const printed = useSessionStore.getState().output.filter((o) => o.kind === 'output').map((o) => o.text.trimEnd());
+    expect(printed).toEqual([
+      '1 b<ax!>',
+      '2 b<ay!>',
+      '3 faz',
+      '4 .T.',
+      '5 cd-.T.',
+      '6 who=Cb',
+      '7         11',
+      '8 stmt;0',
+      '9 sas',
+      '11 .T.',
+    ]);
+    expect(useSessionStore.getState().output.filter((o) => o.kind === 'error')).toEqual([]);
   });
 });
