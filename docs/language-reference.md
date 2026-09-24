@@ -305,7 +305,7 @@ call fails with an explanation rather than "procedure not found".
 | PCOUNT | 0 |
 | PEMSTATUS | 3 |
 | PI | 0 |
-| POPUP | 0 |
+| POPUP | 0-1 |
 | PRIMARY | 0-2 |
 | PRINTSTATUS | 0 |
 | PRMBAR | 2 |

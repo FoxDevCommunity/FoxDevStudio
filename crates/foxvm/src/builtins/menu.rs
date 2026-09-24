@@ -132,7 +132,14 @@ fn f_pad(c: &mut dyn BuiltinCtx, _a: Vec<Value>) -> Result<BuiltinResult, RtErro
 }
 
 /// POPUP(): the name of the popup that is up, or the one last chosen from.
-fn f_popup(c: &mut dyn BuiltinCtx, _a: Vec<Value>) -> Result<BuiltinResult, RtError> {
+/// POPUP([cMenuName]). With no argument, the popup that is active. With one, whether a popup of
+/// that name is defined - measured: a logical, the name compared without regard to case and
+/// without trimming, and a number there error 11.
+fn f_popup(c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
+    if let Some(named) = a.first() {
+        let Value::Str(name) = named.deref() else { return Err(RtError::function_arg_invalid()) };
+        return value(Value::Logical(c.menus().popup(&name).is_some()));
+    }
     let menus = c.menus();
     let name = if menus.active_popup.is_empty() { &menus.last_popup } else { &menus.active_popup };
     value(Value::str(name.to_ascii_uppercase()))
@@ -218,7 +225,7 @@ pub fn specs() -> Vec<BuiltinSpec> {
         spec("MRKBAR", 2, 2, f_mrkbar),
         spec("MRKPAD", 2, 2, f_mrkpad),
         spec("PAD", 0, 0, f_pad),
-        spec("POPUP", 0, 0, f_popup),
+        spec("POPUP", 0, 1, f_popup),
         spec("PRMBAR", 2, 2, f_prmbar),
         spec("PRMPAD", 2, 2, f_prmpad),
         spec("PROMPT", 0, 0, f_prompt),

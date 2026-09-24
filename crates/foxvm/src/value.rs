@@ -440,6 +440,9 @@ pub struct Settings {
     pub talk: bool,
     pub safety: bool,
     pub escape: bool,
+    /// Running as a built application rather than in the IDE: what `VERSION(2)` answers, 0 for
+    /// the runtime and 2 for the development edition. The IDE's player turns it on.
+    pub runtime_only: bool,
     /// SET DELETED ON hides deleted records from every movement command.
     pub deleted: bool,
     /// SET NEAR ON leaves the pointer at the nearest record when a SEEK misses, rather than at
@@ -537,6 +540,7 @@ impl Default for Settings {
             talk: true,
             safety: true,
             escape: true,
+            runtime_only: false,
             deleted: false,
             near: false,
             unique: false,

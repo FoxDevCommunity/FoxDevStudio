@@ -870,6 +870,7 @@ impl FoxVm {
             "TALK" => s.talk = v.truthy().unwrap_or(true),
             "SAFETY" => s.safety = v.truthy().unwrap_or(true),
             "ESCAPE" => s.escape = v.truthy().unwrap_or(true),
+            "RUNTIME" => s.runtime_only = v.truthy().unwrap_or(false),
             "DECIMALS" => s.decimals = v.as_number().unwrap_or(2.0).clamp(0.0, 18.0) as u8,
             "DATE" => {
                 if let Some(f) = v.as_str().ok().and_then(|w| crate::value::DateFormat::parse(&w)) {

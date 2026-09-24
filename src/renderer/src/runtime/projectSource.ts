@@ -15,6 +15,7 @@ import {
   baseName,
   formHeaderRefs,
   formMethodSources,
+  headerStem,
   requireBytes,
   type CompiledForm,
   type CompiledProgram,
@@ -26,7 +27,7 @@ import { refreshed } from '../vfp/refreshImport';
 import { useDocumentsStore, type OpenDocument } from '../stores/documentsStore';
 import { useProjectStore } from '../stores/projectStore';
 import { readHeaderFiles } from './headerFiles';
-import { compileForm, compileProgram, includedHeaders } from './vmBridge';
+import { compileForm, compileProgram, includedHeaderNames } from './vmBridge';
 
 /** Finds an open document whose file name matches, ignoring directory and extension. */
 function openDocumentNamed(name: string, kind: OpenDocument['kind']): OpenDocument | undefined {
@@ -51,16 +52,36 @@ function projectItemPath(name: string, extensions: string[]): string | null {
 }
 
 /**
- * The text of every header file a program includes, by name without folder or extension. A
- * header the project does not have is left out: the compiler warns about it by name.
+ * The text of every header file a program includes, by name without folder or extension.
+ *
+ * A header the project lists is taken from there. The rest are looked for the way a form's are:
+ * beside the program, then in the default directory - the project folder - then among the
+ * Foundation Classes, following the headers they include in turn. A Visual FoxPro project
+ * rarely lists its `.h` files at all, so without the search every constant an application
+ * defines is an unknown name when the line that uses it runs. One found nowhere is left out,
+ * and the compiler warns about it by name.
  */
-async function headerFiles(source: string): Promise<Record<string, string>> {
+async function headerFiles(source: string, dir?: string): Promise<Record<string, string>> {
   const out: Record<string, string> = {};
-  for (const stem of includedHeaders(source)) {
-    if (stem in out) continue;
-    const path = projectItemPath(stem, ['.h', '.prg']);
-    if (!path) continue;
-    out[stem] = await getApi().files.readText(path).catch(() => '');
+  const unlisted: string[] = [];
+  for (const reference of includedHeaderNames(source)) {
+    const stem = headerStem(reference);
+    if (stem === '' || stem in out) continue;
+    // the extension the reference wrote is the file it means: `#include "CodeMine.h"` in
+    // codemine.prg is the header beside it, and never the program itself, whose text would
+    // include the header again
+    const file = reference.trim().split(/[\\/]/).pop() ?? '';
+    const dot = file.lastIndexOf('.');
+    const extensions = dot > 0 ? [file.slice(dot).toLowerCase()] : ['.h', '.prg'];
+    const path = projectItemPath(stem, extensions);
+    if (path) out[stem] = await getApi().files.readText(path).catch(() => '');
+    else unlisted.push(reference);
+  }
+  if (unlisted.length > 0) {
+    const project = useProjectStore.getState();
+    const dirs = [dir ?? '', project.path ? dirname(project.path) : '', await bundledClassLibraryDir()].filter((d) => d !== '');
+    const found = await readHeaderFiles(unlisted, dirs.length > 0 ? dirs : ['']);
+    for (const [stem, text] of Object.entries(found)) if (!(stem in out)) out[stem] = text;
   }
   return out;
 }
@@ -116,20 +137,25 @@ export function createProjectSource(): ProgramSource {
       let source: string;
       let key: string;
       let display = baseName(name);
+      let dir: string | undefined;
 
       if (open?.kind === 'program') {
         source = open.text;
         key = `open:${open.id}:${open.text.length}:${open.text.slice(0, 64)}`;
-        if (open.path) display = baseName(basename(open.path));
+        if (open.path) {
+          display = baseName(basename(open.path));
+          dir = dirname(open.path);
+        }
       } else {
         const path = projectItemPath(name, ['.prg']);
         if (!path) return null;
         source = await getApi().files.readText(path);
         key = `file:${source.length}:${source.slice(0, 64)}`;
         display = baseName(basename(path));
+        dir = dirname(path);
       }
 
-      const headers = await headerFiles(source);
+      const headers = await headerFiles(source, dir);
       const cached = programs.get(display, `${key}:${Object.keys(headers).join(',')}`);
       if (cached) return cached;
       const bytes = requireBytes(display, compileProgram(source, display, headers));

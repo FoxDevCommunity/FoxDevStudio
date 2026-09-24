@@ -31,6 +31,7 @@ function setShell(patch: Partial<ShellState>) {
 registerIdeCommands({ toggle: (p) => setShell({ [p]: !shellState[p] }), get: (p) => shellState[p] });
 // a form opened by any means (Run, a menu item, the Command Window) surfaces the desktop tab
 runtimeUi.showDesktop = () => void useDocumentsStore.getState().openDesktop();
+runtimeUi.development = true;
 // a program that stops has to be seen stopping, however the debugger window was left
 runtimeUi.showDebugger = () => setShell({ showDebugger: true });
 // MODIFY COMMAND and BROWSE open a file in a tab: the same thing File > Open does
