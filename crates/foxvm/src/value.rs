@@ -322,6 +322,8 @@ pub const REMEMBERED: &[(&str, SettingShape, &str)] = &[
     ("BRSTATUS", SettingShape::Switch, "OFF"),
     ("CARRY", SettingShape::Switch, "OFF"),
     ("CLASSLIB", SettingShape::Word, ""),
+    // the list itself is the VM's; this is only what SET() answers when nothing is on it
+    ("PROCEDURE", SettingShape::Word, ""),
     ("CLEAR", SettingShape::Switch, "ON"),
     ("CLOCK", SettingShape::Switch, "OFF"),
     ("COLLATE", SettingShape::Word, "MACHINE"),

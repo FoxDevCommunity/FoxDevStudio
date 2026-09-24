@@ -92,6 +92,8 @@ enum Pending {
         func: Option<String>,
         args: Vec<Value>,
         discard: bool,
+        /// The program the host was asked for, for the error when it has none.
+        program: String,
     },
     /// QUIT / CANCEL: the fiber ends when resumed.
     Finish,
@@ -144,6 +146,14 @@ struct TryHandler {
     pending_len: usize,
 }
 
+/// The files of a `SET PROCEDURE TO`, and how far loading them has got.
+#[derive(Debug, Default)]
+struct ProcedureLoad {
+    additive: bool,
+    names: Vec<String>,
+    next: usize,
+}
+
 #[derive(Debug, Default)]
 struct Fiber {
     frames: Vec<Frame>,
@@ -164,6 +174,9 @@ struct Fiber {
     /// Whether that reply is a `SET CLASSLIB` the host has read rather than an index file, so
     /// the instruction that runs again knows which of the two it was waiting for.
     classlib_reply: bool,
+    /// A `SET PROCEDURE TO` part way through loading its files: each one the host has to
+    /// load is a round trip, and the list only changes once every file is in.
+    procedure_load: Option<ProcedureLoad>,
     /// What the debugger asked this fiber to do when it was let go, and how deep its frames
     /// were then - which is what tells a step over a call from a step into it.
     stepping: Option<(StepMode, usize)>,
@@ -258,6 +271,13 @@ pub struct Vm {
     /// The functions those libraries added: the name a program calls, and which function of
     /// which library it is. A name loaded twice is the later one, as the product's is.
     library_funcs: HashMap<String, (u32, u32)>,
+    /// `SET PROCEDURE TO`: the programs whose routines a bare call finds after the current
+    /// program's own, in the order they are looked in - which is the order they were listed.
+    procedure_files: Vec<u32>,
+    /// Programs loaded only to be procedure files and never run. Measured: once a procedure
+    /// file is released its routines are not found, while a program that ran with `DO` keeps
+    /// its routines findable after it returns. These are the ones that go when released.
+    procedure_only: HashSet<u32>,
     /// Objects whose `Error` method is running, so an error inside it is not handed back to it.
     in_class_error: HashSet<u32>,
     /// The work area the last USE opened, so the index beside it can be read next.
@@ -1543,6 +1563,8 @@ impl Vm {
             dlls: HashMap::new(),
             libraries: Vec::new(),
             library_funcs: HashMap::new(),
+            procedure_files: Vec::new(),
+            procedure_only: HashSet::new(),
             last_opened: None,
             index_build: None,
             idx_open: None,
@@ -2409,13 +2431,18 @@ impl Vm {
                     fb.stack.push(it.next().unwrap_or(Value::Null));
                 }
             }
-            Some(Pending::LoadedProgram { func, args, discard }) => {
+            Some(Pending::LoadedProgram { func, args, discard, program }) => {
                 let id = match v.deref() {
                     Value::Number(n, ..) if n >= 0.0 && (n as usize) < self.modules.len() => n as u32,
-                    _ => return Err(RtError::procedure_not_found(func.as_deref().unwrap_or("MAIN"))),
+                    // measured: a program that is not there is error 1, "File 'x.prg' does not
+                    // exist.", whether DO or a bare call went looking for it
+                    _ => return Err(program_missing(&program)),
                 };
                 let fidx = match &func {
-                    None => 0,
+                    None => {
+                        self.procedure_only.remove(&id);
+                        0
+                    }
                     Some(name) => {
                         self.modules[id as usize].find_func(name).ok_or_else(|| RtError::procedure_not_found(name))?
                     }
@@ -2947,9 +2974,17 @@ impl Vm {
         if let Some(f) = self.modules[current as usize].find_func(upper) {
             return Some((current, f));
         }
+        // measured: the procedure files come next, in the order SET PROCEDURE listed them,
+        // ahead of any other program - a routine in two of them is the first file's
+        for &id in &self.procedure_files {
+            if let Some(f) = self.modules[id as usize].find_func(upper) {
+                return Some((id, f));
+            }
+        }
         for (i, m) in self.modules.iter().enumerate().rev() {
             if i as u32 != current
                 && m.kind == ModuleKind::Program
+                && !self.procedure_only.contains(&(i as u32))
                 && let Some(f) = m.find_func(upper)
             {
                 return Some((i as u32, f));
@@ -3560,9 +3595,19 @@ impl Vm {
                         fb.stack.push(v);
                         return Ok(Flow::Next);
                     }
-                    let (m, f) =
-                        self.find_function(current, upper).ok_or_else(|| RtError::procedure_not_found(upper))?;
-                    self.push_call(fb, m, f, None, args, FrameKind::Call { discard: false }, true)?;
+                    // measured: a name that is no routine anywhere is looked for as a program
+                    // of that name, which runs and answers with what it returns - and when there
+                    // is none, it is error 1 as a DO of it would be
+                    if let Some((m, f)) = self.find_function(current, upper) {
+                        self.push_call(fb, m, f, None, args, FrameKind::Call { discard: false }, true)?;
+                    } else if let Some(id) = self.find_program(upper).or_else(|| host.resolve_program(upper)) {
+                        self.procedure_only.remove(&id);
+                        self.push_call(fb, id, 0, None, args, FrameKind::Call { discard: false }, true)?;
+                    } else {
+                        fb.pending =
+                            Some(Pending::LoadedProgram { func: None, args, discard: false, program: upper.to_string() });
+                        return Ok(Flow::Suspend(HostRequest::LoadProgram { name: upper.to_string() }));
+                    }
                 }
             }
             Instr::CallBuiltin { id, argc } => {
@@ -3946,6 +3991,11 @@ impl Vm {
                 }));
             }
             Instr::SetCmd { name, argc, to } => {
+                // SET PROCEDURE comes back here once per file the host had to load
+                if fb.procedure_load.is_some() && fb.data_reply.is_some() {
+                    let reply = fb.data_reply.take();
+                    return self.continue_procedure_load(host, fb, reply);
+                }
                 // SET INDEX has files to read, so it comes back here once per file with the
                 // bytes of one; every other setting is answered where it stands
                 if let Some(answer) = fb.data_reply.take() {
@@ -3970,6 +4020,27 @@ impl Vm {
                     // A class library is a file the host reads, which it cannot do while the VM
                     // is on the stack, so this one waits where `SET LIBRARY TO` - whose own file
                     // is loaded through the host in `set_cmd` - does not.
+                    if setting == "RELEASE PROCEDURE" {
+                        let names = args.iter().map(|v| v.as_str().map(|s| s.to_string())).collect::<Result<Vec<_>, _>>()?;
+                        self.release_procedures(&names);
+                        return Ok(Flow::Next);
+                    }
+                    // `SET PROCEDURE TO a, b [ADDITIVE]`: the additive flag, then the files
+                    if setting == "PROCEDURE" {
+                        let additive = match args.first() {
+                            Some(v) => v.truthy()?,
+                            None => false,
+                        };
+                        let mut names = Vec::new();
+                        for v in args.iter().skip(1) {
+                            let name = v.as_str()?.trim().to_string();
+                            if !name.is_empty() {
+                                names.push(name);
+                            }
+                        }
+                        fb.procedure_load = Some(ProcedureLoad { additive, names, ..Default::default() });
+                        return self.continue_procedure_load(host, fb, None);
+                    }
                     if setting == "CLASSLIB" {
                         let request = self.classlib_request(&args)?;
                         fb.classlib_reply = true;
@@ -5806,6 +5877,80 @@ impl Vm {
 
     /// `DO name [IN prog]`: a procedure of the running module, an already loaded program, or
     /// one the host has to find and compile first.
+    /// Loads the files of a `SET PROCEDURE TO` one at a time, asking the host for each one it
+    /// does not already have.
+    ///
+    /// Measured: without ADDITIVE the list is emptied before anything is loaded, and each file
+    /// goes on as it is found - so `SET PROCEDURE TO a, missing, b` raises error 1 and leaves
+    /// `a` on the list and nothing else. With ADDITIVE a missing file leaves the list as it was.
+    fn continue_procedure_load(&mut self, host: &mut dyn Host, fb: &mut Fiber, reply: Option<Value>) -> Result<Flow, RtError> {
+        let mut state = fb.procedure_load.take().unwrap_or_default();
+        match reply {
+            None => {
+                if !state.additive {
+                    self.procedure_files.clear();
+                    self.remember_procedures();
+                }
+            }
+            Some(v) => match v.deref() {
+                Value::Number(n, ..) if n >= 0.0 && (n as usize) < self.modules.len() => {
+                    self.procedure_only.insert(n as u32);
+                    self.add_procedure_file(n as u32);
+                    state.next += 1;
+                }
+                _ => return Err(program_missing(&state.names[state.next])),
+            },
+        }
+        while let Some(name) = state.names.get(state.next) {
+            let stem = program_stem(name);
+            if let Some(id) = self.find_program(&stem) {
+                self.add_procedure_file(id);
+            } else if let Some(id) = host.resolve_program(&stem) {
+                self.procedure_only.insert(id);
+                self.add_procedure_file(id);
+            } else {
+                let request = HostRequest::LoadProgram { name: stem };
+                fb.procedure_load = Some(state);
+                return Ok(self.ask(fb, request));
+            }
+            state.next += 1;
+        }
+        Ok(Flow::Next)
+    }
+
+    /// Puts a program on the end of the procedure list. Measured: one that is already on it
+    /// stays where it is rather than moving to the end.
+    fn add_procedure_file(&mut self, id: u32) {
+        if !self.procedure_files.contains(&id) {
+            self.procedure_files.push(id);
+            self.remember_procedures();
+        }
+    }
+
+    /// `RELEASE PROCEDURE a, b`: those files come off the list. One that is not on it is
+    /// nothing to release.
+    fn release_procedures(&mut self, names: &[String]) {
+        let stems: Vec<String> = names.iter().map(|n| program_stem(n)).collect();
+        let modules = &self.modules;
+        self.procedure_files.retain(|&id| !stems.iter().any(|s| program_stem(&modules[id as usize].name) == *s));
+        self.remember_procedures();
+    }
+
+    /// What `SET("PROCEDURE")` answers: every file on the list, quoted, as the compiled program
+    /// it is loaded from - the full path of the `.FXP` - separated by a comma and a space.
+    fn remember_procedures(&mut self) {
+        let text = self
+            .procedure_files
+            .iter()
+            .map(|&id| {
+                let stem = program_stem(&self.modules[id as usize].name);
+                format!("\"{}\"", self.settings.at(&format!("{stem}.FXP")).to_ascii_uppercase())
+            })
+            .collect::<Vec<_>>()
+            .join(", ");
+        self.settings.remembered.insert("PROCEDURE".to_string(), text);
+    }
+
     fn run_do(
         &mut self,
         fb: &mut Fiber,
@@ -5820,9 +5965,11 @@ impl Vm {
                 if let Some((m, f)) = self.find_function(current, &upper) {
                     self.push_call(fb, m, f, None, args, FrameKind::Call { discard: true }, true)?;
                 } else if let Some(id) = self.find_program(&upper).or_else(|| host.resolve_program(&upper)) {
+                    // a program that has run keeps its routines findable, procedure file or not
+                    self.procedure_only.remove(&id);
                     self.push_call(fb, id, 0, None, args, FrameKind::Call { discard: true }, true)?;
                 } else {
-                    fb.pending = Some(Pending::LoadedProgram { func: None, args, discard: true });
+                    fb.pending = Some(Pending::LoadedProgram { func: None, args, discard: true, program: upper.clone() });
                     return Ok(Flow::Suspend(HostRequest::LoadProgram { name: upper }));
                 }
             }
@@ -5832,7 +5979,7 @@ impl Vm {
                     self.push_call(fb, id, f, None, args, FrameKind::Call { discard: true }, true)?;
                 }
                 None => {
-                    fb.pending = Some(Pending::LoadedProgram { func: Some(upper), args, discard: true });
+                    fb.pending = Some(Pending::LoadedProgram { func: Some(upper), args, discard: true, program: prog.clone() });
                     return Ok(Flow::Suspend(HostRequest::LoadProgram { name: prog }));
                 }
             },
@@ -10045,6 +10192,24 @@ fn same_value(stored: Option<&crate::dbf::DbfValue>, value: &Value, settings: &S
 }
 
 /// The work area an `IN` clause named: a number, or an alias.
+/// A program as a procedure file names it: the file's stem, without its folder or extension.
+fn program_stem(name: &str) -> String {
+    let file = name.trim().rsplit(['\\', '/']).next().unwrap_or(name).to_string();
+    let lower = file.to_ascii_lowercase();
+    let stem = if lower.ends_with(".prg") || lower.ends_with(".fxp") { &file[..file.len() - 4] } else { file.as_str() };
+    stem.to_ascii_uppercase()
+}
+
+/// Error 1 for a procedure file that is not there, in the product's words: the name as the
+/// program wrote it, given the extension of a program when it had none.
+fn program_missing(name: &str) -> RtError {
+    let file = name.trim().rsplit(['\\', '/']).next().unwrap_or(name).to_string();
+    // a name the compiler upper-cased is given back as the product writes it, in lower case
+    let file = if file == file.to_ascii_uppercase() { file.to_ascii_lowercase() } else { file };
+    let file = if file.contains('.') { file } else { format!("{file}.prg") };
+    RtError::new(RtError::FILE_NOT_FOUND, format!("File '{file}' does not exist."))
+}
+
 fn area_ref(v: &Value) -> Result<AreaRef, RtError> {
     Ok(match v.deref() {
         Value::Str(s) => AreaRef::Alias(s.trim().to_string()),

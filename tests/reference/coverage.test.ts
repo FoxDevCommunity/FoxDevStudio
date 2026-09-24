@@ -101,6 +101,7 @@ const SET_ELSEWHERE: Record<string, { file: string; find: string }> = {
   MESSAGE: { file: 'crates/foxvm/src/menu.rs', find: 'SET MESSAGE' },
   TEXTMERGE: { file: 'crates/foxvm/src/parser.rs', find: 'TEXTMERGE' },
   DATABASE: { file: 'crates/foxvm/src/vm.rs', find: 'SET DATABASE' },
+  PROCEDURE: { file: 'crates/foxvm/src/vm.rs', find: 'setting == "PROCEDURE"' },
 };
 
 function manifest(): Element[] {

@@ -1,0 +1,30 @@
+none []
+one [FDVPROCA]
+extension FXP
+hello from fdvproca
+fdvboth in fdvproca
+fdvonlya calls its sibling in fdvproca
+additive [FDVPROCA FDVPROCB]
+fdvboth in fdvproca
+fdvonlyb in fdvprocb
+fdvmine in main
+replaced [FDVPROCB]
+fdvboth in fdvprocb
+gone 1 File 'fdvhello.prg' does not exist.
+two [FDVPROCA FDVPROCB] fdvboth in fdvproca
+other order [FDVPROCB FDVPROCA] fdvboth in fdvprocb
+again [FDVPROCB FDVPROCA]
+released [FDVPROCA] fdvboth in fdvproca
+emptied []
+not found 1 File 'fdvboth.prg' does not exist.
+missing 1 File 'fdvnosuch.prg' does not exist.
+after missing []
+missing second 1 File 'fdvnosuch.prg' does not exist.
+after missing second [FDVPROCA]
+missing additive 1 File 'fdvnosuch.prg' does not exist.
+after missing additive [FDVPROCA]
+expression [FDVPROCB]
+macro [FDVPROCB]
+with extension [FDVPROCA]
+fdvrunme ran
+fdvinrunme after it returned

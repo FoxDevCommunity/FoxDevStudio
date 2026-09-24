@@ -65,6 +65,12 @@ fn run(src: &str, host: &mut MockHost) -> Result<Vec<String>, RtError> {
     let other = compile_program(&other_src, "other").module.expect("other compiles");
     let other_id = vm.load_module(other);
     host.programs.insert("OTHER".into(), other_id);
+    // the stage's other programs are not loaded until something asks for one, as a `.prg` in a
+    // project is not: SET PROCEDURE and DO load them through the host
+    for name in ["fdvproca", "fdvprocb", "fdvrunme"] {
+        let src = fs::read_to_string(fixtures_dir().join(format!("{name}.prg"))).expect("a procedure fixture");
+        host.program_sources.insert(name.to_ascii_uppercase(), src);
+    }
     // a report file to run, so a golden program can print one
     let (frx, frt) = dbf_fixture::sample();
     host.files.insert("PARTS.FRX".into(), frx);
