@@ -24,11 +24,8 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
     <div class="hero">
       <div class="hero-copy">
         <span class="mark-img hero-mark" role="img" aria-label="The FoxDev Studio mark: a fox drawn from two angle brackets"></span>
-        <h1>Your FoxPro applications, at home on a modern machine.</h1>
-        <p class="lede">
-          FoxDev Studio opens the projects, forms and tables you already have and runs them the
-          way you remember: <strong>no rewrite, no conversion, no export step</strong>.
-        </p>
+        <h1>FoxPro webassembly runtime + IDE</h1>
+        <p class="lede">A Love letter to FoxPro</p>
         <div class="actions">
           <a class="btn btn-main" href="#download">Download</a>
           <a class="btn btn-ghost" href="/docs/getting-started">Get started</a>
@@ -88,75 +85,9 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
       </div>
     </div>
 
-    <section id="what">
-      <div class="section-head">
-        <h2>It picks up where you left off</h2>
-        <p>Point it at a folder you have not opened in years, and what is there is what you get.</p>
-      </div>
-
-      <div class="cards">
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M2.5 6.2A1.7 1.7 0 0 1 4.2 4.5h4.4l2 2.6h9.2a1.7 1.7 0 0 1 1.7 1.7v8.7a1.7 1.7 0 0 1-1.7 1.7H4.2a1.7 1.7 0 0 1-1.7-1.7z"
-            ></path>
-            <path d="M6.5 12.4h6M6.5 15.6h9"></path>
-          </svg>
-          <h3>Your project, as it is</h3>
-          <p>
-            Projects, forms, class libraries, menus and reports open straight from the files you
-            already have. Nothing is migrated first, and nothing is left behind.
-          </p>
-        </div>
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2.5" y="3.5" width="19" height="17" rx="1.8"></rect>
-            <path d="M2.5 8h19"></path>
-            <rect x="6.5" y="11.5" width="8" height="5.5"></rect>
-            <g class="solid">
-              <rect x="5.4" y="10.4" width="2.2" height="2.2"></rect>
-              <rect x="13.4" y="10.4" width="2.2" height="2.2"></rect>
-              <rect x="5.4" y="15.9" width="2.2" height="2.2"></rect>
-              <rect x="13.4" y="15.9" width="2.2" height="2.2"></rect>
-            </g>
-          </svg>
-          <h3>The designers you know</h3>
-          <p>
-            Forms, classes, menus and reports are edited where you expect them to be, alongside
-            the project manager, the Command Window and a debugger that stops on your line.
-          </p>
-        </div>
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2.5" y="4.5" width="19" height="15" rx="1.8"></rect>
-            <path d="M2.5 9.3h19M2.5 14.4h19M9.5 9.3v10.2M16 9.3v10.2"></path>
-          </svg>
-          <h3>Your data stays your data</h3>
-          <p>
-            Tables, indexes, memos and databases are read and written in place. What sits on disk
-            afterwards is the same kind of file it was before.
-          </p>
-        </div>
-        <div class="card">
-          <svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="1.5" y="7.5" width="7" height="9" rx="1.6"></rect>
-            <rect x="15.5" y="7.5" width="7" height="9" rx="1.6"></rect>
-            <path d="M8.5 12h7"></path>
-            <path d="M12.6 9.9 15.4 12l-2.8 2.1"></path>
-          </svg>
-          <h3>Whatever it talked to, it still talks to</h3>
-          <p>
-            The system calls, the automation objects and the old add-in libraries your application
-            leans on keep working, so the parts nobody wants to touch stay untouched.
-          </p>
-        </div>
-      </div>
-    </section>
-
     <section id="screens">
       <div class="section-head">
         <h2>What it looks like</h2>
-        <p>The IDE, on Visual FoxPro's own sample projects. Every picture is a real session.</p>
       </div>
 
       <div class="shots">
@@ -215,16 +146,10 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
 
     <section>
       <div class="band">
-        <h2>Built to match, not to approximate</h2>
+        <h2>The goal is to have feature parity with the good ol FoxPro</h2>
         <p>
-          Small differences are what break an old application: a number printed a column too
-          wide, an event arriving a moment late, an error with the wrong number on it. So
-          behaviour here is <strong>settled by asking Visual FoxPro itself</strong> and matching
-          its answer, rather than by reading a reference page and hoping.
-        </p>
-        <p>
-          What comes out of that is a runtime written from scratch: quick to start,
-          self-contained, and straightforward about the corners it has not reached yet.
+          By leveraging golden tests against vfp9 we aim at having 100% compatibility. That is
+          the mission.
         </p>
         <div class="figures">
           <div class="figure-stat">
@@ -248,7 +173,7 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
         <h2>What Visual FoxPro 10 would have been</h2>
         <p>
           Visual FoxPro stopped at version 9, and at 32 bits. This is the same language, rebuilt
-          on a foundation that has not been frozen since 2007. Four pieces are what make that
+          on a web foundation that brings the fox to the next level. Four pieces are what make that
           possible.
         </p>
       </div>
@@ -308,19 +233,11 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
       <div class="layers">
         <div class="layer">
           <span class="kicker">64-bit, end to end</span>
-          <h3>The ceiling that came with 32 bits is gone</h3>
+          <h3>Using Nodejs as host give us 64 bit offsets for the DBF, lifting the 2 GB limit</h3>
           <p>
-            Visual FoxPro is a 32-bit program, and that decides more than it appears to. It is why
-            a table stops at two gigabytes, why a memo file stops at two gigabytes, and why a big
-            report runs out of memory on a machine with plenty to spare. The limits are signed
-            32-bit numbers buried in the file handling, not a licensing decision anybody made.
-          </p>
-          <p>
-            FoxDev Studio is <strong>64-bit throughout</strong>. Every file offset is 64-bit and a
-            table is never read into memory at all, so the same <code>.dbf</code> that used to
-            stop dead carries on into the <strong>hundreds of gigabytes</strong>. One thing to know
-            before you lean on it: a table grown past two gigabytes will not open in Visual FoxPro
-            again. If you still work in both, that is a one-way door.
+            There are really good projects, battle tested that brings vfp9 to 64 bits. We aim at
+            something much bigger, an open runtime capable of loading 64 bit libraries and going
+            above and beyond the closed source vfp9 limitations.
           </p>
 
           <div class="diagram-frame figure">
@@ -397,23 +314,18 @@ const squares = Array.from({ length: 279 }, (_, i) => ({ x: 24 + (i % 31) * 7, y
 
         <div class="layer">
           <span class="kicker">The screen</span>
-          <h3>The form you see is the object tree, not a picture of it</h3>
+          <h3>Forms rendered using React and a custom DOM tree</h3>
           <p>
             A running form is a live tree of objects with the properties you would expect, and the
             interface is drawn straight from that tree by React. Each object watches only itself,
             so <code>THISFORM.lblGreeting.Caption = cMsg</code> repaints one label rather than the
             whole form. On a dense screen that is the difference between instant and sluggish.
           </p>
-          <p>
-            The same tree is what the designer edits, one step earlier. There is no second model
-            kept in step with the first, which is the usual place a form and its designer start
-            telling different stories.
-          </p>
         </div>
 
         <div class="layer">
           <span class="kicker">The 32-bit bridge</span>
-          <h3>Your old libraries still load, though nothing here is 32-bit</h3>
+          <h3>Old libraries are battle tested, we support them</h3>
           <p>
             An <code>.fll</code> is a 32-bit image, and every process in a 64-bit application is
             64-bit, so nothing inside the application itself could ever open one. Rather than tell
