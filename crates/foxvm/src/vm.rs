@@ -8896,6 +8896,8 @@ impl Vm {
         let into_alias = run.into_alias.clone();
         let sources: Vec<(usize, Option<u64>)> = run.sources.iter().map(|s| (s.area, s.restore)).collect();
         let (fields, rows) = run.finish(&self.settings)?;
+        // how many rows the query answered with, which is what a program asks straight after it
+        self.globals.insert("_TALLY".into(), Value::number(rows.len() as f64));
 
         // let the sources go before the result lands, so a query INTO CURSOR named after one of
         // them takes its place rather than fighting it for a work area
