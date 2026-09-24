@@ -134,6 +134,11 @@ pub struct ClassProto {
     pub parent: String,
     /// Property values, constant-folded at compile time, in source order.
     pub properties: Vec<(String, Constant)>,
+    /// Property values that are expressions - `TxnDate = TRANSFORM(DTOS(DATE()), ...)` - as their
+    /// source text. Measured: Visual FoxPro works them out when an object is made, where the
+    /// program making it stands, so a variable set just before CREATEOBJECT() is seen.
+    #[serde(default)]
+    pub expressions: Vec<(String, String)>,
     pub members: Vec<MemberProto>,
     /// `("Init", func)` / `("image1.Click", func)`: the name as written and the function index.
     pub methods: Vec<(String, u32)>,
@@ -155,6 +160,9 @@ pub struct MemberProto {
     pub class: String,
     pub noinit: bool,
     pub properties: Vec<(String, Constant)>,
+    /// The WITH clause's values that are expressions, as source text; see [`ClassProto`].
+    #[serde(default)]
+    pub expressions: Vec<(String, String)>,
 }
 
 impl Module {
@@ -1078,11 +1086,13 @@ mod tests {
                     ("Caption".into(), Constant::Str("Form1".into())),
                     ("Visible".into(), Constant::Bool(true)),
                 ],
+                expressions: vec![("Tag".into(), "DTOC(DATE())".into())],
                 members: vec![MemberProto {
                     name: "image1".into(),
                     class: "image".into(),
                     noinit: true,
                     properties: vec![("Left".into(), Constant::num(100.0)), ("Picture".into(), Constant::Null)],
+                    expressions: vec![],
                 }],
                 methods: vec![("Init".into(), 0)],
             }],

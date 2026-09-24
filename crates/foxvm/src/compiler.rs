@@ -54,6 +54,9 @@ impl CompileResult {
     }
 }
 
+/// A class body's property values: the constants, and the expressions kept as source text.
+type ClassValues = (Vec<(String, Constant)>, Vec<(String, String)>);
+
 /// Compiles a .prg: `funcs[0]` is `MAIN`, the procedures follow in source order.
 pub fn compile_program(src: &str, name: &str) -> CompileResult {
     compile_program_with(src, name, &std::collections::HashMap::new())
@@ -637,16 +640,17 @@ impl ModuleCompiler {
     /// function named `"CLASSNAME.METHODNAME"` (`"CLASSNAME.MEMBER.EVENT"` for a member's), also
     /// listed in `Module::methods` so the host can start it by name.
     fn compile_class(&mut self, class: &ClassDecl) {
-        let properties = self.class_properties(&class.properties, &class.name.text);
+        let (properties, expressions) = self.class_properties(&class.properties, &class.name.text);
         let mut members = Vec::with_capacity(class.members.len());
         for m in &class.members {
             let owner = format!("{}.{}", class.name.text, m.name.text);
-            let properties = self.class_properties(&m.properties, &owner);
+            let (properties, expressions) = self.class_properties(&m.properties, &owner);
             members.push(MemberProto {
                 name: m.name.text.clone(),
                 class: m.class.text.clone(),
                 noinit: m.noinit,
                 properties,
+                expressions,
             });
         }
         let mut methods: Vec<(String, u32)> = Vec::new();
@@ -670,14 +674,18 @@ impl ModuleCompiler {
             name: class.name.text.clone(),
             parent: class.parent.text.clone(),
             properties,
+            expressions,
             members,
             methods,
         });
     }
 
-    /// Folds every property value to a constant; a value VFP would not accept there is an error.
-    fn class_properties(&mut self, props: &[ClassProperty], owner: &str) -> Vec<(String, Constant)> {
+    /// Folds every property value it can to a constant. One that is an expression is kept as its
+    /// source text, for the host to work out when an object of the class is made - as Visual
+    /// FoxPro does, measured.
+    fn class_properties(&mut self, props: &[ClassProperty], owner: &str) -> ClassValues {
         let mut out = Vec::with_capacity(props.len());
+        let mut expressions = Vec::new();
         for p in props {
             // `DIMENSION aRGB[3]`: the property starts as an array of .F., as VFP creates it
             if let Some(dim) = &p.dim {
@@ -692,15 +700,45 @@ impl ModuleCompiler {
                 }
                 continue;
             }
+            // an array the body dimensioned: `a[2] = x` sets that element, `a = x` sets every one -
+            // measured - rather than turning the array back into a single value
+            let array_at = out.iter().rposition(|(n, c): &(String, Constant)| n.eq_ignore_ascii_case(&p.name.text) && matches!(c, Constant::Array(_)));
+            if let Some(subs) = &p.index {
+                let (Some(at), Some(value), [sub]) = (array_at, fold_constant(&p.value), subs.as_slice()) else {
+                    let msg = format!("{}[...] of '{}': only a constant in one element of a one-dimensional array is kept here", p.name.text, owner);
+                    self.warning(p.name.span, msg);
+                    continue;
+                };
+                if let (Some(Constant::Num(n, ..)), Constant::Array(items)) = (fold_constant(sub), &mut out[at].1)
+                    && n >= 1.0
+                    && (n as usize) <= items.len()
+                {
+                    items[n as usize - 1] = value;
+                    continue;
+                }
+                self.error(sub.span, format!("Subscript of '{}' of '{}' is outside the array", p.name.text, owner));
+                continue;
+            }
+            if let (Some(at), Some(value)) = (array_at, fold_constant(&p.value)) {
+                if let Constant::Array(items) = &mut out[at].1 {
+                    for item in items.iter_mut() {
+                        *item = value.clone();
+                    }
+                }
+                continue;
+            }
             match fold_constant(&p.value) {
                 Some(c) => out.push((p.name.text.clone(), c)),
-                None => {
-                    let msg = format!("Property '{}' of '{}' must be set to a constant value", p.name.text, owner);
-                    self.error(p.value.span, msg);
-                }
+                None => match self.src.get(p.value.span.start..p.value.span.end) {
+                    Some(text) if !text.trim().is_empty() => expressions.push((p.name.text.clone(), text.trim().to_string())),
+                    _ => {
+                        let msg = format!("Property '{}' of '{}' must be set to a constant value", p.name.text, owner);
+                        self.error(p.value.span, msg);
+                    }
+                },
             }
         }
-        out
+        (out, expressions)
     }
 
     // ----- statements -----
@@ -1094,11 +1132,11 @@ impl ModuleCompiler {
             }
             StmtKind::Set { setting, value } => {
                 let argc = match value {
-                    SetValue::On => {
+                    SetValue::On | SetValue::Switch { on: true, .. } => {
                         fb.emit(Instr::True);
                         1
                     }
-                    SetValue::Off => {
+                    SetValue::Off | SetValue::Switch { on: false, .. } => {
                         fb.emit(Instr::False);
                         1
                     }
@@ -1116,6 +1154,19 @@ impl ModuleCompiler {
                 };
                 let n = self.name(&setting.upper);
                 fb.emit(Instr::SetCmd { name: n, argc, to: matches!(value, SetValue::To(_)) });
+                // `SET COMPATIBLE ON | OFF [PROMPT | NOPROMPT]`: the word is what SET("COMPATIBLE", 1)
+                // answers, and a switch with no word puts it back to PROMPT - measured. It goes where
+                // a setting keeps its second answer, which a TO form writes and an empty one clears.
+                // The words after any other switch - SET TALK OFF NOWINDOW - change nothing measured.
+                if setting.upper == "COMPATIBLE" {
+                    let word = match value {
+                        SetValue::Switch { words, .. } if words.trim().eq_ignore_ascii_case("NOPROMPT") => "NOPROMPT",
+                        _ => "",
+                    };
+                    let c = self.str_const(word);
+                    fb.emit(Instr::Const(c));
+                    fb.emit(Instr::SetCmd { name: n, argc: 1, to: true });
+                }
             }
             StmtKind::Try { body, catches, finally } => self.try_stmt(fb, body, catches, finally.as_ref()),
             StmtKind::Use { table, alias, exclusive, online, in_area, order, order_desc, indexes } => {

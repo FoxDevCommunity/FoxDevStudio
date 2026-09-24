@@ -1,0 +1,13 @@
+* SYS(2007): CRC-16 by default, from a seed when one is given, CRC-32 with flag 1
+? SYS(2007, "")
+? SYS(2007, "a")
+? SYS(2007, "abc")
+? SYS(2007, "Hello, World")
+? SYS(2007, REPLICATE("x", 300))
+? SYS(2007, "abc", 5)
+? SYS(2007, "abc", 1234)
+? SYS(2007, "abc", 0)
+? SYS(2007, "abc", -1)
+? SYS(2007, "abc", 0, 1)
+? SYS(2007, "abc", 5, 1)
+? LEN(SYS(2007, "abc")), VARTYPE(SYS(2007, "abc"))

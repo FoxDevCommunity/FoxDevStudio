@@ -16,7 +16,18 @@ export interface VfpClassMember {
   /** `NOINIT`: do not run the member's Init when the container is created. */
   noinit: boolean;
   /** Property values from the `WITH` clause, already constant-folded. */
-  properties: { name: string; value: VmValue }[];
+  properties: VfpClassProperty[];
+}
+
+/**
+ * One property a class body or a WITH clause sets. `expression` is there when the value was
+ * written as an expression rather than a constant: Visual FoxPro works it out when an object is
+ * made (measured), so `value` is only a placeholder until then.
+ */
+export interface VfpClassProperty {
+  name: string;
+  value: VmValue;
+  expression?: string;
 }
 
 export interface VfpClassDef {
@@ -25,7 +36,7 @@ export interface VfpClassDef {
   /** What it inherits from: a VFP base class, or another class in the same program. */
   baseClass: string;
   /** Class-level property assignments, in source order. */
-  properties: { name: string; value: VmValue }[];
+  properties: VfpClassProperty[];
   /** Contained objects, in the order they were added. */
   members: VfpClassMember[];
   /** Methods this class defines. */

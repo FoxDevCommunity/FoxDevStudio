@@ -2680,6 +2680,9 @@ impl Vm {
         let stack_len = fb.stack.len();
         let handlers_len = fb.handlers.len();
         let pending_len = fb.pending_rethrow.len();
+        // a fiber asked to evaluate while it waits on the host - CREATEOBJECT() working out a
+        // property written as an expression - still wants its answer pushed when it resumes
+        let waiting = fb.pending.take();
         self.push_inline(fb, id, false);
         let step = self.run(host, fb, floor);
         let r = match step {
@@ -2693,7 +2696,7 @@ impl Vm {
         fb.stack.truncate(stack_len);
         fb.handlers.truncate(handlers_len);
         fb.pending_rethrow.truncate(pending_len);
-        fb.pending = None;
+        fb.pending = waiting;
         r
     }
 

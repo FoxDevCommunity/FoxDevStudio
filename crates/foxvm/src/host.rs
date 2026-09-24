@@ -782,6 +782,10 @@ pub struct ClassDefOut {
 pub struct ClassPropOut {
     pub name: String,
     pub value: JsonValue,
+    /// The source of a value that is an expression, which the host works out when the object is
+    /// made; `value` is only a placeholder then.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub expression: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -807,7 +811,7 @@ impl ClassDefOut {
         ClassDefOut {
             name: proto.name.clone(),
             base_class: proto.parent.clone(),
-            properties: props_out(&proto.properties),
+            properties: props_out(&proto.properties, &proto.expressions),
             members: proto
                 .members
                 .iter()
@@ -815,7 +819,7 @@ impl ClassDefOut {
                     name: m.name.clone(),
                     class: m.class.clone(),
                     noinit: m.noinit,
-                    properties: props_out(&m.properties),
+                    properties: props_out(&m.properties, &m.expressions),
                 })
                 .collect(),
             methods: proto
@@ -828,8 +832,13 @@ impl ClassDefOut {
     }
 }
 
-fn props_out(props: &[(String, crate::bytecode::Constant)]) -> Vec<ClassPropOut> {
-    props.iter().map(|(name, c)| ClassPropOut { name: name.clone(), value: JsonValue::from_constant(c) }).collect()
+fn props_out(props: &[(String, crate::bytecode::Constant)], expressions: &[(String, String)]) -> Vec<ClassPropOut> {
+    let values = props.iter().map(|(name, c)| ClassPropOut { name: name.clone(), value: JsonValue::from_constant(c), expression: None });
+    // an expression is worked out by the host when the object is made; until then it is .F.
+    let worked_out = expressions
+        .iter()
+        .map(|(name, text)| ClassPropOut { name: name.clone(), value: JsonValue::Bool(false), expression: Some(text.clone()) });
+    values.chain(worked_out).collect()
 }
 
 /// Values crossing the bridge. Objects travel as handles; arrays by value; dates as ISO text

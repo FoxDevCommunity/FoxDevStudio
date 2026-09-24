@@ -1080,7 +1080,14 @@ export const useSessionStore = create<SessionState>((set, get) => {
               if (dot < 0) instance.classMethods.add(method.name.toLowerCase());
               else instance.child(method.name.slice(0, dot))?.classMethods.add(method.name.slice(dot + 1).toLowerCase());
             }
-            const created = await desktop.runFormLifecycle(instance, { noshow: true, args: request.args });
+            const created = await desktop.runFormLifecycle(instance, {
+              noshow: true,
+              args: request.args,
+              // a property written as an expression is worked out now, where CREATEOBJECT() was
+              // called - measured: a variable set just before it is seen
+              expressions: built.expressions,
+              inFrame: (expression) => vm.evaluateIn(ctx.fiber, -1, expression),
+            });
             if (!created) return null;
             return { $obj: instance.handle };
           })();

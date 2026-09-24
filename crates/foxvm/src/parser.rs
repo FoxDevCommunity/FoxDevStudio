@@ -940,9 +940,30 @@ impl Parser {
                 self.skip_line();
                 continue;
             };
+            // `wbaSearchOrder[1] = "WIZARDS"`: one element of an array the body dimensioned
+            if self.is(&TokKind::LBracket) || self.is(&TokKind::LParen) {
+                let close = if self.is(&TokKind::LBracket) { TokKind::RBracket } else { TokKind::RParen };
+                self.advance();
+                let mut subs = Vec::new();
+                while let Ok(e) = self.expr() {
+                    subs.push(e);
+                    if !self.eat(&TokKind::Comma) {
+                        break;
+                    }
+                }
+                if !self.eat(&close) || !self.eat(&TokKind::Eq) {
+                    self.expected("'='");
+                    self.skip_line();
+                    continue;
+                }
+                let value = self.expr_or_recover();
+                properties.push(ClassProperty { name: pname, value, dim: None, index: Some(subs) });
+                self.end_of_line();
+                continue;
+            }
             if self.eat(&TokKind::Eq) {
                 let value = self.expr_or_recover();
-                properties.push(ClassProperty { name: pname, value, dim: None });
+                properties.push(ClassProperty { name: pname, value, dim: None, index: None });
                 self.end_of_line();
             } else if restricted {
                 // `PROTECTED a, b` declares properties without a value; VFP starts them at .F.
@@ -958,7 +979,7 @@ impl Parser {
                 }
                 for n in names {
                     let span = n.span;
-                    properties.push(ClassProperty { name: n, value: Expr::new(ExprKind::Bool(false), span), dim: None });
+                    properties.push(ClassProperty { name: n, value: Expr::new(ExprKind::Bool(false), span), dim: None, index: None });
                 }
                 self.end_of_line();
             } else {
@@ -999,7 +1020,7 @@ impl Parser {
                 }
                 let _ = self.eat(&TokKind::RBracket) || self.eat(&TokKind::RParen);
             }
-            out.push(ClassProperty { name, value: Expr::new(ExprKind::Bool(false), span), dim });
+            out.push(ClassProperty { name, value: Expr::new(ExprKind::Bool(false), span), dim, index: None });
             if !self.eat(&TokKind::Comma) {
                 break;
             }
@@ -1071,7 +1092,7 @@ impl Parser {
                     break;
                 }
                 let value = self.expr_or_recover();
-                properties.push(ClassProperty { name: pname, value, dim: None });
+                properties.push(ClassProperty { name: pname, value, dim: None, index: None });
                 if !self.eat(&TokKind::Comma) {
                     break;
                 }
@@ -6701,11 +6722,17 @@ impl Parser {
             let delimiters = !second_word.is_empty();
             return self.set_textmerge_stmt(setting, delimiters);
         }
-        if self.eat_kw("ON") {
-            return Ok(StmtKind::Set { setting, value: SetValue::On });
-        }
-        if self.eat_kw("OFF") {
-            return Ok(StmtKind::Set { setting, value: SetValue::Off });
+        // A switch can have words after it - `SET COMPATIBLE OFF NOPROMPT`, `SET TALK OFF
+        // NOWINDOW` - which are kept for the setting to make of them.
+        for (word, on) in [("ON", true), ("OFF", false)] {
+            if self.eat_kw(word) {
+                if self.at_eol() {
+                    return Ok(StmtKind::Set { setting, value: if on { SetValue::On } else { SetValue::Off } });
+                }
+                let words = self.rest_of_line_text().unwrap_or_default();
+                self.skip_line_keep_newline();
+                return Ok(StmtKind::Set { setting, value: SetValue::Switch { on, words } });
+            }
         }
         if self.eat_kw("TO") {
             if self.at_eol() {

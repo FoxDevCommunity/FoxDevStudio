@@ -27,6 +27,11 @@ export interface ClassArray {
 export interface BuiltClass {
   /** The node tree, shaped like a form so the desktop can instantiate it. */
   form: FormNode;
+  /**
+   * Property values that are expressions, to work out once the object exists: keyed the way
+   * `workOutProperties` reads them, the class's own name first, then the member path.
+   */
+  expressions: Record<string, string>;
   /** True when the class has no visual representation and must not be shown. */
   nonVisual: boolean;
   /** Array properties to declare on the live objects once the tree is instantiated. */
@@ -38,13 +43,14 @@ export interface BuiltClass {
 interface BuildContext {
   arrays: ClassArray[];
   path: string[];
+  expressions: Record<string, string>;
 }
 
 /** Applies property entries to a node's sparse props, keeping VFP's case-insensitive names. */
 function applyProperties(
   target: { name: string; props: Record<string, PropValue>; children?: ControlNode[] },
   descriptor: ObjectDescriptor,
-  entries: readonly { name: string; value: VmValue }[],
+  entries: readonly { name: string; value: VmValue; expression?: string }[],
   ctx: BuildContext,
 ): void {
   // VFP allows a dotted path so a member of the object can be set from the same WITH list:
@@ -57,6 +63,13 @@ function applyProperties(
       dotted.push(entry);
       continue;
     }
+    // worked out when the object is made; a later constant for the same property wins over it
+    const key = ['*', ...ctx.path, entry.name].join('.');
+    if (entry.expression !== undefined) {
+      ctx.expressions[key] = entry.expression;
+      continue;
+    }
+    delete ctx.expressions[key];
     // `DIMENSION aRGB[3]` arrives as an array value; a node's props hold only scalars, so it
     // is recorded and declared on the live object instead.
     if (isArray(entry.value)) {
@@ -132,7 +145,7 @@ function applyToMember(
 ): void {
   const child = target.children?.find((c) => c.name.toLowerCase() === memberName.toLowerCase());
   if (!child) return;
-  applyProperties(child, getDescriptor(child.type), [{ name: property, value }], { arrays: ctx.arrays, path: [...ctx.path, child.name] });
+  applyProperties(child, getDescriptor(child.type), [{ name: property, value }], { ...ctx, path: [...ctx.path, child.name] });
 }
 
 /**
@@ -145,6 +158,7 @@ export function buildClassInstance(classes: readonly VfpClassDef[], className: s
 
   const warnings: ClassInstanceWarning[] = [];
   const arrays: ClassArray[] = [];
+  const expressions: Record<string, string> = {};
   const nonVisual = isNonVisualBaseClass(resolved.baseClass);
   const base = baseClassToControlType(resolved.baseClass);
 
@@ -153,14 +167,14 @@ export function buildClassInstance(classes: readonly VfpClassDef[], className: s
   }
 
   const form: FormNode = { name: resolved.name, props: {}, methods: {}, children: [] };
-  applyProperties(form, base === 'Form' || base === null ? FORM_DESCRIPTOR : getDescriptor(base), resolved.properties, { arrays, path: [] });
+  applyProperties(form, base === 'Form' || base === null ? FORM_DESCRIPTOR : getDescriptor(base), resolved.properties, { arrays, path: [], expressions });
 
   for (const member of resolved.members) {
-    const node = buildMember(classes, member, warnings, arrays, resolved.name, new Set([resolved.name.toLowerCase()]));
+    const node = buildMember(classes, member, warnings, arrays, expressions, resolved.name, new Set([resolved.name.toLowerCase()]));
     if (node) form.children.push(node);
   }
 
-  return { form, nonVisual: nonVisual || base === null, arrays, warnings };
+  return { form, nonVisual: nonVisual || base === null, arrays, expressions, warnings };
 }
 
 /** One `ADD OBJECT`, which may itself name a class defined in source. */
@@ -169,6 +183,7 @@ function buildMember(
   member: VfpClassDef['members'][number],
   warnings: ClassInstanceWarning[],
   arrays: ClassArray[],
+  expressions: Record<string, string>,
   path: string,
   seen: ReadonlySet<string>,
 ): ControlNode | null {
@@ -187,7 +202,9 @@ function buildMember(
       }
       const node: ControlNode = { id: nanoid(8), type, name: member.name, props: { ...nested.form.props }, methods: {}, children: nested.form.children };
       for (const a of nested.arrays) arrays.push({ ...a, path: [member.name, ...a.path] });
-      applyProperties(node, getDescriptor(type), member.properties, { arrays, path: [member.name] });
+      // the member's own class's expressions, under the member's name
+      for (const [key, source] of Object.entries(nested.expressions)) expressions[['*', member.name, ...key.split('.').slice(1)].join('.')] = source;
+      applyProperties(node, getDescriptor(type), member.properties, { arrays, path: [member.name], expressions });
       return node;
     }
   }
@@ -199,7 +216,7 @@ function buildMember(
   }
 
   const node: ControlNode = { id: nanoid(8), type, name: member.name, props: {}, methods: {}, children: [] };
-  applyProperties(node, getDescriptor(type), member.properties, { arrays, path: [member.name] });
+  applyProperties(node, getDescriptor(type), member.properties, { arrays, path: [member.name], expressions });
   return node;
 }
 

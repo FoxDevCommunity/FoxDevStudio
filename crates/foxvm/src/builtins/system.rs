@@ -478,14 +478,43 @@ fn unique_token(width: usize) -> String {
     String::from_utf8(out).unwrap_or_default()
 }
 
-/// SYS(): 3 and 2015 return unique names, 16 the running program, and everything else "" so a
-/// program that queries the environment keeps running.
+/// `SYS(2007, cText [, nSeed [, nFlags]])`: a checksum of the text, as a number written out.
+/// Measured: CRC-16/CCITT (polynomial 0x1021) starting from 0xFFFF, or from nSeed when one other
+/// than 0 or -1 is given; nFlags 1 is the standard CRC-32, which takes no seed. CodeMine's
+/// SerialHash is built on it, so a serial number is only valid if this agrees with the product.
+fn sys_checksum(a: &[Value]) -> Result<Value, RtError> {
+    let text = arg_str(a, 1)?;
+    let bytes: Vec<u8> = text.chars().map(|c| (c as u32 & 0xff) as u8).collect();
+    let seed = opt_int(a, 2, -1)?;
+    if opt_int(a, 3, 0)? == 1 {
+        let mut crc: u32 = 0xFFFF_FFFF;
+        for b in &bytes {
+            crc ^= u32::from(*b);
+            for _ in 0..8 {
+                crc = if crc & 1 != 0 { (crc >> 1) ^ 0xEDB8_8320 } else { crc >> 1 };
+            }
+        }
+        return Ok(Value::str((!crc).to_string()));
+    }
+    let mut crc: u16 = if seed == 0 || seed == -1 { 0xFFFF } else { seed as u16 };
+    for b in &bytes {
+        crc ^= u16::from(*b) << 8;
+        for _ in 0..8 {
+            crc = if crc & 0x8000 != 0 { (crc << 1) ^ 0x1021 } else { crc << 1 };
+        }
+    }
+    Ok(Value::str(crc.to_string()))
+}
+
+/// SYS(): 3 and 2015 return unique names, 16 the running program, 2007 a checksum, and
+/// everything else "" so a program that queries the environment keeps running.
 fn f_sys(c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
     let n = arg_int(&a, 0)?;
     ok(match n {
         3 => Value::str(unique_token(8)),
         2015 => Value::str(format!("_{}", unique_token(9))),
         16 => Value::str(c.program_name()),
+        2007 => sys_checksum(&a)?,
         // SYS(1271, oObject): the file a form was built from. Measured in vfp9.exe: it answers
         // .F. - a logical, not an empty string - for an object that came from no file, an
         // object of a class library included, and the Solution samples all test for that with

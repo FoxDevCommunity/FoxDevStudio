@@ -91,6 +91,8 @@ pub struct ClassProperty {
     pub value: Expr,
     /// `DIMENSION aRGB[3]` in a class body: the property is an array of this many elements.
     pub dim: Option<Expr>,
+    /// `aRGB[2] = 255` in a class body: one element of an array the body dimensioned.
+    pub index: Option<Vec<Expr>>,
 }
 
 /// `ADD OBJECT [PROTECTED] <name> AS <class> [NOINIT] [WITH <prop> = <expr>, ...]`.
@@ -134,6 +136,8 @@ pub struct Arg {
 pub enum SetValue {
     On,
     Off,
+    /// `SET COMPATIBLE OFF NOPROMPT`, `SET TALK OFF NOWINDOW`: the switch, and the words after it.
+    Switch { on: bool, words: String },
     To(Vec<Expr>),
     /// `SET DATE TO AMERICAN`, `SET CLASSLIB TO x ADDITIVE`: bare words after TO.
     Word(String),
