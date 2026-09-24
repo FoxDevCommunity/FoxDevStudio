@@ -220,11 +220,22 @@ fn f_forcepath(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, 
 // environment
 // ------------------------------------------------------------------------------------------
 
-fn f_version(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
+/// VERSION([nExpression]). Measured in Visual FoxPro 9: 2 is a number, the edition - 2 in the
+/// development environment and 0 in the runtime - and 5 is the number 900, which is what a
+/// program compares against before it uses anything new in version 9. 3 is the language, "00"
+/// for English, and 0 or anything past 5 is error 11. The product's name in 1 and the plain
+/// form is this runtime's own.
+fn f_version(c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
+    if a.is_empty() {
+        return ok(Value::str(format!("FoxDev Studio Runtime {}", crate::VERSION)));
+    }
     match opt_int(&a, 0, 1)? {
+        1 => ok(Value::str(format!("FoxDev Studio Runtime {}", crate::VERSION))),
+        2 => ok(Value::number(if c.settings().runtime_only { 0.0 } else { 2.0 })),
+        3 => ok(Value::str("00")),
         4 => ok(Value::str(crate::VERSION)),
-        5 => ok(Value::number(0.0)),
-        _ => ok(Value::str(format!("FoxDev Studio Runtime {}", crate::VERSION))),
+        5 => ok(Value::number(900.0)),
+        _ => Err(RtError::function_arg_invalid()),
     }
 }
 

@@ -57,6 +57,15 @@ fn an_included_header_brings_its_constants() {
     let text = dump(&out.program).lines().filter(|l| !l.contains("(directive")).collect::<Vec<_>>().join(" ");
     assert_eq!(text, "(= X (+ 80 25))");
 
+    // headers that include themselves, or each other, are read once each rather than forever
+    let mut looped = HashMap::new();
+    looped.insert("SELF".to_string(), "#INCLUDE self.h\n#DEFINE A 1\n".to_string());
+    looped.insert("PING".to_string(), "#INCLUDE pong.h\n#DEFINE B 2\n".to_string());
+    looped.insert("PONG".to_string(), "#INCLUDE ping.h\n#DEFINE C 3\n".to_string());
+    let out = parse_program_with("#INCLUDE self.h\n#INCLUDE ping.h\nx = A + B + C\n", &looped);
+    let text = dump(&out.program).lines().filter(|l| !l.contains("(directive")).collect::<Vec<_>>().join(" ");
+    assert_eq!(text, "(= X (+ (+ 1 2) 3))");
+
     // and one that is not there is a warning, not an error
     let out = parse_program("#INCLUDE nowhere.h\nx = 1\n");
     assert!(out.diagnostics.iter().all(|d| !d.is_error()));

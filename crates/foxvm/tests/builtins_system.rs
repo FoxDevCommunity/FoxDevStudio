@@ -132,6 +132,13 @@ fn file_requests() {
 fn environment_functions() {
     assert_eq!(text("VERSION", vec![]), format!("FoxDev Studio Runtime {}", foxvm::VERSION));
     assert_eq!(text("VERSION", vec![n(4.0)]), foxvm::VERSION);
+    // measured: the edition and the version number are numbers, a program compares both, and
+    // the edition is the development one unless the host says this is a built application
+    assert_eq!(num("VERSION", vec![n(2.0)]), 2.0);
+    assert_eq!(text("VERSION", vec![n(3.0)]), "00");
+    assert_eq!(num("VERSION", vec![n(5.0)]), 900.0);
+    assert_eq!(err("VERSION", vec![n(0.0)]).code, RtError::FUNCTION_ARG_INVALID);
+    assert_eq!(err("VERSION", vec![n(6.0)]).code, RtError::FUNCTION_ARG_INVALID);
     // a FoxPro program that guards on the Windows version reads OS(3) and OS(4)
     assert_eq!(text("OS", vec![]), "Windows 10.00");
     // OS(2) is DBCS support, not the version - measured against the product empty on the code

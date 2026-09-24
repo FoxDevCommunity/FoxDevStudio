@@ -59,8 +59,9 @@ pub fn parse_method(src: &str) -> ParseOutput {
 pub fn parse_method_with(src: &str, headers: &std::collections::HashMap<String, String>, include: &str) -> ParseOutput {
     let mut p = Parser::new(src, Mode::Method);
     p.headers = headers.clone();
-    if let Some(text) = p.headers.get(&header_stem(include)).cloned() {
-        p.read_header(&text);
+    let stem = header_stem(include);
+    if let Some(text) = p.headers.get(&stem).cloned() {
+        p.read_header(&stem, &text);
     }
     let program = p.program();
     ParseOutput { program, diagnostics: p.diags }
@@ -442,6 +443,10 @@ struct Parser {
     src: Vec<char>,
     /// The header files this program may include, by name without folder or extension.
     headers: std::collections::HashMap<String, String>,
+    /// The headers being read right now, innermost last. A header that includes itself, or one
+    /// that includes it back, is read once: a second `#INCLUDE` of a header already open brings
+    /// nothing the first did not, and following it would never end.
+    headers_open: Vec<String>,
     toks: Vec<Token>,
     /// Parallel to `toks`: false for tokens produced by `#DEFINE` expansion (never re-expanded).
     expandable: Vec<bool>,
@@ -466,6 +471,7 @@ impl Parser {
         Parser {
             src: src.chars().collect(),
             headers: std::collections::HashMap::new(),
+            headers_open: Vec::new(),
             toks: lexed.tokens,
             expandable: vec![true; n],
             pos: 0,
@@ -6992,7 +6998,7 @@ impl Parser {
                 match self.headers.get(&stem) {
                     Some(text) => {
                         let text = text.clone();
-                        self.read_header(&text);
+                        self.read_header(&stem, &text);
                     }
                     None => {
                         let span = hash.span.to(name_tok.span);
@@ -7016,7 +7022,16 @@ impl Parser {
 
     /// Reads a header file's constants into this parse: its `#DEFINE` lines, and the ones of
     /// any header it includes in turn.
-    fn read_header(&mut self, text: &str) {
+    fn read_header(&mut self, stem: &str, text: &str) {
+        if self.headers_open.iter().any(|open| open == stem) {
+            return;
+        }
+        self.headers_open.push(stem.to_string());
+        self.read_header_text(text);
+        self.headers_open.pop();
+    }
+
+    fn read_header_text(&mut self, text: &str) {
         let tokens = crate::lexer::lex(text).tokens;
         let mut at = 0usize;
         while at < tokens.len() {
@@ -7056,8 +7071,9 @@ impl Parser {
                             _ => String::new(),
                         })
                         .collect();
-                    if let Some(text) = self.headers.get(&header_stem(&file)).cloned() {
-                        self.read_header(&text);
+                    let stem = header_stem(&file);
+                    if let Some(text) = self.headers.get(&stem).cloned() {
+                        self.read_header(&stem, &text);
                     }
                 }
                 _ => {}

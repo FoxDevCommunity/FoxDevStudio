@@ -212,6 +212,11 @@ export const runtimeUi = {
   newDocument: async (kind: string, _path: string): Promise<void> => {
     throw new Error(`CREATE ${kind.toUpperCase()} needs a designer, which the player has not`);
   },
+  /**
+   * The development environment rather than a built application: `VERSION(2)` answers 2 here
+   * and 0 in the player, and programs branch on it to find their source.
+   */
+  development: false,
 };
 const showDesktop = () => runtimeUi.showDesktop();
 
@@ -335,9 +340,17 @@ export const useSessionStore = create<SessionState>((set, get) => {
     desktop.runLine = (text) => runSnippet(text, 'line').then(() => undefined);
     desktop.setVariable = (name, value) => vm.setGlobal(name, value);
     desktop.quitRequested = () => void get().cancel();
-    // SET LIBRARY TO reaches the process that can load a 32-bit .fll; there is none in a browser
-    desktop.libraries = getApi().library;
+    // SET LIBRARY TO reaches the process that can load a 32-bit .fll; there is none in a browser.
+    // A library named without a folder is the program's default directory's, which here is the
+    // project folder - `SET LIBRARY TO codemine.fll` means the one beside the application. Left
+    // alone, that process would resolve it against its own working directory instead.
+    const libraryHost = getApi().library;
+    desktop.libraries = libraryHost && {
+      ...libraryHost,
+      load: (path: string) => libraryHost.load(isAbsolute(path) ? path : useProjectStore.getState().resolvePath(path)),
+    };
     const vm = createVm(desktop);
+    vm.setSetting('RUNTIME', !runtimeUi.development);
     // _SAMPLES names the samples directory, which is HOME(2). A program that opens
     // _samples + "\Data\customer.dbf" reads it on its first line, so it is answered before
     // anything runs rather than while it does.
