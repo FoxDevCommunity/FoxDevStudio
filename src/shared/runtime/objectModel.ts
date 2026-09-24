@@ -33,6 +33,8 @@ import type { LibraryHost, LibraryValue } from './libraryHost';
  * empty parameter.
  */
 function toLibraryValue(v: VmValue): LibraryValue {
+  // `@cValue`: the library is handed the variable, and what it stores comes back to it
+  if (typeof v === 'object' && v !== null && '$ref' in v) return { kind: 'ref', value: toLibraryValue(v.$val) };
   if (typeof v === 'string') return { kind: 'string', text: v };
   if (typeof v === 'number') return { kind: 'number', num: v };
   if (typeof v === 'boolean') return { kind: 'logical', flag: v };
@@ -1993,7 +1995,7 @@ export class Desktop implements HostReads {
     library: number,
     fn: number,
     args: VmValue[],
-  ): { ok: true; value: VmValue } | { ok: false; code: number; message: string } {
+  ): { ok: true; value: VmValue; refs: { index: number; value: VmValue }[] } | { ok: false; code: number; message: string } {
     if (!this.libraries) return { ok: false, code: 1726, message: 'API library is not found.' };
     let answer;
     try {
@@ -2005,7 +2007,11 @@ export class Desktop implements HostReads {
     // _Error(n) raises the product's error n; _UserError(text) is 1098, in the library's words
     if (answer.error > 0) return { ok: false, code: answer.error, message: '' };
     if (answer.error < 0) return { ok: false, code: 1098, message: answer.errorText };
-    return { ok: true, value: fromLibraryValue(answer.value) };
+    return {
+      ok: true,
+      value: fromLibraryValue(answer.value),
+      refs: (answer.refs ?? []).map((r) => ({ index: r.index, value: fromLibraryValue(r.value) })),
+    };
   }
 
   unloadLibrary(library: number): void {

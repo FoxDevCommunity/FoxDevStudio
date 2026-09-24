@@ -118,9 +118,11 @@ const samples = join(
 if (!existsSync(join(samples, 'pro_ext.h'))) {
   console.log('[build-fllhost] no Visual FoxPro API samples here: no sample libraries built');
 } else {
+  // and one of our own, for what neither sample does: a variable passed by reference
   for (const [source, name] of [
-    ['hello.c', 'hello.fll'],
-    ['reverse.c', 'reverse.fll'],
+    [join(samples, 'hello.c'), 'hello.fll'],
+    [join(samples, 'reverse.c'), 'reverse.fll'],
+    [join(root, 'tests', 'fll', 'refparm.c'), 'refparm.fll'],
   ]) {
     cl(
       [
@@ -139,7 +141,7 @@ if (!existsSync(join(samples, 'pro_ext.h'))) {
         '/D',
         'NDEBUG',
         `/I${samples}`,
-        join(samples, source),
+        source,
         `/Fe${join(sampleDir, name)}`,
         '/link',
         `/LIBPATH:${samples}`,
