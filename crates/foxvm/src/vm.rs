@@ -3189,6 +3189,73 @@ impl Vm {
         }
     }
 
+    /// What reading `name` of `obj` comes to: its value, or the Access method that answers for
+    /// it - which `access` false passes over, as `ALEN(obj.aProp)` does.
+    fn read_member(&self, host: &mut dyn Host, fb: &Fiber, obj: &Value, name: &str, access: bool) -> Result<MemberRead, RtError> {
+        if let Some(v) = json_member(obj, name) {
+            return v.map(MemberRead::Value);
+        }
+        let h = self.check_object(host, obj, name)?;
+        if let Some(v) = self.native_member(h, name) {
+            return v.map(MemberRead::Value);
+        }
+        if access && let Some(method) = self.accessor(host, fb, h, name, "ACCESS") {
+            return Ok(MemberRead::Access(h, method));
+        }
+        match host.get_member(h, name)? {
+            Member::Child(c) => Ok(MemberRead::Value(Value::Object(c))),
+            Member::Property => Ok(MemberRead::Value(host.get_prop(h, name)?.deref())),
+            Member::Method | Member::None => Err(RtError::unknown_member(name)),
+        }
+    }
+
+    /// Calls the Access method `method` of `h` with `args`, its answer going on the stack.
+    fn call_access(fb: &mut Fiber, h: Handle, method: String, args: Vec<JsonValue>) -> Flow {
+        fb.pending = Some(Pending::Push);
+        Flow::Suspend(HostRequest::CallMethod { obj: h.0, name: method, args })
+    }
+
+    /// What an Access method is handed for a read of its property with no subscript. Measured:
+    /// an array property named whole - `VARTYPE(obj.aProp)` - hands it 1, the first element.
+    fn whole_access_args(host: &mut dyn Host, h: Handle, name: &str) -> Vec<JsonValue> {
+        let array = matches!(host.get_member(h, name), Ok(Member::Property))
+            && matches!(host.get_prop(h, name).map(|v| v.deref()), Ok(Value::Array(_)));
+        if array { vec![JsonValue::Num(1.0)] } else { Vec::new() }
+    }
+
+    /// The Access or Assign method that stands in for reading or writing `name` on `h` - `which`
+    /// is "ACCESS" or "ASSIGN" - when the object has one. Measured: inside either of the two,
+    /// `THIS.name` is the property itself, which is the only way they can reach what they guard.
+    fn accessor(&self, host: &mut dyn Host, fb: &Fiber, h: Handle, name: &str, which: &str) -> Option<String> {
+        if h.0 == 0 || crate::foxscript::in_range(h) {
+            return None;
+        }
+        let method = format!("{}_{which}", name.to_ascii_uppercase());
+        if !host.has_code_method(h, &method) {
+            return None;
+        }
+        let env = env_index(fb, fb.frames.len() - 1);
+        let frame = &fb.frames[env];
+        if frame.this == Some(h) {
+            let running = &self.proto(frame.module, frame.func).display_name;
+            let last = running.rsplit('.').next().unwrap_or(running);
+            let last = last.split('#').next().unwrap_or(last).to_ascii_uppercase();
+            let property = name.to_ascii_uppercase();
+            if last == format!("{property}_ACCESS") || last == format!("{property}_ASSIGN") {
+                return None;
+            }
+        }
+        Some(method)
+    }
+
+    /// A value as a variable reads it: a released form is .NULL. to everything still holding it.
+    fn live(host: &mut dyn Host, v: Value) -> Value {
+        match v.deref() {
+            Value::Object(h) if h.0 != 0 && !crate::foxscript::in_range(h) && host.released(h) => Value::Null,
+            _ => v,
+        }
+    }
+
     fn check_object(&self, host: &mut dyn Host, v: &Value, what: &str) -> Result<Handle, RtError> {
         let h = match v.deref() {
             Value::Object(h) => h,
@@ -3283,7 +3350,7 @@ impl Vm {
             }
             Instr::LoadLocal(s) => {
                 let v = self.load_local(fb, *s)?;
-                fb.stack.push(v);
+                fb.stack.push(Self::live(host, v));
             }
             Instr::StoreLocal(s) => {
                 let v = pop!();
@@ -3299,7 +3366,7 @@ impl Vm {
                         FieldRead::Suspend(req) => return Ok(self.ask(fb, req)),
                     }
                 } else if let Some(v) = self.load_name(fb, &name) {
-                    fb.stack.push(v);
+                    fb.stack.push(Self::live(host, v));
                 } else if let Some(alias) = self.query_field(fb, &name) {
                     // inside a query a name that is nothing else is a field of one of its
                     // sources, which is how a join names the columns it did not have to qualify
@@ -3386,7 +3453,7 @@ impl Vm {
                 let subs = pop_subscripts(fb, *n)?;
                 let arr = pop!();
                 let v = index_array(&arr, &subs)?;
-                fb.stack.push(v);
+                fb.stack.push(Self::live(host, v));
             }
             Instr::StoreIndex(n) => {
                 let subs = pop_subscripts(fb, *n)?;
@@ -3521,6 +3588,17 @@ impl Vm {
                 let var = pop!().as_number()?;
                 if (step >= 0.0 && var > end) || (step < 0.0 && var < end) {
                     fb.frames.last_mut().expect("frame").pc = *t as usize;
+                }
+            }
+            Instr::ForEachItems { member, target } => {
+                let obj = pop!();
+                let items = match obj.deref() {
+                    Value::Object(h) => host.enumerate(h, &module.members[*member as usize]),
+                    _ => None,
+                };
+                if let Some(items) = items {
+                    fb.stack.push(items);
+                    fb.frames.last_mut().expect("frame").pc = *target as usize;
                 }
             }
             Instr::ForEachNext(t) => {
@@ -3717,23 +3795,38 @@ impl Vm {
             Instr::GetMember(m) => {
                 let obj = pop!();
                 let name = &module.members[*m as usize];
-                if let Some(v) = json_member(&obj, name) {
-                fb.stack.push(v?);
-                return Ok(Flow::Next);
-                }
-
-                let h = self.check_object(host, &obj, name)?;
-                if let Some(v) = self.native_member(h, name) {
-                    fb.stack.push(v?);
-                    return Ok(Flow::Next);
-                }
-                match host.get_member(h, name)? {
-                    Member::Child(c) => fb.stack.push(Value::Object(c)),
-                    Member::Property => {
-                        let v = host.get_prop(h, name)?;
-                        fb.stack.push(v.deref());
+                // `Prop_Access` answers for the property when the object has one
+                match self.read_member(host, fb, &obj, name, true)? {
+                    MemberRead::Value(v) => fb.stack.push(v),
+                    MemberRead::Access(h, method) => {
+                        let args = Self::whole_access_args(host, h, name);
+                        return Ok(Self::call_access(fb, h, method, args));
                     }
-                    Member::Method | Member::None => return Err(RtError::unknown_member(name)),
+                }
+            }
+            // `obj.aProp[1]`: measured, the subscripts are the Access method's arguments, and the
+            // method's own THIS.aProp[n] reads the element without calling it again
+            Instr::GetMemberIndex { name, argc } => {
+                let subs = pop_n(fb, *argc as usize)?;
+                let obj = pop!();
+                let name = &module.members[*name as usize];
+                match self.read_member(host, fb, &obj, name, true)? {
+                    MemberRead::Value(v) => {
+                        let subs = subs.iter().map(Value::as_usize).collect::<Result<Vec<_>, _>>()?;
+                        let v = index_array(&v, &subs)?;
+                        fb.stack.push(Self::live(host, v));
+                    }
+                    MemberRead::Access(h, method) => {
+                        return Ok(Self::call_access(fb, h, method, subs.iter().map(JsonValue::from_value).collect()));
+                    }
+                }
+            }
+            Instr::GetProp(m) => {
+                let obj = pop!();
+                let name = &module.members[*m as usize];
+                match self.read_member(host, fb, &obj, name, false)? {
+                    MemberRead::Value(v) => fb.stack.push(v),
+                    MemberRead::Access(..) => unreachable!("an Access method was asked for"),
                 }
             }
             Instr::SetMember(m) => {
@@ -3745,6 +3838,10 @@ impl Vm {
                     return Err(native_write_refused(&self.natives, h, name));
                 }
                 fb.pending = Some(Pending::Discard);
+                // `Prop_Assign` is handed the value instead of the property taking it
+                if let Some(method) = self.accessor(host, fb, h, name, "ASSIGN") {
+                    return Ok(Flow::Suspend(HostRequest::CallMethod { obj: h.0, name: method, args: vec![JsonValue::from_value(&v)] }));
+                }
                 return Ok(Flow::Suspend(HostRequest::SetProp {
                     obj: h.0,
                     name: name.clone(),
@@ -3838,6 +3935,11 @@ impl Vm {
                 let h = self.check_object(host, &obj, name)?;
                 if self.natives.contains(h) {
                     return self.native_call(fb, h, name, args);
+                }
+                // `obj.aProp("x")` is a read of the property as much as `obj.aProp["x"]` is, so
+                // measured, its Access method is handed what is in the parentheses
+                if let Some(method) = self.accessor(host, fb, h, name, "ACCESS") {
+                    return Ok(Self::call_access(fb, h, method, args.iter().map(JsonValue::from_value).collect()));
                 }
                 fb.pending = Some(Pending::Push);
                 return Ok(Flow::Suspend(HostRequest::CallMethod {
@@ -5765,27 +5867,17 @@ impl Vm {
                     if base == "M" {
                         let upper = field.to_ascii_uppercase();
                         let v = self.load_name(fb, &upper).ok_or_else(|| RtError::variable_not_found(&upper))?;
-                        fb.stack.push(v);
+                        fb.stack.push(Self::live(host, v));
                         return Ok(Flow::Next);
                     }
                     if let Some(obj) = self.load_name(fb, &base) {
-                        if let Some(v) = json_member(&obj, &field) {
-                        fb.stack.push(v?);
-                        return Ok(Flow::Next);
-                        }
-
-                        let h = self.check_object(host, &obj, &field)?;
-                        if let Some(v) = self.native_member(h, &field) {
-                            fb.stack.push(v?);
-                            return Ok(Flow::Next);
-                        }
-                        match host.get_member(h, &field)? {
-                            Member::Child(c) => fb.stack.push(Value::Object(c)),
-                            Member::Property => {
-                                let v = host.get_prop(h, &field)?;
-                                fb.stack.push(v.deref());
+                        let obj = Self::live(host, obj);
+                        match self.read_member(host, fb, &obj, &field, true)? {
+                            MemberRead::Value(v) => fb.stack.push(v),
+                            MemberRead::Access(h, method) => {
+                                let args = Self::whole_access_args(host, h, &field);
+                                return Ok(Self::call_access(fb, h, method, args));
                             }
-                            Member::Method | Member::None => return Err(RtError::unknown_member(&field)),
                         }
                         return Ok(Flow::Next);
                     }
@@ -9912,6 +10004,13 @@ fn native_write_refused(natives: &crate::foxscript::Natives, h: Handle, name: &s
         Some(_) => RtError::new(1743, format!("{} is a read-only property.", name.to_ascii_uppercase())),
         None => RtError::unknown_member(name),
     }
+}
+
+/// What reading an object's member comes to.
+enum MemberRead {
+    Value(Value),
+    /// The object has an Access method for the member, named here, that answers instead.
+    Access(Handle, String),
 }
 
 /// A member of a JSON value by name, or nothing when the value is not one.

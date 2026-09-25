@@ -1127,10 +1127,6 @@ impl Parser {
                 Name::new("", head.span)
             }
         };
-        if name.upper.ends_with("_ACCESS") || name.upper.ends_with("_ASSIGN") {
-            let (span, text) = (name.span, name.text.clone());
-            self.warning(span, format!("{text}: access and assign methods are not honoured yet"));
-        }
         let mut params = Vec::new();
         if self.eat(&TokKind::LParen) {
             match self.param_list(&TokKind::RParen) {

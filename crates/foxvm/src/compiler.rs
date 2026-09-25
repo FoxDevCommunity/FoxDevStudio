@@ -376,7 +376,8 @@ impl FuncBuilder {
             | Instr::JumpIfFalseKeep(t)
             | Instr::JumpIfTrueKeep(t)
             | Instr::ForTest(t)
-            | Instr::ForEachNext(t) => *t = target,
+            | Instr::ForEachNext(t)
+            | Instr::ForEachItems { target: t, .. } => *t = target,
             _ => unreachable!("patching a non-jump"),
         }
     }
@@ -943,7 +944,21 @@ impl ModuleCompiler {
             }
             StmtKind::ForEach { var, collection, body } => {
                 let target = self.var_target(fb, var);
+                // `obj.Member` may be a collection the host walks rather than a value it reads -
+                // `_SCREEN.Forms` - so the host is asked first, and the member is read as any
+                // other expression only when it is not one
+                let items = match &collection.kind {
+                    ExprKind::Member { obj, name } if !matches!(&obj.kind, ExprKind::Var(base) if base.upper == "M") => {
+                        self.expr(fb, obj);
+                        let member = self.member(name);
+                        Some(fb.emit(Instr::ForEachItems { member, target: 0 }))
+                    }
+                    _ => None,
+                };
                 self.expr(fb, collection);
+                if let Some(at) = items {
+                    fb.patch_here(at);
+                }
                 let zero = self.constant(Constant::num(0.0));
                 fb.emit(Instr::Const(zero));
                 let top = fb.pc();
@@ -3871,6 +3886,15 @@ impl ModuleCompiler {
                 }
             }
             ExprKind::Call { name, args } => self.call(fb, e, name, args),
+            // `obj.aProp[1]` is one read, not a read and then a subscript: measured, an Access
+            // method for an array property is handed the subscript as its argument
+            ExprKind::Index { base, args } if object_member(base).is_some() => {
+                let (obj, name) = object_member(base).expect("an object's member");
+                self.expr(fb, obj);
+                let n = self.subscripts(fb, args, e.span);
+                let m = self.member(name);
+                fb.emit(Instr::GetMemberIndex { name: m, argc: n });
+            }
             ExprKind::Index { base, args } => {
                 self.expr(fb, base);
                 let n = self.subscripts(fb, args, e.span);
@@ -3991,6 +4015,15 @@ impl ModuleCompiler {
             }
             let argc = match builtins::array_to_fill(spec.name) {
                 Some(at) => self.args_filling_array(fb, args, at),
+                // measured: ALEN(obj.aProp) is the array itself, and its Access method is not
+                // called
+                None if spec.name == "ALEN" && args.first().is_some_and(|a| !a.by_ref && object_member(&a.expr).is_some()) => {
+                    let (obj, name) = object_member(&args[0].expr).expect("an object's member");
+                    self.expr(fb, obj);
+                    let m = self.member(name);
+                    fb.emit(Instr::GetProp(m));
+                    1 + self.args(fb, &args[1..], true, false)
+                }
                 None => self.args(fb, args, true, false),
             };
             fb.emit(Instr::CallBuiltin { id, argc });
@@ -4004,6 +4037,15 @@ impl ModuleCompiler {
         let argc = self.args(fb, args, true, false);
         let n = self.name(&name.upper);
         fb.emit(Instr::IndexOrCall { name: n, argc });
+    }
+}
+
+/// `obj.Member` where `obj` is an object: anything but the `m.` prefix, which names a memory
+/// variable.
+fn object_member(e: &Expr) -> Option<(&Expr, &Name)> {
+    match &e.kind {
+        ExprKind::Member { obj, name } if !matches!(&obj.kind, ExprKind::Var(base) if base.upper == "M") => Some((obj, name)),
+        _ => None,
     }
 }
 
