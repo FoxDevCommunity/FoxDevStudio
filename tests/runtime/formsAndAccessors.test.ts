@@ -180,6 +180,69 @@ describe('Access and Assign methods', () => {
     );
     expect(printed()).toEqual(['read 10', 'after write 60', 'inner 60', 'flag .F.', 'flag2 .T.', 'calls 3 5/1']);
   });
+
+  it('hand an array property its subscript, and leave a write, ALEN and DIMENSION alone', async () => {
+    // measured in Visual FoxPro 9; the Solution sample aa_fun.scx reads THIS.myButtons[1] in Init.
+    // cLog records what each read handed the Access method.
+    await useSessionStore.getState().execute(
+      source,
+      [
+        'LOCAL o',
+        'o = CREATEOBJECT("carr")',
+        '? "e1", o.myButtons[1], o.TakeLog()',
+        '? "e2", o.myButtons[2], o.TakeLog()',
+        '? "paren", o.myButtons("x"), o.TakeLog()',
+        '? "whole", VARTYPE(o.myButtons), o.TakeLog()',
+        'o.myButtons[1] = 5',
+        '? "write", o.TakeLog()',
+        '? "written", o.myButtons[1], o.TakeLog()',
+        '? "alen", ALEN(o.myButtons), o.TakeLog()',
+        'DIMENSION o.myButtons[4]',
+        '? "alen2", ALEN(o.myButtons), o.TakeLog()',
+        '? "inside", o.ReadOther(), o.TakeLog()',
+        'x = o',
+        '? "private", x.myButtons[3], x.TakeLog()',
+        'DEFINE CLASS carr AS Custom',
+        '  DIMENSION myButtons[3]',
+        '  cLog = ""',
+        '  PROCEDURE Init',
+        '    THIS.myButtons[1] = "a"',
+        '    THIS.myButtons[2] = "b"',
+        '    THIS.myButtons[3] = "c"',
+        '  ENDPROC',
+        '  PROCEDURE myButtons_Access',
+        '    LPARAMETERS nIndex',
+        '    THIS.cLog = THIS.cLog + "[" + VARTYPE(nIndex) + TRANSFORM(nIndex) + "]"',
+        '    IF VARTYPE(nIndex) = "N"',
+        '      RETURN THIS.myButtons[nIndex]',
+        '    ENDIF',
+        '    RETURN "whole"',
+        '  ENDPROC',
+        '  PROCEDURE ReadOther',
+        '    RETURN THIS.myButtons[2]',
+        '  ENDPROC',
+        '  PROCEDURE TakeLog',
+        '    LOCAL c',
+        '    c = THIS.cLog',
+        '    THIS.cLog = ""',
+        '    RETURN "log" + c',
+        '  ENDPROC',
+        'ENDDEFINE',
+      ].join('\n'),
+    );
+    expect(printed()).toEqual([
+      'e1 a log[N1]',
+      'e2 b log[N2]',
+      'paren whole log[Cx]',
+      'whole C log[N1]',
+      'write log',
+      'written 5 log[N1]',
+      'alen 3 log',
+      'alen2 4 log',
+      'inside b log[N2]',
+      'private c log[N3]',
+    ]);
+  });
 });
 
 describe('an event called as a method', () => {

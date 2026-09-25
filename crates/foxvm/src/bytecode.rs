@@ -406,6 +406,15 @@ pub enum Instr {
     LoadScreen,
     /// [obj] -> [value or child object]
     GetMember(u32),
+    /// [obj, subs...] -> [element]   `obj.aProp[1]`: the subscripts are the Access method's
+    /// arguments when the object has one for the property, and index what it holds when not.
+    GetMemberIndex {
+        name: u32,
+        argc: u8,
+    },
+    /// [obj] -> [value]   the property itself, past any Access method: what `ALEN(obj.aProp)`
+    /// is handed.
+    GetProp(u32),
     /// [obj, name] -> [value]   the same, for a member named by a variable: `obj.&cName`.
     GetMemberByName,
     /// `obj.&cName = v`: the member a variable names is written. [value, obj, name] -> []
