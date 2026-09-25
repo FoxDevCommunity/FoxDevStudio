@@ -1018,7 +1018,7 @@ impl MockHost {
             HostRequest::GetObject { .. } => Value::Null,
             HostRequest::RunLine { .. } => Value::Null,
             HostRequest::NewDocument { .. } => Value::Null,
-            HostRequest::CallParentMethod { .. } => Value::Logical(false),
+            HostRequest::CallParentMethod { .. } => Value::Logical(true),
             // no data source to reach, which is what a connection that cannot be made answers
             HostRequest::Sql { .. } => Value::number(-1.0),
             HostRequest::CloseMemo { .. } => Value::Null,

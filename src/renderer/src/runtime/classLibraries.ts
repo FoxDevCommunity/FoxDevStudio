@@ -45,6 +45,8 @@ export class ClassLibraries {
   constructor(
     private readonly readTable: (path: string) => Promise<DbfTableData>,
     private readonly search: readonly string[] = [],
+    /** Told when a library a class stands on cannot be found, so an object is not silently short of its parent's code. */
+    private readonly onMissing: (library: string, from: string) => void = () => {},
   ) {}
 
   /**
@@ -92,7 +94,12 @@ export class ClassLibraries {
     const table = await this.readTable(path);
     // a class in the file may stand on one in another file, and an object of it needs the whole
     // lineage; the importer follows those references itself, given somewhere to look
-    const { libraries } = await loadClassLibraries(table, dirname(path), this.readTable, [dirname(path), ...this.search]);
+    const { libraries, missing } = await loadClassLibraries(table, dirname(path), this.readTable, [dirname(path), ...this.search]);
+    // a class standing on another in the same file names its own library, which is not missing
+    const own = basename(path).toLowerCase();
+    for (const library of missing) {
+      if (basename(library.replace(/\\/g, '/')).toLowerCase() !== own) this.onMissing(library, path);
+    }
     const doc = importClassLibraryDocument(table, name, libraries).doc;
     this.read.set(path.toLowerCase(), doc);
     return { path, alias: alias || name, doc };

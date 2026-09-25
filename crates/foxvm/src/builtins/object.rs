@@ -305,12 +305,14 @@ fn f_dodefault(c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, R
     let Some(obj) = c.running_object() else {
         return Err(RtError::new(1928, "DODEFAULT() can only be used inside a method"));
     };
-    let method = c.running_method();
+    let from = c.running_method();
+    let method = from.rsplit('.').next().unwrap_or(&from).to_string();
     if method.is_empty() {
         return Err(RtError::new(1928, "DODEFAULT() can only be used inside a method"));
     }
-    let args = a.iter().map(JsonValue::from_value).collect();
-    Ok(BuiltinResult::Suspend(HostRequest::CallParentMethod { obj, method, args }))
+    // `DODEFAULT(@m.nError, ...)` hands the parent the same variables
+    let args = a.iter().map(JsonValue::from_arg).collect();
+    Ok(BuiltinResult::Suspend(HostRequest::CallParentMethod { obj, method, args, from }))
 }
 
 /// `COMPROP(oObject, cProperty [, eValue])`: a setting on how the runtime talks to that COM

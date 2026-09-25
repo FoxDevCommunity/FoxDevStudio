@@ -57,7 +57,11 @@ export interface HostReads {
    * sharper reason: a program calls one from the middle of an expression the VM is already
    * evaluating, where there is nothing to suspend.
    */
-  callLibrary?(library: number, fn: number, args: VmValue[]): { ok: true; value: VmValue } | { ok: false; code: number; message: string };
+  callLibrary?(
+    library: number,
+    fn: number,
+    args: VmValue[],
+  ): { ok: true; value: VmValue; refs?: { index: number; value: VmValue }[] } | { ok: false; code: number; message: string };
   unloadLibrary?(library: number): void;
 }
 
@@ -141,7 +145,7 @@ export type HostRequest =
   | { kind: 'NewDocument'; what: string; path: string }
   | { kind: 'Build'; what: string; target: string; from: string[]; recompile: boolean }
   | { kind: 'Compile'; what: string; files: string; all: boolean; encrypt: boolean; nodebug: boolean }
-  | { kind: 'CallParentMethod'; obj: number; method: string; args: VmValue[] }
+  | { kind: 'CallParentMethod'; obj: number; method: string; args: VmValue[]; from?: string }
   | { kind: 'Sql'; what: number; handle: number; text: string; extra: string }
   | { kind: 'Environment'; name: string }
   | { kind: 'EditMemo'; alias: string; field: string; text: string; noedit: boolean; nowait: boolean }

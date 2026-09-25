@@ -30,7 +30,7 @@ Every element of the Visual FoxPro language, and what happens when a program use
 | directive | 7 | 0 | 0 | 0 | 0 | 7 |
 | systemvar | 49 | 0 | 0 | 0 | 0 | 49 |
 
-1534 element(s) are exercised by a test.
+1535 element(s) are exercised by a test.
 
 ## command
 
