@@ -1,8 +1,12 @@
 //! Single-byte code page decoding for DBF text.
 //!
-//! Only the code pages FoxPro tables realistically carry are implemented as tables: Windows-1252
-//! (the VFP default), Windows-1257 (Baltic), and the DOS pages 437 and 850. Anything else falls back to 1252 so that
-//! decoding a table never fails; bytes with no mapping become U+FFFD.
+//! Windows 1250–1257, Thai 874, and DOS 437/737/850/852/857/860/861/863/865/866
+//! have explicit mappings. Unimplemented pages (including DBCS and Macintosh) retain
+//! the legacy 1252 fallback; recognizing a header marker does not imply codec support.
+//! Unassigned bytes decode to U+FFFD.
+
+#[path = "encoding_tables.rs"]
+mod tables;
 
 /// Maps the DBF header language-driver byte (offset 29) to a code page number.
 ///
@@ -13,7 +17,8 @@ pub fn codepage_for_language_id(id: u8) -> Option<u16> {
         0x01 | 0x09 | 0x0B | 0x0D | 0x0F | 0x11 | 0x15 | 0x18 | 0x19 | 0x1B => 437,
         0x02 | 0x0A | 0x0E | 0x10 | 0x12 | 0x14 | 0x16 | 0x1A | 0x1D | 0x25 | 0x37 => 850,
         0x03 | 0x57 | 0x58 | 0x59 => 1252,
-        0x04 | 0x98 => 10000,
+        0x04 => 10000,
+        0x98 => 10006,
         0x08 | 0x17 | 0x66 => 865,
         0x13 | 0x7B => 932,
         0x1C | 0x6C => 863,
@@ -72,6 +77,21 @@ fn high_table(codepage: Option<u16>) -> &'static [char; 128] {
         Some(437) => &CP437,
         Some(850) => &CP850,
         Some(1257) => &CP1257,
+        Some(737) => &tables::CP737,
+        Some(852) => &tables::CP852,
+        Some(857) => &tables::CP857,
+        Some(860) => &tables::CP860,
+        Some(861) => &tables::CP861,
+        Some(863) => &tables::CP863,
+        Some(865) => &tables::CP865,
+        Some(866) => &tables::CP866,
+        Some(874) => &tables::CP874,
+        Some(1250) => &tables::CP1250,
+        Some(1251) => &tables::CP1251,
+        Some(1253) => &tables::CP1253,
+        Some(1254) => &tables::CP1254,
+        Some(1255) => &tables::CP1255,
+        Some(1256) => &tables::CP1256,
         _ => &CP1252,
     }
 }
