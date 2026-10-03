@@ -572,3 +572,35 @@ fn code_pages_decode_high_bytes() {
     let odd = read_table(&b.build(&[(false, vec![0x81])]), None).expect("1252");
     assert_eq!(odd.records[0].get(&odd, "TXT").unwrap().as_text(), "\u{fffd}");
 }
+
+#[test]
+fn windows_1257_character_and_memo_fields() {
+    let text = "ĄČĘĖĮŠŲŪŽąčęėįšųūž";
+    let raw = [0xc0,0xc8,0xc6,0xcb,0xc1,0xd0,0xd8,0xdb,0xde,
+               0xe0,0xe8,0xe6,0xeb,0xe1,0xf0,0xf8,0xfb,0xfe];
+    let mut dbf = vec![0u8; 97 + 23];
+    dbf[0] = 0x30;
+    dbf[4..8].copy_from_slice(&1u32.to_le_bytes());
+    dbf[8..10].copy_from_slice(&97u16.to_le_bytes());
+    dbf[10..12].copy_from_slice(&23u16.to_le_bytes());
+    dbf[29] = 0xcc;
+    dbf[32..37].copy_from_slice(b"LABEL");
+    dbf[43] = b'C';
+    dbf[48] = 18;
+    dbf[64..74].copy_from_slice(b"PROPERTIES");
+    dbf[75] = b'M';
+    dbf[80] = 4;
+    dbf[96] = 0x0d;
+    dbf[97] = b' ';
+    dbf[98..116].copy_from_slice(&raw);
+    dbf[116..120].copy_from_slice(&1u32.to_le_bytes());
+    let mut memo = vec![0u8; 1024];
+    memo[6..8].copy_from_slice(&512u16.to_be_bytes());
+    memo[512..516].copy_from_slice(&1u32.to_be_bytes());
+    memo[516..520].copy_from_slice(&18u32.to_be_bytes());
+    memo[520..538].copy_from_slice(&raw);
+    let table = read_table(&dbf, Some(&memo)).unwrap();
+    assert_eq!(table.codepage, Some(1257));
+    assert_eq!(table.records[0].get(&table, "LABEL").unwrap().as_text(), text);
+    assert_eq!(table.records[0].get(&table, "PROPERTIES").unwrap().as_text(), text);
+}
