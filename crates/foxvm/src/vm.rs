@@ -1615,6 +1615,37 @@ impl Vm {
         &self.data
     }
 
+    /// A bounded, read-only preview for runtime grids. Never moves a work-area pointer.
+    pub fn grid_preview(&self, alias: &str) -> serde_json::Value {
+        use serde_json::json;
+        let Some(cursor) = self.data.find(&crate::data::AreaRef::Alias(alias.into())) else {
+            return json!({"error": "RecordSource alias is not open"});
+        };
+        if cursor.handle().is_some() || cursor.buffering() != 1 || cursor.ordered()
+            || !cursor.filter().is_empty() || cursor.key_limit().is_some() || !cursor.relations().is_empty() {
+            return json!({"error": "Grid preview supports unfiltered, unbuffered in-memory cursors without indexes or relations"});
+        }
+        if cursor.header.fields.len() > 128 {
+            return json!({"error": "Grid preview supports at most 128 fields"});
+        }
+        let columns: Vec<_> = cursor.header.fields.iter().map(|f| f.name.clone()).collect();
+        let mut rows = Vec::new();
+        let mut truncated = false;
+        for record in cursor.all_rows() {
+            if record.deleted && self.settings.deleted { continue; }
+            if rows.len() == 200 { truncated = true; break; }
+            let cells: Vec<_> = record.values.iter().map(|v| {
+                let text = crate::value::display(&value_of_dbf(Some(v)), &self.settings);
+                let mut chars = text.chars();
+                let mut bounded: String = chars.by_ref().take(512).collect();
+                if chars.next().is_some() { bounded.push('…'); truncated = true; }
+                bounded
+            }).collect();
+            rows.push(cells);
+        }
+        json!({"columns": columns, "rows": rows, "truncated": truncated})
+    }
+
     pub fn settings(&self) -> &Settings {
         &self.settings
     }

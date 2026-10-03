@@ -20,6 +20,7 @@ import { colorCss, designSurfaces, fontStyle } from '../../designer/surfaces';
 import { pictureProblem, pictureUrl } from '../pictureUrl';
 import { useSessionStore } from '../session';
 import { ImageList, TreeView } from '@shared/runtime/oleObjects';
+import type { GridPreview } from '../vmBridge';
 import { OleTreeView } from './OleTreeView';
 
 export interface RuntimeProps {
@@ -543,7 +544,28 @@ const RGrid: FC<RuntimeProps> = ({ obj, props: r }) => {
   const ev = useEvents(obj);
   const bind = useBind(obj);
   const columns = obj.children;
-  const rows = Math.max(1, Math.floor((Number(r['Height']) - Number(r['HeaderHeight'] ?? 17) - 2) / Number(r['RowHeight'] ?? 17)));
+  const vm = useSessionStore((s) => s.vm);
+  const status = useSessionStore((s) => s.status);
+  const revision = useSessionStore((s) => s.revision);
+  const alias = String(r['RecordSource'] ?? '');
+  const sourceType = Number(r['RecordSourceType'] ?? 1);
+  const preview = useMemo<GridPreview | null>(() => {
+    // Session revisions invalidate a preview even when an event starts and finishes
+    // between React renders and leaves the scheduler in the same waiting state.
+    void revision;
+    if (status === 'running' || !alias || !vm) return null;
+    if (sourceType !== 1) return {error: 'Grid preview requires RecordSourceType 1 (alias)'};
+    try { return vm.gridPreview(alias); }
+    catch { return {error: 'Grid preview could not read the cursor'}; }
+  }, [vm, status, revision, alias, sourceType]);
+  const data = preview && !('error' in preview) ? preview : null;
+  const positions = columns.map((col, i) => {
+    const source = String(col.get('ControlSource') ?? '').trim();
+    if (!source) return i;
+    const parts = source.split('.');
+    if (parts.length > 2 || (parts.length === 2 && parts[0]?.toLowerCase() !== alias.toLowerCase())) return -1;
+    return data?.columns.findIndex((name) => name.toLowerCase() === parts.at(-1)?.toLowerCase()) ?? -1;
+  });
   return (
     <div ref={bind} tabIndex={-1} style={{ ...fill, overflow: 'auto', border: '1px solid var(--colorNeutralStroke1)', background: colorCss(r['BackColor']) }} {...ev.focus} {...ev.common}>
       <Table size="extra-small" aria-label={obj.name} style={{ ...fontStyle(r), minWidth: 0 }}>
@@ -560,15 +582,18 @@ const RGrid: FC<RuntimeProps> = ({ obj, props: r }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {Array.from({ length: rows }).map((_, i) => (
+          {data?.rows.map((row, i) => (
             <TableRow key={i}>
-              {columns.map((col) => (
-                <TableCell key={col.handle} />
+              {columns.map((col, j) => (
+                <TableCell key={col.handle}>{positions[j]! < 0 ? '(unsupported field)' : row[positions[j]!] ?? ''}</TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {preview && 'error' in preview && <div role="status">{preview.error}</div>}
+      {data && <div role="status">Read-only preview; row navigation and editing are not available.{data.truncated ? ' Preview shortened (200 rows / 512 characters per cell).' : ''}</div>}
+
     </div>
   );
 };

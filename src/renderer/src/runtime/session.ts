@@ -445,7 +445,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
               set({ status: 'error', errorReport: { error, stack, resolve: (action) => { set({ errorReport: null }); resolve(action); } } });
               print({ kind: 'error', text: `Error ${error.code} in ${error.program} line ${error.line}: ${error.message}` });
             }),
-      onStateChange: (status) => set({ status }),
+      onStateChange: (status) => set((s) => ({ status, revision: s.revision + 1 })),
       onQuit: () => get().cancel(),
       // a program stopped at a breakpoint is a parked fiber, so the IDE carries on around it
       onBreak: (stop) => {

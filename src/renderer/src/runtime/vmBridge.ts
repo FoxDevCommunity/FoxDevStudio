@@ -13,6 +13,8 @@ import type { VmValue } from '@shared/runtime/values';
 import { headerStem } from '@shared/runtime/programSource';
 import { loadFoxVm, loadFoxVmSync, type FoxVmModule } from '../../../wasm/foxvm/loader';
 
+export type GridPreview = {error: string} | {columns: string[]; rows: string[][]; truncated: boolean};
+
 export interface MethodSourceInput {
   objectPath: string;
   event: string;
@@ -110,6 +112,9 @@ class WasmVm implements VmLike {
   }
   getGlobal(name: string): VmValue {
     return this.guard('getGlobal', () => this.vm.get_global(name) as VmValue);
+  }
+  gridPreview(alias: string): GridPreview {
+    return this.guard('gridPreview', () => this.vm.grid_preview(alias) as GridPreview);
   }
   /** The text of an XML document from its bytes, decoded as its declaration says. */
   xmlText(bytes: string): string {
