@@ -20,6 +20,7 @@ import { colorCss, designSurfaces, fontStyle } from '../../designer/surfaces';
 import { pictureProblem, pictureUrl } from '../pictureUrl';
 import { useSessionStore } from '../session';
 import { ImageList, TreeView } from '@shared/runtime/oleObjects';
+import { selectGridCell } from '../gridNavigation';
 import type { GridPreview } from '../vmBridge';
 import { OleTreeView } from './OleTreeView';
 
@@ -559,6 +560,28 @@ const RGrid: FC<RuntimeProps> = ({ obj, props: r }) => {
     catch { return {error: 'Grid preview could not read the cursor'}; }
   }, [vm, status, revision, alias, sourceType]);
   const data = preview && !('error' in preview) ? preview : null;
+  const [selectionError, setSelectionError] = useState('');
+  const select = async (record: number, column: number, click = true) => {
+    if (!data) return;
+    try {
+      if (await selectGridCell(obj, record, column, data.generation)) {
+        setSelectionError('');
+        if (click) await obj.desktop.dispatch(obj, 'Click', []);
+      }
+    } catch (error) { setSelectionError(String(error)); }
+  };
+  const keyDown = async (e: ReactKeyboardEvent) => {
+    if (!data || !['ArrowUp', 'ArrowDown', 'Home', 'End'].includes(e.key)) { ev.common.onKeyDown(e); return; }
+    e.preventDefault();
+    const key = e.key;
+    const outcome = await obj.desktop.dispatch(obj, 'KeyPress', [{ArrowUp: 5, ArrowDown: 24, Home: 1, End: 6}[key]!, shiftAltCtrl(e)]);
+    if (outcome?.nodefault) return;
+    const at = data.records.indexOf(data.currentRecord);
+    const index = key === 'Home' ? 0 : key === 'End' ? data.records.length - 1
+      : Math.max(0, Math.min(data.records.length - 1, at + (key === 'ArrowDown' ? 1 : -1)));
+    const record = data.records[index];
+    if (record !== undefined) await select(record, Math.max(1, Number(obj.get('ActiveColumn')) || 1), false);
+  };
   const positions = columns.map((col, i) => {
     const source = String(col.get('ControlSource') ?? '').trim();
     if (!source) return i;
@@ -567,8 +590,8 @@ const RGrid: FC<RuntimeProps> = ({ obj, props: r }) => {
     return data?.columns.findIndex((name) => name.toLowerCase() === parts.at(-1)?.toLowerCase()) ?? -1;
   });
   return (
-    <div ref={bind} tabIndex={-1} style={{ ...fill, overflow: 'auto', border: '1px solid var(--colorNeutralStroke1)', background: colorCss(r['BackColor']) }} {...ev.focus} {...ev.common}>
-      <Table size="extra-small" aria-label={obj.name} style={{ ...fontStyle(r), minWidth: 0 }}>
+    <div ref={bind} tabIndex={r['Enabled'] === false ? -1 : 0} style={{ ...fill, overflow: 'auto', border: '1px solid var(--colorNeutralStroke1)', background: colorCss(r['BackColor']) }} {...ev.focus} {...ev.common} onKeyDown={(e) => { void keyDown(e).catch(error => setSelectionError(String(error))); }}>
+      <Table role="grid" size="extra-small" aria-label={obj.name} style={{ ...fontStyle(r), minWidth: 0 }}>
         <TableHeader>
           <TableRow>
             {columns.map((col) => {
@@ -583,16 +606,18 @@ const RGrid: FC<RuntimeProps> = ({ obj, props: r }) => {
         </TableHeader>
         <TableBody>
           {data?.rows.map((row, i) => (
-            <TableRow key={i}>
+            <TableRow key={data.records[i] ?? i} aria-selected={data.currentRecord === data.records[i]}
+              style={data.currentRecord === data.records[i] ? {background: colorCss(r['HighlightBackColor'] ?? 0x800000), color: colorCss(r['HighlightForeColor'] ?? 0xffffff)} : undefined}>
               {columns.map((col, j) => (
-                <TableCell key={col.handle}>{positions[j]! < 0 ? '(unsupported field)' : row[positions[j]!] ?? ''}</TableCell>
+                <TableCell key={col.handle} role="gridcell" onClick={() => { const record = data.records[i]; if (record !== undefined) void select(record, j + 1); }}>{positions[j]! < 0 ? '(unsupported field)' : row[positions[j]!] ?? ''}</TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      {selectionError && <div role="alert">{selectionError}</div>}
       {preview && 'error' in preview && <div role="status">{preview.error}</div>}
-      {data && <div role="status">Read-only preview; row navigation and editing are not available.{data.truncated ? ' Preview shortened (200 rows / 512 characters per cell).' : ''}</div>}
+      {data && <div role="status">Select a row with a click or the arrow keys. Cell editing is not available.{data.truncated ? ' Preview shortened (200 rows / 512 characters per cell).' : ''}</div>}
 
     </div>
   );

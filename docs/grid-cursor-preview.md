@@ -14,11 +14,25 @@ Snapshots refresh after runtime state changes and desktop revisions. Closing an
 alias removes its old values and reports that the alias is not open. Rendering
 uses text nodes, not HTML, and does not execute ControlSource expressions.
 
-This is a read-only preview, visibly labelled as such. Row navigation, editing,
-Before/AfterRowColChange dispatch, Dynamic* expressions, per-column formatting,
-record markers and full Grid parity remain unimplemented. Selecting a record via
-the grid is not supported; consuming form actions still see the VM's current
-record, which the preview never moves.
+Clicking a displayed cell or pressing Up/Down/Home/End selects its physical
+record in the VM and selects the source work area. Thus form actions read the
+chosen record. Highlighting follows the VM pointer, including programmatic
+movement. Selection is limited to the displayed snapshot; cells remain read-only.
+
+Navigation dispatches BeforeRowColChange with the old column, then the current
+control's Valid, selects the target record, dispatches the target control's When,
+and finally AfterRowColChange with the new column. NODEFAULT in Before cancels;
+Valid returning false cancels. When returning false restores the previous visible
+record: this is a conservative fallback, not VFP's full alternate-focus search.
+RowColChange uses 1=row, 2=column, 3=both. Keyboard KeyPress can suppress default
+navigation. Mouse selection also dispatches Grid.Click; keyboard navigation does
+not synthesize a click. Full child-control focus/click/double-click behavior,
+cell editing and Dynamic* expressions remain separate work.
+
+Every cursor installation gets a generation token. Stale requests after closing
+and recreating an alias are rejected, as are disabled/rebound grids and concurrent
+navigation on the same grid. Events that move the cursor themselves cancel the
+pending default movement. No host file writes are performed by navigation.
 
 Host-backed tables, buffering, SET FILTER, controlling indexes, key ranges and
 relations report a limitation instead of showing an unfiltered or misleading

@@ -117,6 +117,23 @@ describe('FoxVM bridge', () => {
     expect(host.lines.at(-1)?.toLowerCase()).toBe('other');
   });
 
+  it('selects physical rows and rejects a recreated alias across WASM', () => {
+    const host = new StubHost();
+    const {vm, scheduler} = makeSession(host);
+    const run = (text: string) => scheduler.runProgram(vm.loadModule(compileProgram(text, 'select-test').bytes!));
+    run("CREATE CURSOR choices (id I)\nINSERT INTO choices VALUES (10)\nINSERT INTO choices VALUES (20)\nGO TOP");
+    const preview = vm.gridPreview('choices');
+    if ('error' in preview) throw new Error(preview.error);
+    vm.gridSelect('choices', 2, preview.generation);
+    run('? id');
+    expect(host.lines.at(-1)?.trim()).toBe('20');
+    run('USE IN choices\nCREATE CURSOR choices (id I)\nINSERT INTO choices VALUES (30)');
+    expect(() => vm.gridSelect('choices', 1, preview.generation)).toThrow(/source changed/i);
+    expect(() => vm.gridSelect('choices', -1, preview.generation)).toThrow();
+    run('? id');
+    expect(host.lines.at(-1)?.trim()).toBe('30');
+  });
+
   it('reports compile errors instead of a module', () => {
     const out = compileProgram('IF x\n', 'broken');
     expect(out.bytes).toBeNull();

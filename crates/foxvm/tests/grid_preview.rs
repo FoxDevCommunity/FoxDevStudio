@@ -33,3 +33,18 @@ fn preview_is_bounded_and_respects_deleted_setting() {
     assert_eq!(result["truncated"], true);
     assert_eq!(result["rows"][0][0].as_str().unwrap().trim(), "2");
 }
+
+#[test]
+fn selection_uses_physical_records_and_rejects_invalid_requests() {
+    let mut vm = run("CREATE CURSOR choices (id I)\nINSERT INTO choices VALUES (10)\nINSERT INTO choices VALUES (20)\nGO TOP\nDELETE\nSET DELETED ON\nCREATE CURSOR other (id I)");
+    let preview = vm.grid_preview("choices");
+    let generation = preview["generation"].as_str().unwrap();
+    assert_eq!(preview["records"][0], 2);
+    assert!(vm.grid_select("choices", 1, generation).is_err());
+    assert!(vm.grid_select("choices", 2, "stale").is_err());
+    assert!(vm.grid_select("choices", 999, generation).is_err());
+    vm.grid_select("choices", 2, generation).unwrap();
+    assert_eq!(vm.grid_preview("choices")["currentRecord"], 2);
+    assert_eq!(vm.data().cursor().unwrap().recno(), 2);
+    assert!(vm.grid_select("missing", 2, generation).is_err());
+}

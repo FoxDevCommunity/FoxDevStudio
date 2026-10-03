@@ -13,7 +13,7 @@ import type { VmValue } from '@shared/runtime/values';
 import { headerStem } from '@shared/runtime/programSource';
 import { loadFoxVm, loadFoxVmSync, type FoxVmModule } from '../../../wasm/foxvm/loader';
 
-export type GridPreview = {error: string} | {columns: string[]; rows: string[][]; truncated: boolean};
+export type GridPreview = {error: string} | {columns: string[]; rows: string[][]; records: number[]; currentRecord: number; generation: string; truncated: boolean};
 
 export interface MethodSourceInput {
   objectPath: string;
@@ -115,6 +115,10 @@ class WasmVm implements VmLike {
   }
   gridPreview(alias: string): GridPreview {
     return this.guard('gridPreview', () => this.vm.grid_preview(alias) as GridPreview);
+  }
+  gridSelect(alias: string, record: number, generation: string): void {
+    if (!Number.isInteger(record) || record < 1 || record > 0xffffffff) throw new Error('Invalid grid record');
+    this.guard('gridSelect', () => this.vm.grid_select(alias, record, generation));
   }
   /** The text of an XML document from its bytes, decoded as its declaration says. */
   xmlText(bytes: string): string {
