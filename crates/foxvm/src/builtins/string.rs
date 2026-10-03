@@ -53,17 +53,17 @@ fn find_all(hay: &[u8], needle: &[u8], case_insensitive: bool) -> Vec<usize> {
 
 /// Trim characters for ALLTRIM/LTRIM/RTRIM: numeric extra arguments are the VFP flags, which
 /// this runtime ignores, character ones add to the set. Defaults to the space.
-fn trim_set(args: &[Value], from: usize) -> Result<Vec<u8>, RtError> {
+fn trim_set(args: &[Value], from: usize) -> Result<Vec<char>, RtError> {
     let mut set = Vec::new();
     for v in args.iter().skip(from) {
         match v.deref() {
             Value::Number(..) | Value::Logical(_) => {}
-            Value::Str(s) => set.extend_from_slice(s.as_bytes()),
+            Value::Str(s) => set.extend(s.chars()),
             _ => return Err(RtError::function_arg_invalid()),
         }
     }
     if set.is_empty() {
-        set.push(b' ');
+        set.push(' ');
     }
     Ok(set)
 }
@@ -84,6 +84,13 @@ fn trimmed(b: &[u8], set: &[u8], left: bool, right: bool) -> Vec<u8> {
     b[start..end].to_vec()
 }
 
+// Work on decoded characters, not the low-byte carrier used by binary functions.
+// Trimming must leave the retained text unchanged, including scalars above U+00FF.
+fn trimmed_text<'a>(s: &'a str, set: &[char], left: bool, right: bool) -> &'a str {
+    let s = if left { s.trim_start_matches(|c| set.contains(&c)) } else { s };
+    if right { s.trim_end_matches(|c| set.contains(&c)) } else { s }
+}
+
 // ------------------------------------------------------------------------------------------
 // trimming and case
 // ------------------------------------------------------------------------------------------
@@ -92,21 +99,21 @@ fn f_alltrim(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, Rt
     if any_null(&a) {
         return ok(Value::Null);
     }
-    ok(text(&trimmed(&bytes(&a, 0)?, &trim_set(&a, 1)?, true, true)))
+    ok(Value::str(trimmed_text(&arg_str(&a, 0)?, &trim_set(&a, 1)?, true, true)))
 }
 
 fn f_ltrim(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
     if any_null(&a) {
         return ok(Value::Null);
     }
-    ok(text(&trimmed(&bytes(&a, 0)?, &trim_set(&a, 1)?, true, false)))
+    ok(Value::str(trimmed_text(&arg_str(&a, 0)?, &trim_set(&a, 1)?, true, false)))
 }
 
 fn f_rtrim(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {
     if any_null(&a) {
         return ok(Value::Null);
     }
-    ok(text(&trimmed(&bytes(&a, 0)?, &trim_set(&a, 1)?, false, true)))
+    ok(Value::str(trimmed_text(&arg_str(&a, 0)?, &trim_set(&a, 1)?, false, true)))
 }
 
 fn f_upper(_c: &mut dyn BuiltinCtx, a: Vec<Value>) -> Result<BuiltinResult, RtError> {

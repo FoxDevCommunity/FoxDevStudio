@@ -102,6 +102,27 @@ describe('FoxVM bridge', () => {
     expect(host.lines).toEqual(['sum:           42', 'DONE']);
   });
 
+  it('preserves decoded Unicode through trimming in a compiled program', () => {
+    const host = new StubHost();
+    const { vm, scheduler } = makeSession(host);
+    const out = compileProgram([
+      'LOCAL label',
+      'label = "  Ąžuolas Ελληνικά हिन्दी 😀  "',
+      '? ALLTRIM(label)',
+      '? LTRIM(label)',
+      '? RTRIM(label)',
+      '? TRIM(label)',
+    ].join('\n'), 'unicode-trimming');
+    expect(compileError(out)).toBeNull();
+    scheduler.runProgram(vm.loadModule(out.bytes!));
+    expect(host.lines).toEqual([
+      'Ąžuolas Ελληνικά हिन्दी 😀',
+      'Ąžuolas Ελληνικά हिन्दी 😀  ',
+      '  Ąžuolas Ελληνικά हिन्दी 😀',
+      '  Ąžuolas Ελληνικά हिन्दी 😀',
+    ]);
+  });
+
   it('reports compile errors instead of a module', () => {
     const out = compileProgram('IF x\n', 'broken');
     expect(out.bytes).toBeNull();

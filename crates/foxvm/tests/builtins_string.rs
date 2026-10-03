@@ -20,6 +20,38 @@ fn trimming() {
 }
 
 #[test]
+fn trimming_preserves_unicode() {
+    for input in ["Ąžuolas žąsis į ų ū ė č š", "Ελληνικά", "Українська", "العربية", "हिन्दी", "日本語", "😀", "Ġ"]
+    {
+        let padded = format!("  {input}  ");
+        assert_eq!(text("ALLTRIM", vec![s(&padded)]), input);
+        assert_eq!(text("LTRIM", vec![s(&padded)]), format!("{input}  "));
+        for name in ["RTRIM", "TRIM"] {
+            assert_eq!(text(name, vec![s(&padded)]), format!("  {input}"));
+        }
+    }
+}
+
+#[test]
+fn trimming_unicode_parse_characters() {
+    assert_eq!(text("ALLTRIM", vec![s("ąąŽodisą"), s("ą")]), "Žodis");
+    assert_eq!(text("LTRIM", vec![s("ąŽodisą"), s("ą")]), "Žodisą");
+    assert_eq!(text("RTRIM", vec![s("ąŽodisą"), s("ą")]), "ąŽodis");
+    // A scalar sharing a low byte with a parse character must not match it.
+    assert_eq!(text("ALLTRIM", vec![s("ĠwordĠ")]), "ĠwordĠ");
+    assert_eq!(text("ALLTRIM", vec![s("ŁwordŁ"), s("A")]), "ŁwordŁ");
+}
+
+#[test]
+fn trimming_preserves_byte_carriers_and_non_space_whitespace() {
+    let carrier: String = (0u8..=255).map(char::from).collect();
+    for name in ["ALLTRIM", "LTRIM", "RTRIM", "TRIM"] {
+        assert_eq!(text(name, vec![s(&carrier)]), carrier);
+        assert_eq!(text(name, vec![s("\t\r\n\u{a0}hi\u{a0}\n\r\t")]), "\t\r\n\u{a0}hi\u{a0}\n\r\t");
+    }
+}
+
+#[test]
 fn case_conversion() {
     assert_eq!(text("UPPER", vec![s("Hello, world!")]), "HELLO, WORLD!");
     assert_eq!(text("LOWER", vec![s("Hello, World!")]), "hello, world!");
