@@ -3786,8 +3786,11 @@ impl ModuleCompiler {
                 fb.emit(Instr::Const(c));
             }
             ExprKind::Var(n) => {
-                let v = self.var_target(fb, n);
-                self.load_var(fb, v);
+                // Even a declared LOCAL can be shadowed by a current-table field.
+                // Resolve bare expression names at runtime; explicit m.x and the
+                // compiler's internal slots remain memory-only LoadLocal reads.
+                let name = self.name(&n.upper);
+                fb.emit(Instr::LoadName(name));
             }
             ExprKind::This => {
                 fb.emit(Instr::LoadThis);
