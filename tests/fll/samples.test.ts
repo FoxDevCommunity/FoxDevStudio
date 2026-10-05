@@ -29,7 +29,8 @@ import { loadFoxVm } from '../../src/wasm/foxvm/loader';
 const HOST = resolve('resources/native/win32/fllhost.exe');
 const HELLO = resolve('tests/fll/build/hello.fll');
 const REVERSE = resolve('tests/fll/build/reverse.fll');
-const have = existsSync(HOST) && existsSync(HELLO) && existsSync(REVERSE);
+const REFPARM = resolve('tests/fll/build/refparm.fll');
+const have = existsSync(HOST) && existsSync(HELLO) && existsSync(REVERSE) && existsSync(REFPARM);
 
 /**
  * How `SET("LIBRARY")` names a path. Measured in Visual FoxPro 9: capitals, and quoted when the
@@ -127,6 +128,35 @@ SET LIBRARY TO
 SET LIBRARY TO ${REVERSE} ADDITIVE
 ? SET("LIBRARY")`);
     expect(said.at(-1)).toBe(named(REVERSE));
+  }, 60_000);
+
+  it('hands a variable passed with @ to a parameter declared R, and keeps what it stored', async () => {
+    // refparm.c is ours, not Microsoft's: neither sample takes a reference. Measured in Visual
+    // FoxPro 9 with the same build of it; CodeMine's cmRegGetValue ("I,C,R") is the real case.
+    const said = await run(`SET LIBRARY TO ${REFPARM}
+ON ERROR ? "err", ERROR()
+cVar = "old"
+x = SWAPREF("new", @cVar)
+? "swap", x, cVar
+nVar = 5
+? "bump", BUMPREF(@nVar), nVar, VARTYPE(nVar)
+uVar = "text"
+? "set", SETREF(@uVar), uVar, VARTYPE(uVar)
+cVar = "kept"
+x = SWAPREF("new", cVar)
+? "byval", cVar`);
+    const printed = said.slice(1).filter((l) => !l.startsWith('Error '));
+    expect(printed.map((l) => l.replace(/\s+/g, ' ').trim())).toEqual(['swap old new', 'bump .T. 6 N', 'set .T. 42 N', 'err 9', 'byval kept']);
+  }, 60_000);
+
+  it('hands a number to a parameter declared I the way the product does, past the top of a long too', async () => {
+    // measured with refparm.fll's INTOF: a registry root is written 2147483650 for
+    // HKEY_LOCAL_MACHINE, and the library has to be handed 0x80000002 for it
+    const said = await run(`SET LIBRARY TO ${REFPARM}
+? "a", INTOF(5), INTOF(-7), INTOF(2147483647)
+? "b", INTOF(2147483648), INTOF(2147483650), INTOF(4294967295)
+? "c", INTOF(3.7), INTOF(-3.7)`);
+    expect(said.slice(1).map((l) => l.replace(/\s+/g, ' ').trim())).toEqual(['a 5 -7 2147483647', 'b -2147483648 -2147483646 -1', 'c 3 -3']);
   }, 60_000);
 
   it('a name with no extension is a .fll', async () => {

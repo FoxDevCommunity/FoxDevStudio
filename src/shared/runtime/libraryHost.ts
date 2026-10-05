@@ -38,7 +38,9 @@ export type LibraryValue =
   | { kind: 'number'; num: number }
   | { kind: 'logical'; flag: boolean }
   | { kind: 'date'; text: string }
-  | { kind: 'datetime'; text: string };
+  | { kind: 'datetime'; text: string }
+  /** A variable passed with @: the library reads and writes it through _Load and _Store. */
+  | { kind: 'ref'; value: LibraryValue };
 
 export interface LibraryLoad {
   /** How this library is named in later calls. */
@@ -60,6 +62,8 @@ export interface LibraryCall {
   errorText: string;
   /** API functions it asked for that this host does not have, as their numbers. */
   missing: string;
+  /** What it stored in the variables it was handed by reference, by argument position. */
+  refs: { index: number; value: LibraryValue }[];
 }
 
 export interface LibraryHost {
@@ -173,6 +177,9 @@ class Reply {
   }
   u8(): number {
     return this.view.getUint8(this.at++);
+  }
+  remaining(): number {
+    return this.bytes.byteLength - this.at;
   }
   u16(): number {
     const v = this.view.getUint16(this.at, true);
@@ -358,7 +365,10 @@ export function createLibraryHost(dirs: string[]): LibraryHost {
 
     call(library, fn, args) {
       const frame = new Frame().u8(2).u16(library).u16(fn).u16(args.length);
-      for (const a of args) {
+      for (const arg of args) {
+        // a variable passed by reference is its value with an 'R' in front
+        if (arg.kind === 'ref') frame.u8(0x52);
+        const a = arg.kind === 'ref' ? arg.value : arg;
         switch (a.kind) {
           case 'string':
             frame.u8(0x43).bytes32(a.text);
@@ -375,13 +385,20 @@ export function createLibraryHost(dirs: string[]): LibraryHost {
         }
       }
       const reply = ok(exchange(frame.done()));
-      return {
+      const answer: LibraryCall = {
         value: reply.value(),
         output: reply.bytes32(),
         error: reply.i32(),
         errorText: reply.text(),
         missing: reply.text(),
+        refs: [],
       };
+      // a host built before references were carried ends its reply here
+      if (reply.remaining() >= 2) {
+        const count = reply.u16();
+        for (let i = 0; i < count; i++) answer.refs.push({ index: reply.u16(), value: reply.value() });
+      }
+      return answer;
     },
 
     unload(library) {

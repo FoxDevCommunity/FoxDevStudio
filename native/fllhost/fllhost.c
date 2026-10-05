@@ -179,6 +179,8 @@ typedef struct {
 #define API_PUTSTR 2
 #define API_RETDATESTR 10
 #define API_RETVAL 11
+#define API_STORE 29 /* _Store(Locator *, Value *): write a variable passed by reference */
+#define API_LOAD 30  /* _Load(Locator *, Value *): read one */
 #define API_PUTVALUE 64
 #define API_ERROR 83
 #define API_USERERROR 84
@@ -225,6 +227,27 @@ static size_t g_retTextLen, g_retTextCap;
 static int g_errNo;
 static char g_errText[512];
 static char g_missing[256];
+
+/*
+ * The variables a call was handed by reference, by parameter position. A library is given a
+ * Locator for each - `cmRegGetValue(nRoot, cKey, @cValue)` is declared "I,C,R" - and reads and
+ * writes the variable through _Load and _Store. What it stored goes back with the answer, and
+ * the runtime writes it into the variable. A character value is kept as its bytes, because the
+ * handle a library stores from is its own to free the moment _Store returns.
+ */
+static Value g_refs[MAX_PARMS];
+static char *g_refText[MAX_PARMS];
+static unsigned g_refTextLen[MAX_PARMS];
+static int g_refIs[MAX_PARMS], g_refStored[MAX_PARMS];
+
+static void ref_keep_text(unsigned i, const char *p, unsigned len) {
+  char *grown = (char *)realloc(g_refText[i], len + 1);
+  if (!grown) return;
+  g_refText[i] = grown;
+  if (p && len) memcpy(grown, p, len);
+  grown[len] = '\0';
+  g_refTextLen[i] = len;
+}
 
 static void say(const char *bytes, size_t len) {
   if (g_outLen + len + 1 > g_outCap) {
@@ -324,6 +347,36 @@ static void FASTCALL host_api(ApiCall *c) {
         g_ret.ev_length = s ? (unsigned)strlen(s) : 0;
         g_ret.ev_long = (long)c->a;
         g_hasRet = 1;
+      }
+      c->a = 0;
+      break;
+    }
+    case API_STORE:
+    case API_LOAD: {
+      Locator *loc = (Locator *)c->a;
+      Value *v = (Value *)c->b;
+      unsigned i = loc ? (unsigned)loc->l_NTI - 1 : MAX_PARMS;
+      if (!v || i >= MAX_PARMS || !g_refIs[i] || !g_current) {
+        c->a = (unsigned)-1;
+        break;
+      }
+      if (c->code == API_STORE) {
+        g_refs[i] = *v;
+        if (v->ev_type == 'C' || v->ev_type == 'H') {
+          g_refs[i].ev_type = 'C';
+          ref_keep_text(i, (const char *)deref_handle(g_current, v->ev_handle), v->ev_length);
+        }
+        g_refStored[i] = 1;
+      } else {
+        *v = g_refs[i];
+        /* a character value comes with a handle of its own, which the library frees */
+        if (v->ev_type == 'C') {
+          unsigned handle = 0;
+          void *p = alloc_handle(g_current, g_refTextLen[i] + 1, &handle);
+          if (p) memcpy(p, g_refText[i] ? g_refText[i] : "", g_refTextLen[i] + 1);
+          v->ev_handle = handle;
+          v->ev_length = g_refTextLen[i];
+        }
       }
       c->a = 0;
       break;
@@ -803,7 +856,15 @@ static void coerce(Value *v, char want) {
   switch (want) {
     case 'I':
       if (v->ev_type == 'N') {
-        v->ev_long = (long)v->ev_real;
+        /* A number past the top of a signed long wraps round, as it does in Visual FoxPro: a
+           registry root is written 2147483650 for HKEY_LOCAL_MACHINE (0x80000002), and
+           CodeMine's cmRegGetValue reads HKLM with it (measured). A plain cast of a double that
+           large is undefined, and this compiler makes it 0x80000000 - HKEY_CLASSES_ROOT. */
+        if (v->ev_real >= 2147483648.0 && v->ev_real < 4294967296.0) {
+          v->ev_long = (long)(unsigned long)v->ev_real;
+        } else {
+          v->ev_long = (long)v->ev_real;
+        }
       } else if (v->ev_type == 'L') {
         v->ev_long = v->ev_length ? 1 : 0;
       } else if (v->ev_type != 'I') {
@@ -998,6 +1059,26 @@ static void do_call(void) {
   memset(&r->pCount, 0, sizeof(short) + sizeof(FoxParameter) * MAX_PARMS);
   r->pCount = (short)argc;
   for (i = 0; i < argc; i++) {
+    g_refIs[i] = g_refStored[i] = 0;
+    /* 'R' is a variable passed by reference: its value follows, and the library gets a Locator */
+    if (g_inPos < g_inLen && g_in[g_inPos] == 'R') {
+      g_inPos++;
+      if (!read_parameter(lib, &g_refs[i], error)) {
+        fail(error);
+        return;
+      }
+      if (g_refs[i].ev_type == 'C') {
+        ref_keep_text(i, (const char *)deref_handle(lib, g_refs[i].ev_handle), g_refs[i].ev_length);
+        free_handle(lib, g_refs[i].ev_handle);
+        g_refs[i].ev_handle = 0;
+      }
+      g_refIs[i] = 1;
+      memset(&r->p[i], 0, sizeof(FoxParameter));
+      r->p[i].loc.l_type = 'R';
+      r->p[i].loc.l_where = -1;
+      r->p[i].loc.l_NTI = (USHORT)(i + 1);
+      continue;
+    }
     if (!read_parameter(lib, &r->p[i].val, error)) {
       for (; i > 0; i--)
         if (r->p[i - 1].val.ev_type == 'C') free_handle(lib, r->p[i - 1].val.ev_handle);
@@ -1005,10 +1086,13 @@ static void do_call(void) {
       return;
     }
     coerce(&r->p[i].val, wanted_type(lib->funcs[index]->parmTypes, i));
+    /* a value where the function declared a reference is refused before it runs: the library
+       would read a Locator out of it. Measured: error 9, "Data type mismatch". */
+    if (wanted_type(lib->funcs[index]->parmTypes, i) == 'R') g_errNo = 9;
   }
 
   g_current = lib;
-  if (!perform(lib, lib->funcs[index], error)) {
+  if (g_errNo == 0 && !perform(lib, lib->funcs[index], error)) {
     g_current = NULL;
     fail(error);
     return;
@@ -1017,7 +1101,7 @@ static void do_call(void) {
   /* what the library was given is the host's to let go of; what it handed back was taken
      while the library still had it */
   for (i = 0; i < argc; i++)
-    if (r->p[i].val.ev_type == 'C') free_handle(lib, r->p[i].val.ev_handle);
+    if (!g_refIs[i] && r->p[i].val.ev_type == 'C') free_handle(lib, r->p[i].val.ev_handle);
 
   put_u8(0);
   if (g_hasRet) {
@@ -1030,6 +1114,22 @@ static void do_call(void) {
   put_i32(g_errNo);
   put_text(g_errText);
   put_text(g_missing);
+  /* what the library stored in the variables it was handed by reference */
+  {
+    unsigned stored = 0;
+    for (i = 0; i < argc; i++) stored += g_refIs[i] && g_refStored[i];
+    put_u16(stored);
+    for (i = 0; i < argc; i++) {
+      if (!(g_refIs[i] && g_refStored[i])) continue;
+      put_u16(i);
+      if (g_refs[i].ev_type == 'C') {
+        put_u8('C');
+        put_bytes32(g_refText[i] ? g_refText[i] : "", g_refTextLen[i]);
+      } else {
+        write_value(lib, &g_refs[i]);
+      }
+    }
+  }
 }
 
 static void do_unload(void) {

@@ -472,7 +472,8 @@ impl Host for JsHost {
     fn call_library(&mut self, library: u32, function: u32, args: &[Value]) -> Result<Value, RtError> {
         let missing = || RtError::new(RtError::API_LIBRARY_NOT_FOUND, "API library is not found.");
         let f = optional_method(&self.reads, "callLibrary").ok_or_else(missing)?;
-        let list: Vec<JsonValue> = args.iter().map(JsonValue::from_value).collect();
+        // `@cValue` crosses as the variable, for a library that declared the parameter "R"
+        let list: Vec<JsonValue> = args.iter().map(JsonValue::from_arg).collect();
         let answer = f
             .apply(
                 self.reads.as_ref(),
@@ -487,6 +488,16 @@ impl Host for JsHost {
             match field("message").as_string().unwrap_or_default() {
                 m if m.is_empty() => return Err(RtError::about(code, "")),
                 m => return Err(RtError::new(code, m)),
+            }
+        }
+        // what the library stored through _Store goes into the variables it was handed
+        if let Ok(refs) = field("refs").dyn_into::<js_sys::Array>() {
+            for r in refs.iter() {
+                let index = js_sys::Reflect::get(&r, &"index".into()).ok().and_then(|i| i.as_f64());
+                let value = js_sys::Reflect::get(&r, &"value".into()).unwrap_or(JsValue::UNDEFINED);
+                if let Some(Value::Ref(cell)) = index.and_then(|i| args.get(i as usize)) {
+                    *cell.borrow_mut() = from_js(value);
+                }
             }
         }
         Ok(from_js(field("value")))

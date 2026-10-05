@@ -73,7 +73,11 @@ export interface HostReads {
    * sharper reason: a program calls one from the middle of an expression the VM is already
    * evaluating, where there is nothing to suspend.
    */
-  callLibrary?(library: number, fn: number, args: VmValue[]): { ok: true; value: VmValue } | { ok: false; code: number; message: string };
+  callLibrary?(
+    library: number,
+    fn: number,
+    args: VmValue[],
+  ): { ok: true; value: VmValue; refs?: { index: number; value: VmValue }[] } | { ok: false; code: number; message: string };
   unloadLibrary?(library: number): void;
 }
 
