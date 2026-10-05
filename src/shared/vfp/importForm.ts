@@ -1412,10 +1412,17 @@ function applyProperties(
         const meta = descriptor.properties.find((p) => p.name === declared)!;
         // a value that is worked out is remembered as the expression it is, and the property is
         // left at its default until the form loads and it can be worked out
-        if (entry.expression) {
+        // The designer also stores bare filenames for Picture. Restrict this exception to
+        // picture properties and filename-shaped values; variables and calls still evaluate.
+        const pictureFile = declared === 'Picture' && meta.editor === 'picture' &&
+          !/^(?:m|this|thisform|thisformset|_screen|_vfp)\./i.test(entry.raw) &&
+          /^[^"'()[\]\r\n+*?=<>|&]+\.(?:bmp|dib|jpg|jpeg|gif|png|ico|cur|emf|wmf|tif|tiff)$/i.test(entry.raw);
+        if (entry.expression && !pictureFile) {
           expressions[`${objectPath}.${declared}`] = entry.raw;
           continue;
         }
+        // A literal override must also replace an inherited/deferred expression.
+        if (declared === 'Picture') delete expressions[`${objectPath}.${declared}`];
         // A property at its default is left out, which is what keeps an imported form from
         // carrying every property VFP has. But once a line has set one, a later line saying
         // "back to the default" has to be written down, or a class that inherits `PageCount = 1`
