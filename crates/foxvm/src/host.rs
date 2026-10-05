@@ -93,6 +93,19 @@ pub trait Host {
     fn members(&mut self, _obj: Handle) -> Option<Vec<MemberInfo>> {
         None
     }
+    /// The objects a collection member holds, in the order `FOR EACH` visits them - an array
+    /// value - for a member that is a collection rather than a property: `_SCREEN.Forms`, which
+    /// Visual FoxPro will not read as a value (1924, measured) but will walk. `None` when the
+    /// member is not one, and `FOR EACH` then reads it as it reads anything else.
+    fn enumerate(&mut self, _obj: Handle, _member: &str) -> Option<Value> {
+        None
+    }
+    /// Whether the object was a form (or a member of one) that has since been released. A
+    /// variable or array element still holding it reads as .NULL. from then on - measured:
+    /// `oForm.Release()`, then `ISNULL(oForm)` is .T. and `VARTYPE(oForm)` is "X".
+    fn released(&mut self, _obj: Handle) -> bool {
+        false
+    }
     /// `None` when the handle has been released ("Object is not valid").
     fn object_class(&mut self, obj: Handle) -> Option<String>;
     /// The file the object was built from, for `SYS(1271, oObject)`: a form's `.scx`. Measured:
@@ -116,6 +129,12 @@ pub trait Host {
     /// merely having an event of that name. `DEFINE CLASS ... PROCEDURE Error` is the case
     /// that matters: VFP routes an error inside a method to it.
     fn class_method(&mut self, _obj: Handle, _name: &str) -> bool {
+        false
+    }
+    /// True when the object carries FoxPro source for a method of that name, whether its class
+    /// wrote it or the form or library it came from did. What asks is a property read or write,
+    /// looking for the `Prop_Access` or `Prop_Assign` method that stands in for it.
+    fn has_code_method(&mut self, _obj: Handle, _name: &str) -> bool {
         false
     }
     /// Where the mouse pointer is over the character screen, in rows and columns from its

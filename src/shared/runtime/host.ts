@@ -17,6 +17,22 @@ export interface HostReads {
   getProp(obj: number, name: string): VmValue | undefined;
   /** A child object's handle, or what kind of member the name is. */
   getMember(obj: number, name: string): number | 'prop' | 'method' | 'none';
+  /**
+   * The objects a collection member holds, in the order `FOR EACH obj IN x.Member` visits them,
+   * or `undefined` when the member is not a collection. `_SCREEN.Forms` is one: Visual FoxPro
+   * walks it but will not read it as a value (1924, measured).
+   */
+  enumerate?(obj: number, name: string): VmValue | undefined;
+  /**
+   * Whether the handle was a form, or a member of one, that has been released: a variable still
+   * holding it then reads as .NULL. (measured - `ISNULL(oForm)` after `oForm.Release()` is .T.).
+   */
+  released?(obj: number): boolean;
+  /**
+   * True when the object carries FoxPro source for a method of that name - its class's, or the
+   * form's or library's own. A property read or write asks, for `Prop_Access` and `Prop_Assign`.
+   */
+  hasCodeMethod?(obj: number, name: string): boolean;
   /** Class name, or `null` when the handle has been released. */
   objectClass(obj: number): string | null;
   /**

@@ -357,6 +357,9 @@ pub enum Instr {
     /// FOR EACH support: [array, index] -> [array, index+1, element]; at the end pops both and
     /// jumps to the exit.
     ForEachNext(u32),
+    /// `FOR EACH x IN obj.Member`: [obj] -> [items] and a jump past the member's ordinary read
+    /// when the host enumerates the member as a collection; otherwise [obj] -> [] and on.
+    ForEachItems { member: u32, target: u32 },
 
     // ---- calls
     /// `name(args)`: array element access when `name` resolves to an array, else a user function
@@ -403,6 +406,15 @@ pub enum Instr {
     LoadScreen,
     /// [obj] -> [value or child object]
     GetMember(u32),
+    /// [obj, subs...] -> [element]   `obj.aProp[1]`: the subscripts are the Access method's
+    /// arguments when the object has one for the property, and index what it holds when not.
+    GetMemberIndex {
+        name: u32,
+        argc: u8,
+    },
+    /// [obj] -> [value]   the property itself, past any Access method: what `ALEN(obj.aProp)`
+    /// is handed.
+    GetProp(u32),
     /// [obj, name] -> [value]   the same, for a member named by a variable: `obj.&cName`.
     GetMemberByName,
     /// `obj.&cName = v`: the member a variable names is written. [value, obj, name] -> []
