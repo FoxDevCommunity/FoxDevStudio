@@ -57,12 +57,13 @@ export function createTableService(): TableService {
   };
 
   return {
-    async open(path, exclusive) {
+    async open(path, _exclusive) {
       // 'r+' so a later REPLACE can write; a table that is read-only on disk still opens to read,
       // and says so, because a browser that quietly refuses every edit is worse than one that
       // says the file cannot be written
-      let writable = exclusive;
-      const dbf = await open(path, exclusive ? 'r+' : 'r').catch(() => {
+      // Shared access is not read-only access. Both modes need a writable descriptor.
+      let writable = true;
+      const dbf = await open(path, 'r+').catch(() => {
         writable = false;
         return open(path, 'r');
       });
