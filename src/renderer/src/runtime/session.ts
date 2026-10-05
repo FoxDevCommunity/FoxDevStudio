@@ -20,7 +20,7 @@ import { baseName, CompileFailure, formHeaderRefs, formMethodSources, requireByt
 import type { MenuDocument, MenuItem } from '@shared/menu/schema';
 import type { FormCursor, FormDocument, FormNode, FormRelation } from '@shared/form/schema';
 import { formsetDocumentNames } from '@shared/form/formset';
-import { displayValue, type VmValue } from '@shared/runtime/values';
+import { argValue, displayValue, type VmValue } from '@shared/runtime/values';
 import { buildClassInstance } from '@shared/runtime/classInstance';
 import { isNonVisualBaseClass, resolveInheritance, type VfpClassDef } from '@shared/runtime/classDef';
 import { classAsNode } from '@shared/classlib/schema';
@@ -418,9 +418,33 @@ export const useSessionStore = create<SessionState>((set, get) => {
      * the class's own name, and every object of it runs that module. The key holds the file as
      * well as the class, because two libraries may each have a class of the same name.
      */
+    /** The folders the project's class libraries are in, each once, in the order the project lists them. */
+    function projectClassFolders(): string[] {
+      const project = useProjectStore.getState();
+      const folders: string[] = [];
+      for (const item of project.doc?.items ?? []) {
+        if (item.kind !== 'class') continue;
+        const folder = dirname(project.resolvePath(item.path));
+        if (!folders.some((f) => f.toLowerCase() === folder.toLowerCase())) folders.push(folder);
+      }
+      return folders;
+    }
+
     const classLibraries = new ClassLibraries(async (given) => {
       const path = await reach(at(given));
       if (await getApi().files.exists(path).catch(() => false)) return readVfpTable(path);
+      // A class library of the project is found by name wherever in the project it sits, as it
+      // is once the project is built and every file is inside the application: `SET CLASSLIB TO
+      // AppMain` from a program in `source\` names `source\appmain.vcx`. The project lists the
+      // library as what the import made of it; the .vcx it was made from is beside that.
+      const stemOf = (p: string) => basename(p).replace(/\.[^.]*$/, '').toLowerCase();
+      const wanted = stemOf(given);
+      const project = useProjectStore.getState();
+      const item = project.doc?.items.find((i) => i.kind === 'class' && stemOf(i.path) === wanted);
+      if (item) {
+        const vcx = project.resolvePath(item.path).replace(/\.[^./\\]+$/, '.vcx');
+        if (await getApi().files.exists(vcx).catch(() => false)) return readVfpTable(await reach(vcx));
+      }
       // A Foundation Class is named by file alone - `SET CLASSLIB TO _base` - because Visual
       // FoxPro finds those on its own search path. Copies of them ship with FoxDev for exactly
       // that reason, and the folder holding them is the last place looked, as it is when a
@@ -430,7 +454,14 @@ export const useSessionStore = create<SessionState>((set, get) => {
       // the product reports a class library it cannot find as a missing file, not as a class
       // that does not exist - measured, error 1 with the name it was given
       throw new HostError(1, `File '${given}' does not exist.`);
-    }, ffcDir === '' ? [] : [ffcDir]);
+    },
+      // A class names the library it stands on by a path from wherever the developer's copy sat,
+      // and that seldom leads anywhere now: `..\..\common50\cmapp.vcx` from `source\`. The
+      // project's own class libraries say where those files really are, as they did when the
+      // project was imported, so their folders are looked in before the Foundation Classes.
+      [...projectClassFolders(), ...(ffcDir === '' ? [] : [ffcDir])],
+      (library, from) => print({ kind: 'error', text: `${basename(from)}: class library "${library}" was not found; its classes are missing what they inherit from it` }),
+    );
     const classModules = new Map<string, number>();
 
     const scheduler = new Scheduler(vm, { perform: (request, ctx) => perform(request, ctx) }, {
@@ -459,6 +490,25 @@ export const useSessionStore = create<SessionState>((set, get) => {
     });
     useDebugStore.getState().attach(vm, scheduler);
 
+    /**
+     * A method of an object of a program's class: the class's own code, or the nearest class
+     * above it that has some. Each class's methods are compiled under the class's own name, so
+     * one that a class inherits without overriding is found under its parent's - measured, an
+     * object of `cc AS cb` runs cb's Greet, and cb's object runs ca's Who.
+     */
+    function dispatchUpClasses(module: number, className: string, obj: RuntimeObject, event: string, args: VmValue[]) {
+      const classes = definedClasses(module);
+      const seen = new Set<string>();
+      let name = className;
+      while (name !== '' && !seen.has(name.toLowerCase())) {
+        seen.add(name.toLowerCase());
+        const outcome = scheduler.dispatchClass(module, name, obj.path(), event, obj.handle, args);
+        if (outcome !== null) return outcome;
+        name = classes.find((c) => c.name.toLowerCase() === name.toLowerCase())?.baseClass ?? '';
+      }
+      return null;
+    }
+
     desktop.dispatch = (obj, event, args) => {
       // a control's code lives in its form's module; a formset's own lives in the formset's,
       // because each form of a formset is a document, and so is compiled, of its own
@@ -471,7 +521,7 @@ export const useSessionStore = create<SessionState>((set, get) => {
       // of a library - keys them by the path from the document's own root. Which of the two a
       // module is, is a question about the module, not about whether the object has a class.
       const own = owner.className && definedClasses(owner.module).length > 0
-        ? scheduler.dispatchClass(owner.module, owner.className, obj.path(), event, obj.handle, args ?? [])
+        ? dispatchUpClasses(owner.module, owner.className, obj, event, args ?? [])
         : scheduler.dispatch(owner.module, obj.path(), event, obj.handle, args ?? []);
 
       const bound = desktop.boundHandlers(obj.handle, event);
@@ -817,23 +867,43 @@ export const useSessionStore = create<SessionState>((set, get) => {
 
         case 'CallMethod': {
           const target = desktop.object(request.obj);
-          if (target?.hasClassMethod(request.name)) {
+          // FoxPro code of the object's own - a program's class, or a class out of a library -
+          // is given the arguments as they came, so a variable passed with @ is the variable
+          if (target && (target.hasClassMethod(request.name) || target.hasOwnMethod(request.name))) {
             const outcome = desktop.dispatch(target, request.name, request.args);
             if (outcome === null) return null;
             return outcome instanceof Promise ? outcome.then((o) => o.value) : outcome.value;
           }
-          const result = desktop.callMethod(request.obj, request.name, request.args);
+          // everything else is answered here, and wants values
+          const result = desktop.callMethod(request.obj, request.name, request.args.map(argValue));
           if (result === undefined) throw new HostError(1925, `Unknown member ${request.name.toUpperCase()}.`);
           return result;
         }
 
-        // DODEFAULT(): the method of the same name on the class this one was built from. The
-        // classes of a module are each compiled under their own name, so what this has to find
-        // is the first class above this one that has the method at all.
+        // DODEFAULT(): the next class up that has code for the method being run, called with the
+        // same THIS. Measured in Visual FoxPro 9: the arguments go with it, its answer is the
+        // answer, a class with no code for the method is passed over, and past the last one the
+        // answer is .T. Where to start looking is the class whose code is running, not the
+        // object's: an inherited method that calls up must not find itself again.
         case 'CallParentMethod': {
           const target = desktop.object(request.obj);
           const form = target?.form();
-          if (!target || !form || form.module < 0 || !form.className) return false;
+          if (!target || !form || form.module < 0) return true;
+          const settle = (outcome: ReturnType<typeof scheduler.dispatch>) =>
+            outcome instanceof Promise ? outcome.then((o) => o.value) : outcome!.value;
+
+          // An object of a class library carries its ancestors' code in its own module: the
+          // import kept an overridden method's earlier versions as `Init#1`, `Init#2`, nearest
+          // first. The next one up from the version running is the parent's.
+          const running = /^(.*?)(?:#(\d+))?$/.exec(request.method)!;
+          const event = running[1]!;
+          const depth = Number(running[2] ?? 0);
+          const copy = scheduler.dispatch(form.module, target.path(), `${event}#${depth + 1}`, target.handle, request.args);
+          if (copy !== null) return settle(copy);
+
+          // A class of a program: each class's methods are compiled under the class's own name,
+          // so the chain is walked from the class that wrote the running code.
+          if (!form.className) return true;
           const classes = classesFor(form.module, {
             name: form.className,
             baseClass: '',
@@ -842,27 +912,19 @@ export const useSessionStore = create<SessionState>((set, get) => {
             methods: [],
             module: form.module,
           });
-          let name = form.className.toLowerCase();
+          const writer = (request.from ?? '').split('.')[0]!.toLowerCase();
+          let name = classes.some((c) => c.name.toLowerCase() === writer) ? writer : form.className.toLowerCase();
           const seen = new Set<string>();
           while (name !== '' && !seen.has(name)) {
             seen.add(name);
             const above = classes.find((c) => c.name.toLowerCase() === name)?.baseClass ?? '';
             const parent = classes.find((c) => c.name.toLowerCase() === above.toLowerCase());
-            if (!parent) return false;
+            if (!parent) return true;
             name = parent.name.toLowerCase();
-            const outcome = scheduler.dispatchClass(
-              form.module,
-              parent.name,
-              target.path(),
-              request.method,
-              target.handle,
-              request.args,
-            );
-            if (outcome !== null) {
-              return outcome instanceof Promise ? outcome.then((o) => o.value) : outcome.value;
-            }
+            const outcome = scheduler.dispatchClass(form.module, parent.name, target.path(), event, target.handle, request.args);
+            if (outcome !== null) return settle(outcome);
           }
-          return false;
+          return true;
         }
 
         case 'AddProperty':
@@ -1076,7 +1138,9 @@ export const useSessionStore = create<SessionState>((set, get) => {
 
             if (!built.nonVisual) showDesktop();
             const instance = desktop.instantiate(built.form, definition.module ?? -1, {
-              className: definition.name,
+              // measured: a program's class answers for its Class with the first letter capital
+              // and the rest small, however DEFINE CLASS wrote it - `mYthingHere` is Mythinghere
+              className: definition.name.charAt(0).toUpperCase() + definition.name.slice(1).toLowerCase(),
               nonVisual: built.nonVisual,
               args: request.args,
             });

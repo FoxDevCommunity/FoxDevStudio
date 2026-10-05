@@ -306,9 +306,14 @@ pub enum HostRequest {
     /// came from has no such method.
     CallParentMethod {
         obj: u32,
-        /// The method being run, which is the one to look for above it.
+        /// The method being run, which is the one to look for above it: its event, with the
+        /// `#n` of an ancestor's copy when that is what is running.
         method: String,
         args: Vec<JsonValue>,
+        /// The whole name the running code was compiled under - `CLASS.EVENT` for a class of a
+        /// program - which says whose code it is, and so where above it to start looking.
+        #[serde(default)]
+        from: String,
     },
     /// `BUILD APP | EXE | DLL | MTDLL | PROJECT`: a project turned into the file that ships,
     /// or the project itself built out of the files it names. Resume with Null; a build that
@@ -861,6 +866,16 @@ pub enum JsonValue {
         #[serde(rename = "$fn")]
         function: u32,
     },
+    /// A variable passed by reference to a method - `o.GetClassName(cAlias, @m.cLibrary)`. It
+    /// travels as a number naming the variable's cell, with the value beside it for a host that
+    /// only wants to read it; when the host runs the method's code the number comes back, and
+    /// the parameter is that same cell, so what the method writes the caller sees.
+    Ref {
+        #[serde(rename = "$ref")]
+        cell: u32,
+        #[serde(rename = "$val")]
+        value: Box<JsonValue>,
+    },
     Date {
         #[serde(rename = "$date")]
         date: String,
@@ -922,8 +937,19 @@ impl JsonValue {
         }
     }
 
+    /// A call's argument: a variable passed by reference crosses as a `Ref`, everything else as
+    /// its value.
+    pub fn from_arg(v: &Value) -> JsonValue {
+        match v {
+            Value::Ref(cell) => JsonValue::Ref { cell: ref_cells::hold(cell), value: Box::new(JsonValue::from_value(v)) },
+            other => JsonValue::from_value(other),
+        }
+    }
+
     pub fn to_value(&self) -> Value {
         match self {
+            // the variable itself, when it is still there; otherwise the value it crossed with
+            JsonValue::Ref { cell, value } => ref_cells::find(*cell).map_or_else(|| value.to_value(), Value::Ref),
             JsonValue::Null => Value::Null,
             JsonValue::Bool(b) => Value::Logical(*b),
             JsonValue::Num(n) => Value::number(*n),
@@ -1079,4 +1105,38 @@ pub struct BrowseRow {
     pub recno: u64,
     pub deleted: bool,
     pub values: Vec<JsonValue>,
+}
+
+/// The variables passed by reference that are out in the host, by the number they crossed as.
+///
+/// Held weakly: the variable belongs to the routine that declared it, and a number the host keeps
+/// after that routine has returned finds nothing, rather than keeping the variable alive.
+mod ref_cells {
+    use std::cell::RefCell;
+    use std::collections::HashMap;
+    use std::rc::{Rc, Weak};
+
+    use crate::value::Value;
+
+    thread_local! {
+        static CELLS: RefCell<(u32, HashMap<u32, Weak<RefCell<Value>>>)> = RefCell::new((0, HashMap::new()));
+    }
+
+    pub fn hold(cell: &Rc<RefCell<Value>>) -> u32 {
+        CELLS.with(|c| {
+            let mut c = c.borrow_mut();
+            // numbers for variables that have gone are let go of now and then
+            if c.1.len() > 4096 {
+                c.1.retain(|_, w| w.strong_count() > 0);
+            }
+            c.0 = c.0.wrapping_add(1);
+            let id = c.0;
+            c.1.insert(id, Rc::downgrade(cell));
+            id
+        })
+    }
+
+    pub fn find(id: u32) -> Option<Rc<RefCell<Value>>> {
+        CELLS.with(|c| c.borrow().1.get(&id).and_then(Weak::upgrade))
+    }
 }

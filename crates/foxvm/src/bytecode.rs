@@ -492,8 +492,6 @@ pub enum Instr {
         to: bool,
     },
     NoDefault,
-    /// [args...] -> [v]
-    DoDefault(u8),
 
     // ---- exceptions
     /// Installs a handler; either target may be `NO_TARGET`. On an error the VM unwinds to the

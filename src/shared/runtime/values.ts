@@ -3,7 +3,22 @@
  * primitives travel as themselves, objects as handles, dates as ISO text, arrays by value.
  */
 
-export type VmValue = null | boolean | number | string | VmObjectRef | VmFuncRef | VmDate | VmDateTime | VmArray;
+export type VmValue = null | boolean | number | string | VmObjectRef | VmFuncRef | VmDate | VmDateTime | VmArray | VmVarRef;
+
+/**
+ * A variable passed by reference to a method: the cell it lives in, and its value. Code of the
+ * program's that the host runs is given the cell back, so it writes the caller's variable;
+ * anything else only reads `$val`.
+ */
+export interface VmVarRef {
+  $ref: number;
+  $val: VmValue;
+}
+
+/** An argument as a method the host answers itself wants it: the value, not the variable. */
+export function argValue(v: VmValue): VmValue {
+  return typeof v === 'object' && v !== null && '$ref' in v ? v.$val : v;
+}
 
 export interface VmObjectRef {
   $obj: number;

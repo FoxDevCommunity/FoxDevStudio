@@ -90,7 +90,8 @@ pub trait BuiltinCtx {
     fn object_members(&mut self, obj: crate::value::Handle) -> Option<Vec<crate::host::MemberInfo>>;
     /// The object whose method is running, for DODEFAULT().
     fn running_object(&self) -> Option<u32>;
-    /// What that method is called.
+    /// What that method is compiled as: `CLASS.EVENT` for a class of a program, `PATH.EVENT` for
+    /// an object's own, with an ancestor's copy of an overridden method marked `EVENT#n`.
     fn running_method(&self) -> String;
     /// COMARRAY(): how an array is passed to that COM object, as it was last set.
     fn com_setting(&self, obj: u32) -> i64;

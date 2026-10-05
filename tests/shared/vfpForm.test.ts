@@ -197,6 +197,31 @@ describe('parseVfpMethods', () => {
       ].join('\n'),
     );
   });
+  it("keeps an overridden method's earlier versions for DODEFAULT to reach", () => {
+    // a class chain's memos arrive joined, the class the chain starts from first: the last
+    // definition is what runs, and the ones before it are its ancestors', nearest first
+    const memo = [
+      'PROCEDURE Init',
+      'grand = 1',
+      'ENDPROC',
+      'PROCEDURE Click',
+      'only = 1',
+      'ENDPROC',
+      'PROCEDURE init',
+      'parent = 1',
+      'ENDPROC',
+      'PROCEDURE INIT',
+      'own = 1',
+      'RETURN DODEFAULT()',
+      'ENDPROC',
+    ].join('\n');
+    expect(parseVfpMethods(memo)).toEqual({
+      INIT: 'own = 1\nRETURN DODEFAULT()',
+      'INIT#1': 'parent = 1',
+      'INIT#2': 'grand = 1',
+      Click: 'only = 1',
+    });
+  });
   it('ends a body at the next PROCEDURE when ENDPROC is missing', () => {
     const methods = parseVfpMethods('PROCEDURE Init\r\nx = 1\r\nPROCEDURE Click\r\ny = 2\r\nENDPROC');
     expect(methods).toEqual({ Init: 'x = 1', Click: 'y = 2' });
@@ -682,6 +707,73 @@ describe('importClassLibrary', () => {
     expect(pages[0]!.props).toMatchObject({ Enabled: false });
     expect(pages[1]!.props).toMatchObject({ Caption: 'Relations' });
     expect(pages[1]!.children!.map((c) => [c.type, c.name])).toEqual([['Label', 'Label1']]);
+  });
+
+  it('keeps the pages a middle class names when a third class inherits them', () => {
+    // CodeMine's install dialog: frmWizardDialog makes the pageframe, frmInstallDialog names its
+    // pages from the form row and puts controls on them, and the application's own dialog
+    // inherits all of that with no rows of its own. The middle class's dotted page names have
+    // to reach the pageframe, or its controls have no page to go on.
+    const base = row({ PLATFORM: 'WINDOWS', CLASS: 'form', BASECLASS: 'form', OBJNAME: 'wizard', PARENT: '', PROPERTIES: props('Name = "wizard"') });
+    const frame = row({
+      PLATFORM: 'WINDOWS',
+      CLASS: 'pageframe',
+      BASECLASS: 'pageframe',
+      OBJNAME: 'pgfSteps',
+      PARENT: 'wizard',
+      PROPERTIES: props('PageCount = 1', 'Name = "pgfSteps"'),
+    });
+    const middle = row({
+      PLATFORM: 'WINDOWS',
+      CLASS: 'wizard',
+      BASECLASS: 'form',
+      OBJNAME: 'install',
+      PARENT: '',
+      PROPERTIES: props('Name = "install"', 'pgfSteps.PageCount = 2', 'pgfSteps.Page1.Name = "pagRegistration"', 'pgfSteps.Page2.Name = "pagPaths"'),
+    });
+    const onPaths = row({
+      PLATFORM: 'WINDOWS',
+      CLASS: 'label',
+      BASECLASS: 'label',
+      OBJNAME: 'lblLocal',
+      PARENT: 'install.pgfSteps.pagPaths',
+      PROPERTIES: props('Name = "lblLocal"'),
+    });
+    const leaf = row({
+      PLATFORM: 'WINDOWS',
+      CLASS: 'install',
+      BASECLASS: 'form',
+      OBJNAME: 'appinstall',
+      PARENT: '',
+      PROPERTIES: props('Name = "appinstall"', 'pgfSteps.Height = 200'),
+    });
+
+    const classes = importClassLibrary(table(HEADER_ROW, base, frame, middle, onPaths, leaf), 'dialogs');
+    const imported = classes.find((c) => c.className === 'appinstall')!.imported;
+    expect(imported.warnings).toEqual([]);
+
+    const frameNode = imported.doc.form.children[0]!;
+    expect(frameNode.props).toMatchObject({ Height: 200 });
+    const pages = frameNode.children!;
+    expect(pages.map((p) => p.name)).toEqual(['pagRegistration', 'pagPaths']);
+    expect(pages[1]!.children!.map((c) => c.name)).toEqual(['lblLocal']);
+    expect(imported.doc.form.children).toHaveLength(1);
+  });
+
+  it("works out a class's own property written in parentheses, and keeps an unquoted one as text", () => {
+    // CodeMine's cmApplicationManager: `nhkeymachineroot = ((2^31) + 2)` is HKEY_LOCAL_MACHINE to
+    // every registry call handed it, while `cappname = ShutterDesign` is a string
+    const app = row({
+      PLATFORM: 'WINDOWS',
+      CLASS: 'custom',
+      BASECLASS: 'custom',
+      OBJNAME: 'appmanager',
+      PARENT: '',
+      PROPERTIES: props('nhkeymachineroot = ((2^31) + 2)', 'cappname = ShutterDesign', 'cpair = (a) + (b)', 'Name = "appmanager"'),
+    });
+    const imported = importClassLibrary(table(HEADER_ROW, app), 'apps').find((c) => c.className === 'appmanager')!.imported;
+    expect(imported.doc.meta?.vfp?.expressions).toEqual({ 'appmanager.nhkeymachineroot': '((2^31) + 2)' });
+    expect(imported.doc.form.props['cappname']).toBe('ShutterDesign');
   });
 
   it('imports a Collection member the way it imports a Custom one', () => {

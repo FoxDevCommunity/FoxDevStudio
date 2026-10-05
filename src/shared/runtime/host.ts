@@ -141,7 +141,7 @@ export type HostRequest =
   | { kind: 'NewDocument'; what: string; path: string }
   | { kind: 'Build'; what: string; target: string; from: string[]; recompile: boolean }
   | { kind: 'Compile'; what: string; files: string; all: boolean; encrypt: boolean; nodebug: boolean }
-  | { kind: 'CallParentMethod'; obj: number; method: string; args: VmValue[] }
+  | { kind: 'CallParentMethod'; obj: number; method: string; args: VmValue[]; from?: string }
   | { kind: 'Sql'; what: number; handle: number; text: string; extra: string }
   | { kind: 'Environment'; name: string }
   | { kind: 'EditMemo'; alias: string; field: string; text: string; noedit: boolean; nowait: boolean }

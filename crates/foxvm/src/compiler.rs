@@ -2209,9 +2209,12 @@ impl ModuleCompiler {
             StmtKind::NoDefault => {
                 fb.emit(Instr::NoDefault);
             }
+            // `DODEFAULT()` on a line of its own runs the parent's code as the function form
+            // does, and the answer is dropped
             StmtKind::DoDefault(args) => {
-                let argc = self.args(fb, args, false, false);
-                fb.emit(Instr::DoDefault(argc));
+                let (id, _) = builtins::lookup("DODEFAULT").expect("DODEFAULT is a builtin");
+                let argc = self.args(fb, args, true, false);
+                fb.emit(Instr::CallBuiltin { id, argc });
                 fb.emit(Instr::Pop);
             }
             StmtKind::Text { target, additive, textmerge, noshow, raw } => {
@@ -3693,6 +3696,22 @@ impl ModuleCompiler {
                         continue;
                     }
                     ExprKind::Var(_) => self.warning(a.expr.span, "Argument is passed by value here"),
+                    // `@m.uArg1`: the `m.` says a memory variable, which is what `@` passes, so
+                    // it is the variable by reference - unless a local is really called M
+                    ExprKind::Member { obj, name }
+                        if a.by_ref
+                            && matches!(&obj.kind, ExprKind::Var(base) if base.upper == "M")
+                            && fb.local("M").is_none() =>
+                    {
+                        if allow_ref {
+                            let v = self.var_target(fb, name);
+                            fb.emit(Instr::Ref(v));
+                            continue;
+                        }
+                        // where a plain `@name` is passed by value - a method of an object - so
+                        // is this, and with the same warning
+                        self.warning(a.expr.span, "Argument is passed by value here");
+                    }
                     _ if a.by_ref => self.error(a.expr.span, "Only a variable can be passed by reference"),
                     _ => {}
                 }
@@ -3876,9 +3895,11 @@ impl ModuleCompiler {
                 let n = self.subscripts(fb, args, e.span);
                 fb.emit(Instr::LoadIndex(n));
             }
+            // `@var` reaches a method as the variable itself: an object's method of FoxPro code
+            // writes to it as a procedure does, which is how CodeMine hands back a second answer
             ExprKind::MethodCall { obj, name, args } => {
                 self.expr(fb, obj);
-                let argc = self.args(fb, args, false, false);
+                let argc = self.args(fb, args, true, false);
                 let m = self.member(name);
                 fb.emit(Instr::CallMethod { name: m, argc });
             }
@@ -3994,11 +4015,6 @@ impl ModuleCompiler {
                 None => self.args(fb, args, true, false),
             };
             fb.emit(Instr::CallBuiltin { id, argc });
-            return;
-        }
-        if name.upper == "DODEFAULT" {
-            let argc = self.args(fb, args, false, false);
-            fb.emit(Instr::DoDefault(argc));
             return;
         }
         let argc = self.args(fb, args, true, false);
