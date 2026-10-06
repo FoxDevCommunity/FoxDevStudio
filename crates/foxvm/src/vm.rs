@@ -1619,6 +1619,57 @@ impl Vm {
         &self.data
     }
 
+    /// A bounded, read-only preview for runtime grids. Never moves a work-area pointer.
+    pub fn grid_preview(&self, alias: &str) -> serde_json::Value {
+        use serde_json::json;
+        let Some(cursor) = self.data.find(&crate::data::AreaRef::Alias(alias.into())) else {
+            return json!({"error": "RecordSource alias is not open"});
+        };
+        if cursor.handle().is_some() || cursor.buffering() != 1 || cursor.ordered()
+            || !cursor.filter().is_empty() || cursor.key_limit().is_some() || !cursor.relations().is_empty() {
+            return json!({"error": "Grid preview supports unfiltered, unbuffered in-memory cursors without indexes or relations"});
+        }
+        if cursor.header.fields.len() > 128 {
+            return json!({"error": "Grid preview supports at most 128 fields"});
+        }
+        let columns: Vec<_> = cursor.header.fields.iter().map(|f| f.name.clone()).collect();
+        let mut rows = Vec::new();
+        let mut records = Vec::new();
+        let mut truncated = false;
+        for (index, record) in cursor.all_rows().iter().enumerate() {
+            if record.deleted && self.settings.deleted { continue; }
+            if rows.len() == 200 { truncated = true; break; }
+            let cells: Vec<_> = record.values.iter().map(|v| {
+                let text = crate::value::display(&value_of_dbf(Some(v)), &self.settings);
+                let mut chars = text.chars();
+                let mut bounded: String = chars.by_ref().take(512).collect();
+                if chars.next().is_some() { bounded.push('…'); truncated = true; }
+                bounded
+            }).collect();
+            records.push(index + 1);
+            rows.push(cells);
+        }
+        json!({"columns": columns, "rows": rows, "records": records,
+            "currentRecord": cursor.recno(), "generation": cursor.generation().to_string(), "truncated": truncated})
+    }
+
+    /// Select a physical record that is currently offered by the bounded grid view.
+    /// The generation rejects clicks queued before an alias was closed/recreated.
+    pub fn grid_select(&mut self, alias: &str, recno: u32, generation: &str) -> Result<(), String> {
+        let preview = self.grid_preview(alias);
+        if let Some(error) = preview["error"].as_str() { return Err(error.into()); }
+        if preview["generation"].as_str() != Some(generation) {
+            return Err("Grid source changed; select the row again".into());
+        }
+        if !preview["records"].as_array().is_some_and(|records| records.iter().any(|r| r.as_u64() == Some(recno.into()))) {
+            return Err("Grid record is no longer visible".into());
+        }
+        let area = crate::data::AreaRef::Alias(alias.into());
+        self.data.select(&area).map_err(|_| "Grid source is no longer open".to_string())?;
+        self.data.cursor_mut().unwrap().seek(recno.into());
+        Ok(())
+    }
+
     pub fn settings(&self) -> &Settings {
         &self.settings
     }

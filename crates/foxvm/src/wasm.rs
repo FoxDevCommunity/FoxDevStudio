@@ -900,6 +900,15 @@ impl FoxVm {
         to_js(&JsonValue::from_value(&self.vm.get_global(name).unwrap_or(crate::value::Value::Null)))
     }
 
+    /// A read-only grid preview; no host IO or record movement.
+    pub fn grid_preview(&self, alias: &str) -> JsValue {
+        to_js(&self.vm.grid_preview(alias))
+    }
+
+    pub fn grid_select(&mut self, alias: &str, recno: u32, generation: &str) -> Result<(), JsValue> {
+        self.vm.grid_select(alias, recno, generation).map_err(|error| JsValue::from_str(&error))
+    }
+
     /// `exact`, `decimals`, `century`, `date`, `talk`, `safety`, `escape`.
     pub fn set_setting(&mut self, name: &str, value: JsValue) {
         let s = self.vm.settings_mut();

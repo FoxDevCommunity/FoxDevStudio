@@ -25,11 +25,12 @@ pub const PAGE_RECORDS: u32 = 64;
 pub struct DataSession {
     areas: Vec<Option<Cursor>>,
     current: usize,
+    next_generation: u64,
 }
 
 impl DataSession {
     pub fn new() -> DataSession {
-        DataSession { areas: Vec::new(), current: 0 }
+        DataSession { areas: Vec::new(), current: 0, next_generation: 0 }
     }
 
     /// The selected work area, 1-based, as `SELECT()` reports it.
@@ -94,9 +95,11 @@ impl DataSession {
 
     /// Puts a freshly opened cursor in the selected area, replacing whatever was there.
     /// Returns the handle of the table that was closed, if any, so the caller can release it.
-    pub fn install(&mut self, cursor: Cursor) -> Option<u32> {
+    pub fn install(&mut self, mut cursor: Cursor) -> Option<u32> {
         let index = self.current;
         self.ensure(index);
+        self.next_generation += 1;
+        cursor.generation = self.next_generation;
         self.areas[index].replace(cursor).and_then(|old| old.handle())
     }
 
@@ -154,6 +157,8 @@ pub enum Source {
 /// One open table.
 #[derive(Debug)]
 pub struct Cursor {
+    /// Identity of this installation, to reject UI events for a replaced alias.
+    generation: u64,
     source: Source,
     /// The name this table answers to: the file stem, or whatever `USE ... ALIAS` said.
     pub alias: String,
@@ -239,6 +244,8 @@ pub struct Cursor {
 }
 
 impl Cursor {
+    pub fn generation(&self) -> u64 { self.generation }
+
     pub fn new(handle: u32, alias: String, path: String, header: DbfHeader) -> Cursor {
         Cursor::over(Source::Host { handle }, alias, path, header)
     }
@@ -281,6 +288,7 @@ impl Cursor {
         let count = header.record_count;
         // VFP opens a table at record 1, which for an empty one is already end of file
         Cursor {
+            generation: 0,
             source,
             alias,
             path,
