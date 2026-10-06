@@ -1,8 +1,12 @@
 //! Single-byte code page decoding for DBF text.
 //!
-//! Only the code pages FoxPro tables realistically carry are implemented as tables: Windows-1252
-//! (the VFP default), and the DOS pages 437 and 850. Anything else falls back to 1252 so that
-//! decoding a table never fails; bytes with no mapping become U+FFFD.
+//! Windows 1250–1257, Thai 874, and DOS 437/737/850/852/857/860/861/863/865/866
+//! have explicit mappings. Unimplemented pages (including DBCS and Macintosh) retain
+//! the legacy 1252 fallback; recognizing a header marker does not imply codec support.
+//! Unassigned bytes decode to U+FFFD.
+
+#[path = "encoding_tables.rs"]
+mod tables;
 
 /// Maps the DBF header language-driver byte (offset 29) to a code page number.
 ///
@@ -13,7 +17,8 @@ pub fn codepage_for_language_id(id: u8) -> Option<u16> {
         0x01 | 0x09 | 0x0B | 0x0D | 0x0F | 0x11 | 0x15 | 0x18 | 0x19 | 0x1B => 437,
         0x02 | 0x0A | 0x0E | 0x10 | 0x12 | 0x14 | 0x16 | 0x1A | 0x1D | 0x25 | 0x37 => 850,
         0x03 | 0x57 | 0x58 | 0x59 => 1252,
-        0x04 | 0x98 => 10000,
+        0x04 => 10000,
+        0x98 => 10006,
         0x08 | 0x17 | 0x66 => 865,
         0x13 | 0x7B => 932,
         0x1C | 0x6C => 863,
@@ -71,6 +76,22 @@ fn high_table(codepage: Option<u16>) -> &'static [char; 128] {
     match codepage {
         Some(437) => &CP437,
         Some(850) => &CP850,
+        Some(1257) => &CP1257,
+        Some(737) => &tables::CP737,
+        Some(852) => &tables::CP852,
+        Some(857) => &tables::CP857,
+        Some(860) => &tables::CP860,
+        Some(861) => &tables::CP861,
+        Some(863) => &tables::CP863,
+        Some(865) => &tables::CP865,
+        Some(866) => &tables::CP866,
+        Some(874) => &tables::CP874,
+        Some(1250) => &tables::CP1250,
+        Some(1251) => &tables::CP1251,
+        Some(1253) => &tables::CP1253,
+        Some(1254) => &tables::CP1254,
+        Some(1255) => &tables::CP1255,
+        Some(1256) => &tables::CP1256,
         _ => &CP1252,
     }
 }
@@ -137,3 +158,65 @@ static CP850: [char; 128] = [
     '\u{00AD}', '\u{00B1}', '\u{2017}', '\u{00BE}', '\u{00B6}', '\u{00A7}', '\u{00F7}', '\u{00B8}',
     '\u{00B0}', '\u{00A8}', '\u{00B7}', '\u{00B9}', '\u{00B3}', '\u{00B2}', '\u{25A0}', '\u{00A0}',
 ];
+
+/// Windows-1257 (Baltic), bytes 0x80..=0xFF. Unassigned positions decode to U+FFFD.
+#[rustfmt::skip]
+static CP1257: [char; 128] = [
+    '\u{20AC}', '\u{FFFD}', '\u{201A}', '\u{FFFD}', '\u{201E}', '\u{2026}', '\u{2020}', '\u{2021}',
+    '\u{FFFD}', '\u{2030}', '\u{FFFD}', '\u{2039}', '\u{FFFD}', '\u{00A8}', '\u{02C7}', '\u{00B8}',
+    '\u{FFFD}', '\u{2018}', '\u{2019}', '\u{201C}', '\u{201D}', '\u{2022}', '\u{2013}', '\u{2014}',
+    '\u{FFFD}', '\u{2122}', '\u{FFFD}', '\u{203A}', '\u{FFFD}', '\u{00AF}', '\u{02DB}', '\u{FFFD}',
+    '\u{00A0}', '\u{FFFD}', '\u{00A2}', '\u{00A3}', '\u{00A4}', '\u{FFFD}', '\u{00A6}', '\u{00A7}',
+    '\u{00D8}', '\u{00A9}', '\u{0156}', '\u{00AB}', '\u{00AC}', '\u{00AD}', '\u{00AE}', '\u{00C6}',
+    '\u{00B0}', '\u{00B1}', '\u{00B2}', '\u{00B3}', '\u{00B4}', '\u{00B5}', '\u{00B6}', '\u{00B7}',
+    '\u{00F8}', '\u{00B9}', '\u{0157}', '\u{00BB}', '\u{00BC}', '\u{00BD}', '\u{00BE}', '\u{00E6}',
+    '\u{0104}', '\u{012E}', '\u{0100}', '\u{0106}', '\u{00C4}', '\u{00C5}', '\u{0118}', '\u{0112}',
+    '\u{010C}', '\u{00C9}', '\u{0179}', '\u{0116}', '\u{0122}', '\u{0136}', '\u{012A}', '\u{013B}',
+    '\u{0160}', '\u{0143}', '\u{0145}', '\u{00D3}', '\u{014C}', '\u{00D5}', '\u{00D6}', '\u{00D7}',
+    '\u{0172}', '\u{0141}', '\u{015A}', '\u{016A}', '\u{00DC}', '\u{017B}', '\u{017D}', '\u{00DF}',
+    '\u{0105}', '\u{012F}', '\u{0101}', '\u{0107}', '\u{00E4}', '\u{00E5}', '\u{0119}', '\u{0113}',
+    '\u{010D}', '\u{00E9}', '\u{017A}', '\u{0117}', '\u{0123}', '\u{0137}', '\u{012B}', '\u{013C}',
+    '\u{0161}', '\u{0144}', '\u{0146}', '\u{00F3}', '\u{014D}', '\u{00F5}', '\u{00F6}', '\u{00F7}',
+    '\u{0173}', '\u{0142}', '\u{015B}', '\u{016B}', '\u{00FC}', '\u{017C}', '\u{017E}', '\u{02D9}',
+];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn baltic_letters_decode_and_encode() {
+        let bytes = [0xc0,0xc8,0xc6,0xcb,0xc1,0xd0,0xd8,0xdb,0xde,
+                     0xe0,0xe8,0xe6,0xeb,0xe1,0xf0,0xf8,0xfb,0xfe];
+        let text = "ĄČĘĖĮŠŲŪŽąčęėįšųūž";
+        let cp = codepage_for_language_id(0xcc);
+        assert_eq!(cp, Some(1257));
+        assert_eq!(decode(&bytes, cp), text);
+        assert_eq!(encode(text, cp), bytes);
+    }
+
+    #[test]
+    fn baltic_ascii_and_unsupported_characters() {
+        assert_eq!(decode(b"Hello 123", Some(1257)), "Hello 123");
+        assert_eq!(encode("Hello 123 😀", Some(1257)), b"Hello 123 ?");
+        assert_eq!(decode(&[0x81], Some(1257)), "\u{fffd}");
+    }
+
+    #[test]
+    fn baltic_defined_bytes_round_trip() {
+        for byte in 0u8..=255 {
+            let text = decode(&[byte], Some(1257));
+            if text != "\u{fffd}" {
+                assert_eq!(encode(&text, Some(1257)), vec![byte]);
+            }
+        }
+    }
+
+    #[test]
+    fn existing_pages_keep_their_mappings() {
+        assert_eq!(decode(&[0xe1], None), "á");
+        assert_eq!(decode(&[0xe1], Some(9999)), "á");
+        assert_eq!(decode(&[0x80], Some(437)), "Ç");
+        assert_eq!(decode(&[0x80], Some(850)), "Ç");
+    }
+}
