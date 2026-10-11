@@ -3414,6 +3414,8 @@ impl Vm {
                         FieldRead::Value(v) => fb.stack.push(v),
                         FieldRead::Suspend(req) => return Ok(self.ask(fb, req)),
                     }
+                } else if let Some(slot) = module.funcs[fb.frames.last().expect("frame").func as usize].locals.iter().position(|local| local == &name) {
+                    fb.stack.push(self.load_local(fb, slot as u32)?);
                 } else if let Some(v) = self.load_name(fb, &name) {
                     fb.stack.push(Self::live(host, v));
                 } else if let Some(alias) = self.query_field(fb, &name) {
