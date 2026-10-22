@@ -212,7 +212,7 @@ export async function askVfp(source, { timeoutMs = TIMEOUT_MS } = {}) {
           // it may already be gone; the taskkill below is what actually ends a modal one
         }
         try {
-          execFileSync('taskkill', ['/IM', 'vfp9.exe', '/F'], { stdio: 'ignore' });
+          execFileSync('taskkill', ['/PID', String(child.pid), '/T', '/F'], { stdio: 'ignore' });
         } catch {
           // no VFP left to kill, which is the good case
         }
