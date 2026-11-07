@@ -204,7 +204,7 @@ export async function askVfp(source, { timeoutMs = TIMEOUT_MS } = {}) {
     stage(run);
     writeFileSync(join(dir, 'probe.prg'), WRAPPER);
     await new Promise((done) => {
-      const child = execFile(VFP, [join(dir, 'probe.prg')], { cwd: run }, () => done());
+      const child = execFile(VFP, ['-A', join(dir, 'probe.prg')], { cwd: run }, () => done());
       const timer = setTimeout(() => {
         try {
           child.kill();
@@ -387,7 +387,17 @@ async function main() {
     const source = readFileSync(path, 'latin1');
     const answer = await askVfp(source);
     const name = basename(path);
-    const why = whyNotMeasured(answer);
+    let why = whyNotMeasured(answer);
+    if (!why) {
+      // Asked twice, because an answer that changes from run to run - a clock, the record of a
+      // time - is not a golden either, and nothing in a single run says so. The second run also
+      // has to be measurable: a program that asked a person once may not ask the next time.
+      const again = await askVfp(source);
+      why = whyNotMeasured(again);
+      if (!why && answer.text !== again.text) {
+        why = 'what it printed changes from run to run';
+      }
+    }
     if (why) {
       unmeasured += 1;
       manifest.set(name, why);
